@@ -11,17 +11,17 @@ import {
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
 
-const SplashScreen = ({ navigation }) => {
-  const onPressBegin = () => {
-    navigation.navigate("Main Menu");
+const ClassicConfigScreen = ({ navigation }) => {
+  const onPressSubmit = () => {
+    navigation.navigate("Classic Roles");
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.titleLabel}>Splash Screen</Text>
+      <Text style={styles.titleLabel}>Classic Config</Text>
       <View style={styles.beginButton}>
-        <TouchableOpacity onPress={() => onPressBegin()}>
-          <Text style={styles.beginButtonLabel}>Go to Main Menu</Text>
+        <TouchableOpacity onPress={() => onPressSubmit()}>
+          <Text style={styles.beginButtonLabel}>Submit</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     marginTop: height / 12,
   },
   beginButton: {
-    backgroundColor: "orange",
+    backgroundColor: "red",
     width: width / 1.5,
     borderRadius: 10,
     alignItems: "center",
@@ -53,4 +53,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SplashScreen;
+export default ClassicConfigScreen;
