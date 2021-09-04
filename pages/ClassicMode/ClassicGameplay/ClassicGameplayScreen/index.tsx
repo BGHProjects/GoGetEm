@@ -15,27 +15,118 @@ const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
 const mazeSideLength = height * 0.4;
 const cellSize = height * 0.04;
-const mazeColumns = Math.floor(mazeSideLength / cellSize);
-const mazeRows = Math.floor(mazeSideLength / cellSize);
 const mazeGrid: any = [];
+const wallWidth = 1;
+const stack: any = [];
 
 const ClassicGameplayScreen = ({ navigation }) => {
   const generateCells = () => {
     for (let rowNum = 0; rowNum < 10; rowNum++) {
       for (let colNum = 0; colNum < 10; colNum++) {
-        mazeGrid.push([
-          rowNum * 10,
-          colNum * 10,
-          Math.floor(Math.random() * 2),
-          Math.floor(Math.random() * 2),
-          Math.floor(Math.random() * 2),
-          Math.floor(Math.random() * 2),
-        ]);
+        mazeGrid.push({
+          row: rowNum * 10,
+          col: colNum * 10,
+          top: wallWidth,
+          right: wallWidth,
+          bottom: wallWidth,
+          left: wallWidth,
+          visited: false,
+          color: null,
+        });
+      }
+    }
+  };
+
+  const checkNeighbours = (cell: any) => {
+    let neighbours = [];
+    let defined = [];
+
+    // Finds the neighbours in the grid
+    let top = mazeGrid.filter(
+      (item) => item.row === cell.row - 10 && item.col === cell.col
+    );
+    let right = mazeGrid.filter(
+      (item) => item.col === cell.col + 10 && item.row === cell.row
+    );
+    let bottom = mazeGrid.filter(
+      (item) => item.row === cell.row + 10 && item.col === cell.col
+    );
+    let left = mazeGrid.filter(
+      (item) => item.col === cell.col - 10 && item.row === cell.row
+    );
+
+    // If there is a neighbour for that cell, add it to defined
+    if (top.length > 0) {
+      defined.push(top[0]);
+    }
+
+    if (right.length > 0) {
+      defined.push(right[0]);
+    }
+
+    if (bottom.length > 0) {
+      defined.push(bottom[0]);
+    }
+
+    if (left.length > 0) {
+      defined.push(left[0]);
+    }
+
+    // Add all unvisited neighbours to neighbours
+    for (let i = 0; i < defined.length; i++) {
+      if (defined[i].visited === false) {
+        neighbours.push(defined[i]);
+      }
+    }
+
+    // Pick a random neighbour
+    if (neighbours.length > 0) {
+      let r = Math.floor(Math.random() * neighbours.length + 1);
+      return neighbours[r - 1];
+    } else {
+      return undefined;
+    }
+  };
+
+  const removeWalls = (current: any, neighbour: any) => {
+    if (neighbour.row < current.row) {
+      current.top = 0;
+      neighbour.bottom = 0;
+    } else if (neighbour.col > current.col) {
+      current.right = 0;
+      neighbour.left = 0;
+    } else if (neighbour.row > current.row) {
+      current.bottom = 0;
+      neighbour.top = 0;
+    } else if (neighbour.col < current.col) {
+      current.left = 0;
+      neighbour.right = 0;
+    }
+  };
+
+  const makeMaze = () => {
+    let current = mazeGrid[0];
+    current.visited = true;
+
+    for (let i = 0; i < 300; i++) {
+      if (mazeGrid.every((cell) => cell.visited === true) === false) {
+        // Get the next cell to visit
+        let next = checkNeighbours(current);
+        if (next) {
+          next.visited = true;
+          stack.push(current);
+          removeWalls(current, next);
+          current = next;
+        } else if (stack.length > 0) {
+          current = stack.pop();
+          // Finds the previous current, to find a new next
+        }
       }
     }
   };
 
   generateCells();
+  makeMaze();
 
   return (
     <SafeAreaView style={styles.container}>
@@ -43,18 +134,19 @@ const ClassicGameplayScreen = ({ navigation }) => {
       <View style={styles.mazeContainer}>
         {mazeGrid.map((item: any) => (
           <View
-            key={[item[0], item[1]].toString()}
+            key={[item.row, item.col].toString()}
             style={{
               height: cellSize,
               width: cellSize,
               position: "absolute",
-              left: `${item[0]}%`,
-              top: `${item[1]}%`,
+              left: `${item.col}%`,
+              top: `${item.row}%`,
               borderColor: "blue",
-              borderRightWidth: item[2],
-              borderLeftWidth: item[3],
-              borderTopWidth: item[4],
-              borderBottomWidth: item[5],
+              borderTopWidth: item.top,
+              borderRightWidth: item.right,
+              borderBottomWidth: item.bottom,
+              borderLeftWidth: item.left,
+              backgroundColor: item.color,
             }}
           />
         ))}
