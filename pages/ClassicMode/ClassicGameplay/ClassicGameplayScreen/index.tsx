@@ -20,6 +20,7 @@ const wallWidth = 1;
 const stack: any = [];
 let gridColor = "violet";
 let searchGrid1: any = [];
+let searchPath1: any = [];
 
 const generateCells = () => {
   mazeGrid.length = 0;
@@ -129,14 +130,23 @@ const makeMaze = () => {
 };
 
 function makeSearchGrid() {
-  searchGrid1 = [...mazeGrid];
+  searchGrid1.length = 0;
 
-  for (let i = 0; i < searchGrid1.length; i++) {
-    searchGrid1[i].f = 0;
-    searchGrid1[i].g = 0;
-    searchGrid1[i].h = 0;
-    searchGrid1[i].neighbours = [];
-    searchGrid1[i].previous = null;
+  for (let i = 0; i < mazeGrid.length; i++) {
+    let object = {
+      row: mazeGrid[i].row,
+      col: mazeGrid[i].col,
+      top: mazeGrid[i].top,
+      right: mazeGrid[i].right,
+      bottom: mazeGrid[i].bottom,
+      left: mazeGrid[i].left,
+      f: 0,
+      g: 0,
+      h: 0,
+      neighbours: [],
+      previous: null,
+    };
+    searchGrid1.push(object);
   }
 
   return searchGrid1;
@@ -157,6 +167,8 @@ function findNeighbour(cell: any) {
   let left = searchGrid1.filter(
     (item: any) => item.col === cell.col - 10 && item.row === cell.row
   );
+
+  //console.log("\n", top[0], "\n", right[0], "\n", bottom[0], "\n", left[0]);
 
   // If there is a neighbour for that cell, add it to defined
   if (top.length > 0) {
@@ -183,8 +195,11 @@ function findNeighbour(cell: any) {
     }
   }
 
+  //console.log("\n defined ", defined);
+
   // Add all unvisited neighbours to neighbours
   for (let i = 0; i < defined.length; i++) {
+    //console.log("defined ", defined);
     cell.neighbours.push(defined[i]);
   }
 }
@@ -198,6 +213,7 @@ const ClassicGameplayScreen = ({ navigation }) => {
   const [playerY, setplayerY] = useState(5);
   const [player2X, setplayer2X] = useState(95);
   const [player2Y, setplayer2Y] = useState(95);
+  const [search1IntervalId, setSearch1IntervalId] = useState<any>(null);
 
   const movePlayerUp = () => {
     let mazeCell = getPlayerMazeCell();
@@ -245,6 +261,20 @@ const ClassicGameplayScreen = ({ navigation }) => {
     return mazeGrid[digits];
   };
 
+  const getPlayer2MazeCell = () => {
+    let digit1 = (player2X - 5).toString();
+    let digit2 = (player2Y - 5).toString();
+    let digits;
+
+    if (digit2 === "0") {
+      digits = digit1[0];
+    } else {
+      digits = digit2[0] + digit1[0];
+    }
+
+    return mazeGrid[digits];
+  };
+
   function heuristic(a: any, b: any) {
     let xs = Number(b.row) - Number(a.row);
     let ys = Number(b.col) - Number(a.col);
@@ -253,11 +283,21 @@ const ClassicGameplayScreen = ({ navigation }) => {
     return answer;
   }
 
-  const aStarSearch = (playerPosition: any) => {
+  const aStarSearch = (playerPosition: any, player2Position?: any) => {
     let openSet = [];
     let closedSet = [];
+    //let start = player2Position;
+    //let end = playerPosition;
+
+    // let start = searchGrid1.filter(
+    //   (item: any) => item.row === player2Y - 5 && item.col === player2X - 5
+    // )[0];
+
     let start = searchGrid1[99];
-    let end = playerPosition;
+
+    let end = searchGrid1.filter(
+      (item: any) => item.row === playerY - 5 && item.col === playerX - 5
+    )[0];
 
     openSet.push(start);
 
@@ -266,31 +306,29 @@ const ClassicGameplayScreen = ({ navigation }) => {
 
       let current: any = openSet[lowestIndex];
 
+      // if (lowestIndex === 0) {
+      //   return;
+      // }
+
       if (current === end) {
-        let path = [];
+        searchPath1.length = 0;
         let temp = current;
-        path.push(temp);
+        searchPath1.push([temp.row, temp.col]);
         while (temp.previous) {
-          path.push(temp.previous);
+          searchPath1.push([temp.previous.row, temp.previous.col]);
           temp = temp.previous;
         }
 
-        for (let i = 0; i < path.length; i++) {
-          path[i].color = "blue";
-        }
-
-        //console.log("\n Object.keys(path[0]) ", Object.keys(path[0]));
-        //console.log("\n path[0].color ", path[0].color);
-
-        console.log("Done");
+        console.log("\n Found path to player");
       }
 
       openSet.splice(lowestIndex, 1);
-      // openSet.remove(current)
       closedSet.push(current);
 
       findNeighbour(current);
+
       for (let i = 0; i < current.neighbours.length; i++) {
+        //console.log("entered neighbour for loop ", i);
         let neighbour: any = current.neighbours[i];
         if (!closedSet.includes(neighbour)) {
           let tempG = current.g + 1;
@@ -312,12 +350,56 @@ const ClassicGameplayScreen = ({ navigation }) => {
     }
   };
 
+  function followPath() {
+    let index = searchPath1.length - 1;
+
+    console.log("Path Length ", index + 1);
+
+    // for (let i = 0; i < searchPath1.length; i++) {
+    //   if (index > -1) {
+    //     setplayer2X(searchPath1[index][1] + 5),
+    //       setplayer2Y(searchPath1[index][0] + 5),
+    //       // console.log(
+    //       //   "Follow path",
+    //       //   searchPath1[index].row + 5,
+    //       //   player2Y,
+    //       //   searchPath1[index].col + 5,
+    //       //   player2X
+    //       // );
+    //       index--;
+    //     //console.log("hit");
+    //   }
+    // }
+
+    setSearch1IntervalId(
+      setInterval(() => {
+        if (index > -1) {
+          console.log("current searchPath1 ", searchPath1[index]);
+          setplayer2X(searchPath1[index][1] + 5),
+            setplayer2Y(searchPath1[index][0] + 5),
+            // console.log(
+            //   "Follow path",
+            //   searchPath1[index].row + 5,
+            //   player2Y,
+            //   searchPath1[index].col + 5,
+            //   player2X
+            // );
+            index--;
+          //console.log("hit");
+        }
+      }, 300)
+    );
+
+    console.log("Follow Path Completed");
+  }
+
   useEffect(() => {
-    for (let i = 0; i < searchGrid1.length; i++) {
-      searchGrid1[i].color = null;
-    }
-    let cell = getPlayerMazeCell();
-    aStarSearch(cell);
+    clearInterval(search1IntervalId);
+    console.log("This was hit");
+    let player1Cell = getPlayerMazeCell();
+    let player2Cell = getPlayer2MazeCell();
+    aStarSearch(player1Cell, player2Cell);
+    followPath();
   }, [playerX, playerY]);
 
   return (
