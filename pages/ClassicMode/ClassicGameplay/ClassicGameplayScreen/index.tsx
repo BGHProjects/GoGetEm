@@ -15,12 +15,14 @@ const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
 const mazeSideLength = height * 0.4;
 const cellSize = height * 0.04;
-const mazeGrid: any = [];
+let mazeGrid: any = [];
 const wallWidth = 1;
 const stack: any = [];
-let gridColor = "violet";
+let gridColor = "white";
 let searchGrid1: any = [];
+let searchGrid2: any = [];
 let searchPath1: any = [];
+let searchPath2: any = [];
 
 const generateCells = () => {
   mazeGrid.length = 0;
@@ -129,8 +131,122 @@ const makeMaze = () => {
   }
 };
 
-function makeSearchGrid() {
-  searchGrid1.length = 0;
+function trimMaze() {
+  let result = mazeGrid.map(function (cell: any, index: any, elements: any) {
+    if (cell.top > 0) {
+      if (index > 9) {
+        // Don't take any from the top border wall
+        // Get the right and left neighbours
+        let right = mazeGrid.filter(
+          (item: any) => item.col === cell.col + 10 && item.row === cell.row
+        );
+
+        let left = mazeGrid.filter(
+          (item: any) => item.col === cell.col - 10 && item.row === cell.row
+        );
+
+        // If there are neighbours
+        if (right[0] !== undefined && left[0] !== undefined) {
+          // If the neighbours also have a top border
+          if (right[0].top > 0 && left[0].top > 0) {
+            cell.top = 0;
+          }
+        }
+      }
+    }
+
+    if (cell.bottom > 0) {
+      if (index < 90) {
+        // Don't take any from the bottom border wall
+        // Get the right and left neighbours
+        let right = mazeGrid.filter(
+          (item: any) => item.col === cell.col + 10 && item.row === cell.row
+        );
+
+        let left = mazeGrid.filter(
+          (item: any) => item.col === cell.col - 10 && item.row === cell.row
+        );
+
+        // If there are neighbours
+        if (right[0] !== undefined && left[0] !== undefined) {
+          // If the neighbours also have a bottom border
+          if (right[0].bottom > 0 && left[0].bottom > 0) {
+            cell.bottom = 0;
+          }
+        }
+      }
+    }
+
+    if (cell.right > 0) {
+      if (
+        Number(index.toString()[index.toString().length - 1]) !== 9 &&
+        Number(index.toString()[index.toString().length - 1]) !== 0
+      ) {
+        // Don't take any from the right border wall
+        // Get the top and bottom neighbours
+        let top = mazeGrid.filter(
+          (item: any) => item.row === cell.row - 10 && item.col === cell.col
+        );
+
+        let bottom = mazeGrid.filter(
+          (item: any) => item.row === cell.row + 10 && item.col === cell.col
+        );
+
+        let right = mazeGrid.filter(
+          (item: any) => item.col === cell.col + 10 && item.row === cell.row
+        );
+
+        // If there are neighbours
+        if (top[0] !== undefined && bottom[0] !== undefined) {
+          // If the neighbours also have a right border
+          if (top[0].right > 0 && bottom[0].right > 0) {
+            cell.right = 0;
+            if (right[0] !== undefined) {
+              right[0].left = 0;
+            }
+          }
+        }
+      }
+    }
+
+    if (cell.left > 0) {
+      if (
+        Number(index.toString()[index.toString().length - 1]) !== 0 &&
+        Number(index.toString()[index.toString().length - 1]) !== 9
+      ) {
+        // Don't take any from the right border wall
+        // Get the top and bottom neighbours
+        let top = mazeGrid.filter(
+          (item: any) => item.row === cell.row - 10 && item.col === cell.col
+        );
+
+        let bottom = mazeGrid.filter(
+          (item: any) => item.row === cell.row + 10 && item.col === cell.col
+        );
+
+        let left = mazeGrid.filter(
+          (item: any) => item.col === cell.col - 10 && item.row === cell.row
+        );
+
+        // If there are neighbours
+        if (top[0] !== undefined && bottom[0] !== undefined) {
+          // If the neighbours also have a right border
+          if (top[0].left > 0 && bottom[0].left > 0) {
+            cell.left = 0;
+            if (left[0] !== undefined) {
+              left[0].right = 0;
+            }
+          }
+        }
+      }
+    }
+
+    return cell;
+  });
+}
+
+function makeSearchGrid(searchGrid: any) {
+  searchGrid.length = 0;
 
   for (let i = 0; i < mazeGrid.length; i++) {
     let object = {
@@ -146,29 +262,27 @@ function makeSearchGrid() {
       neighbours: [],
       previous: null,
     };
-    searchGrid1.push(object);
+    searchGrid.push(object);
   }
 
-  return searchGrid1;
+  return searchGrid;
 }
 
-function findNeighbour(cell: any) {
+function findNeighbour(cell: any, searchGrid: any) {
   let defined = [];
 
-  let top = searchGrid1.filter(
+  let top = searchGrid.filter(
     (item: any) => item.row === cell.row - 10 && item.col === cell.col
   );
-  let right = searchGrid1.filter(
+  let right = searchGrid.filter(
     (item: any) => item.col === cell.col + 10 && item.row === cell.row
   );
-  let bottom = searchGrid1.filter(
+  let bottom = searchGrid.filter(
     (item: any) => item.row === cell.row + 10 && item.col === cell.col
   );
-  let left = searchGrid1.filter(
+  let left = searchGrid.filter(
     (item: any) => item.col === cell.col - 10 && item.row === cell.row
   );
-
-  //console.log("\n", top[0], "\n", right[0], "\n", bottom[0], "\n", left[0]);
 
   // If there is a neighbour for that cell, add it to defined
   if (top.length > 0) {
@@ -195,8 +309,6 @@ function findNeighbour(cell: any) {
     }
   }
 
-  //console.log("\n defined ", defined);
-
   // Add all unvisited neighbours to neighbours
   for (let i = 0; i < defined.length; i++) {
     //console.log("defined ", defined);
@@ -206,14 +318,22 @@ function findNeighbour(cell: any) {
 
 generateCells();
 makeMaze();
-makeSearchGrid();
+trimMaze();
+makeSearchGrid(searchGrid1);
+makeSearchGrid(searchGrid2);
 
 const ClassicGameplayScreen = ({ navigation }) => {
   const [playerX, setplayerX] = useState(5);
   const [playerY, setplayerY] = useState(5);
   const [player2X, setplayer2X] = useState(95);
   const [player2Y, setplayer2Y] = useState(95);
+  const [player3X, setplayer3X] = useState(5);
+  const [player3Y, setplayer3Y] = useState(95);
+
   const [search1IntervalId, setSearch1IntervalId] = useState<any>(null);
+  const [search2IntervalId, setSearch2IntervalId] = useState<any>(null);
+
+  const [player2Started, setPlayer2Started] = useState<any>(false);
 
   const movePlayerUp = () => {
     let mazeCell = getPlayerMazeCell();
@@ -283,21 +403,28 @@ const ClassicGameplayScreen = ({ navigation }) => {
     return answer;
   }
 
-  const aStarSearch = (playerPosition: any, player2Position?: any) => {
+  const aStarSearch = (whichPlayer?: any) => {
     let openSet = [];
     let closedSet = [];
-    //let start = player2Position;
-    //let end = playerPosition;
+    let start;
+    let end;
+    let searchPath;
+    let searchGrid;
 
-    // let start = searchGrid1.filter(
-    //   (item: any) => item.row === player2Y - 5 && item.col === player2X - 5
-    // )[0];
+    if (whichPlayer === "player2") {
+      start = searchGrid1[99];
 
-    let start = searchGrid1[99];
-
-    let end = searchGrid1.filter(
-      (item: any) => item.row === playerY - 5 && item.col === playerX - 5
-    )[0];
+      end = searchGrid1.filter(
+        (item: any) => item.row === playerY - 5 && item.col === playerX - 5
+      )[0];
+      searchPath = searchPath1;
+      searchGrid = searchGrid1;
+    } else if (whichPlayer === "player3") {
+      start = searchGrid2[90];
+      end = searchGrid2[99];
+      searchPath = searchPath2;
+      searchGrid = searchGrid2;
+    }
 
     openSet.push(start);
 
@@ -306,29 +433,22 @@ const ClassicGameplayScreen = ({ navigation }) => {
 
       let current: any = openSet[lowestIndex];
 
-      // if (lowestIndex === 0) {
-      //   return;
-      // }
-
       if (current === end) {
-        searchPath1.length = 0;
+        searchPath.length = 0;
         let temp = current;
-        searchPath1.push([temp.row, temp.col]);
+        searchPath.push([temp.row, temp.col]);
         while (temp.previous) {
-          searchPath1.push([temp.previous.row, temp.previous.col]);
+          searchPath.push([temp.previous.row, temp.previous.col]);
           temp = temp.previous;
         }
-
-        console.log("\n Found path to player");
       }
 
       openSet.splice(lowestIndex, 1);
       closedSet.push(current);
 
-      findNeighbour(current);
+      findNeighbour(current, searchGrid);
 
       for (let i = 0; i < current.neighbours.length; i++) {
-        //console.log("entered neighbour for loop ", i);
         let neighbour: any = current.neighbours[i];
         if (!closedSet.includes(neighbour)) {
           let tempG = current.g + 1;
@@ -350,57 +470,61 @@ const ClassicGameplayScreen = ({ navigation }) => {
     }
   };
 
-  function followPath() {
-    let index = searchPath1.length - 1;
+  function followPath(player: any, searchPath: any) {
+    let index = 0;
 
-    console.log("Path Length ", index + 1);
+    if (player === "player2") {
+      setPlayer2Started(true);
+      setSearch1IntervalId(
+        setInterval(() => {
+          if (index < searchPath.length) {
+            setplayer2X(searchPath[index][1] + 5),
+              setplayer2Y(searchPath[index][0] + 5);
 
-    // for (let i = 0; i < searchPath1.length; i++) {
-    //   if (index > -1) {
-    //     setplayer2X(searchPath1[index][1] + 5),
-    //       setplayer2Y(searchPath1[index][0] + 5),
-    //       // console.log(
-    //       //   "Follow path",
-    //       //   searchPath1[index].row + 5,
-    //       //   player2Y,
-    //       //   searchPath1[index].col + 5,
-    //       //   player2X
-    //       // );
-    //       index--;
-    //     //console.log("hit");
-    //   }
-    // }
+            index++;
+          }
+        }, 800)
+      );
 
-    setSearch1IntervalId(
-      setInterval(() => {
-        if (index > -1) {
-          console.log("current searchPath1 ", searchPath1[index]);
-          setplayer2X(searchPath1[index][1] + 5),
-            setplayer2Y(searchPath1[index][0] + 5),
-            // console.log(
-            //   "Follow path",
-            //   searchPath1[index].row + 5,
-            //   player2Y,
-            //   searchPath1[index].col + 5,
-            //   player2X
-            // );
-            index--;
-          //console.log("hit");
-        }
-      }, 300)
-    );
+      clearInterval(search1IntervalId);
+    } else if (player === "player3") {
+      setSearch2IntervalId(
+        setInterval(() => {
+          if (index < searchPath.length) {
+            setplayer3X(searchPath[index][1] + 5),
+              setplayer3Y(searchPath[index][0] + 5);
 
-    console.log("Follow Path Completed");
+            index++;
+          }
+        }, 800)
+      );
+
+      console.log("Follow Path Player 3 Completed");
+      clearInterval(search2IntervalId);
+    }
   }
 
   useEffect(() => {
-    clearInterval(search1IntervalId);
-    console.log("This was hit");
+    aStarSearch("player2");
+    aStarSearch("player3");
+    //Search Paths are compiled in reverse
+    searchPath1 = searchPath1.reverse();
+    searchPath2 = searchPath2.reverse();
+    followPath("player2", searchPath1);
+    followPath("player3", searchPath2);
+  }, []);
+
+  useEffect(() => {
     let player1Cell = getPlayerMazeCell();
-    let player2Cell = getPlayer2MazeCell();
-    aStarSearch(player1Cell, player2Cell);
-    followPath();
+    searchPath1.push([player1Cell.row, player1Cell.col]);
   }, [playerX, playerY]);
+
+  useEffect(() => {
+    if (player2Started) {
+      let player2Cell = getPlayer2MazeCell();
+      searchPath2.push([player2Cell.row, player2Cell.col]);
+    }
+  }, [player2X, player2Y]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -426,8 +550,9 @@ const ClassicGameplayScreen = ({ navigation }) => {
         ))}
 
         <Svg height="100%" width="100%" viewBox="0 0 100 100">
-          <Circle cx={player2X} cy={player2Y} r="3" fill="lightgreen"></Circle>
           <Circle cx={playerX} cy={playerY} r="3" fill="red"></Circle>
+          <Circle cx={player2X} cy={player2Y} r="3" fill="lightgreen"></Circle>
+          <Circle cx={player3X} cy={player3Y} r="3" fill="dodgerblue"></Circle>
         </Svg>
       </View>
       <View
