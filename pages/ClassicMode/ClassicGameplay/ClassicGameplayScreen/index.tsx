@@ -316,29 +316,30 @@ function findNeighbour(cell: any, searchGrid: any) {
   }
 }
 
-generateCells();
-makeMaze();
-trimMaze();
-makeSearchGrid(searchGrid1);
-makeSearchGrid(searchGrid2);
-
 const ClassicGameplayScreen = ({ navigation }) => {
-  const [playerX, setplayerX] = useState(5);
-  const [playerY, setplayerY] = useState(5);
-  const [player2X, setplayer2X] = useState(95);
-  const [player2Y, setplayer2Y] = useState(95);
+  const [playerX, setplayerX] = useState(55);
+  const [playerY, setplayerY] = useState(15);
+  const [player2X, setplayer2X] = useState(85);
+  const [player2Y, setplayer2Y] = useState(85);
   const [player3X, setplayer3X] = useState(5);
-  const [player3Y, setplayer3Y] = useState(95);
-
+  const [player3Y, setplayer3Y] = useState(85);
   const [search1IntervalId, setSearch1IntervalId] = useState<any>(null);
   const [search2IntervalId, setSearch2IntervalId] = useState<any>(null);
-
   const [player2Started, setPlayer2Started] = useState<any>(false);
+  const [gameOver, setGameOver] = useState(false);
+
+  useEffect(() => {
+    generateCells();
+    makeMaze();
+    trimMaze();
+    makeSearchGrid(searchGrid1);
+    makeSearchGrid(searchGrid2);
+  }, []);
 
   const movePlayerUp = () => {
     let mazeCell = getPlayerMazeCell();
 
-    if (playerY > 5 && mazeCell.top === 0) {
+    if (playerY > 5 && mazeCell.top === 0 && !gameOver) {
       setplayerY(playerY - 10);
     }
   };
@@ -346,7 +347,7 @@ const ClassicGameplayScreen = ({ navigation }) => {
   const movePlayerRight = () => {
     let mazeCell = getPlayerMazeCell();
 
-    if (playerX < 95 && mazeCell.right === 0) {
+    if (playerX < 95 && mazeCell.right === 0 && !gameOver) {
       setplayerX(playerX + 10);
     }
   };
@@ -354,7 +355,7 @@ const ClassicGameplayScreen = ({ navigation }) => {
   const movePlayerLeft = () => {
     let mazeCell = getPlayerMazeCell();
 
-    if (playerX > 5 && mazeCell.left === 0) {
+    if (playerX > 5 && mazeCell.left === 0 && !gameOver) {
       setplayerX(playerX - 10);
     }
   };
@@ -362,7 +363,7 @@ const ClassicGameplayScreen = ({ navigation }) => {
   const movePlayerDown = () => {
     let mazeCell = getPlayerMazeCell();
 
-    if (playerY < 95 && mazeCell.bottom === 0) {
+    if (playerY < 95 && mazeCell.bottom === 0 && !gameOver) {
       setplayerY(playerY + 10);
     }
   };
@@ -412,7 +413,7 @@ const ClassicGameplayScreen = ({ navigation }) => {
     let searchGrid;
 
     if (whichPlayer === "player2") {
-      start = searchGrid1[99];
+      start = searchGrid1[89];
 
       end = searchGrid1.filter(
         (item: any) => item.row === playerY - 5 && item.col === playerX - 5
@@ -420,8 +421,8 @@ const ClassicGameplayScreen = ({ navigation }) => {
       searchPath = searchPath1;
       searchGrid = searchGrid1;
     } else if (whichPlayer === "player3") {
-      start = searchGrid2[90];
-      end = searchGrid2[99];
+      start = searchGrid2[80];
+      end = searchGrid2[89];
       searchPath = searchPath2;
       searchGrid = searchGrid2;
     }
@@ -480,12 +481,10 @@ const ClassicGameplayScreen = ({ navigation }) => {
           if (index < searchPath.length) {
             setplayer2X(searchPath[index][1] + 5),
               setplayer2Y(searchPath[index][0] + 5);
-
             index++;
           }
         }, 800)
       );
-
       clearInterval(search1IntervalId);
     } else if (player === "player3") {
       setSearch2IntervalId(
@@ -493,13 +492,11 @@ const ClassicGameplayScreen = ({ navigation }) => {
           if (index < searchPath.length) {
             setplayer3X(searchPath[index][1] + 5),
               setplayer3Y(searchPath[index][0] + 5);
-
             index++;
           }
         }, 800)
       );
 
-      console.log("Follow Path Player 3 Completed");
       clearInterval(search2IntervalId);
     }
   }
@@ -516,15 +513,71 @@ const ClassicGameplayScreen = ({ navigation }) => {
 
   useEffect(() => {
     let player1Cell = getPlayerMazeCell();
-    searchPath1.push([player1Cell.row, player1Cell.col]);
+    /*
+      This ensures that if the player backtracks on the search path
+      those entries are removed instead of explored by the bot
+       */
+
+    if (
+      playerY - 5 === searchPath1[searchPath1.length - 2][0] &&
+      playerX - 5 === searchPath1[searchPath1.length - 2][1]
+    ) {
+      searchPath1.splice(searchPath1.length - 1, 1);
+    } else {
+      if (
+        [playerY - 5, playerX - 5] !==
+        [
+          searchPath1[searchPath1.length - 1][0],
+          searchPath1[searchPath1.length - 1][1],
+        ]
+      ) {
+        searchPath1.push([player1Cell.row, player1Cell.col]);
+      }
+    }
   }, [playerX, playerY]);
 
   useEffect(() => {
     if (player2Started) {
       let player2Cell = getPlayer2MazeCell();
+      /*
+      This ensures that if player2 backtracks on the search path
+      those entries are removed instead of explored by the bot
+       */
+      if (
+        player2Cell.row === searchPath2[searchPath2.length - 2][0] &&
+        player2Cell.col === searchPath2[searchPath2.length - 2][1]
+      ) {
+        searchPath2.splice(searchPath2.length - 2, 2);
+      }
       searchPath2.push([player2Cell.row, player2Cell.col]);
     }
-  }, [player2X, player2Y]);
+  }, [player2X, player2Y, searchPath1]);
+
+  useEffect(() => {
+    if (playerX === player3X && playerY === player3Y) {
+      setGameOver(true);
+      console.log("\n Player caught Player 3!");
+    }
+
+    if (player3X === player2X && player3Y === player2Y) {
+      setGameOver(true);
+      console.log("\n Player 3 caught Player 2!");
+    }
+
+    if (player2X === playerX && player2Y === playerY) {
+      setGameOver(true);
+      console.log("\n Player 2 caught Player!");
+    }
+  }, [playerX, playerY, player2X, player2Y, player3X, player3Y]);
+
+  useEffect(() => {
+    if (gameOver) {
+      clearInterval(search1IntervalId);
+      clearInterval(search2IntervalId);
+      console.log("\n\n GAME OVER");
+      navigation.navigate("Classic Config");
+    }
+  }, [gameOver]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -550,9 +603,9 @@ const ClassicGameplayScreen = ({ navigation }) => {
         ))}
 
         <Svg height="100%" width="100%" viewBox="0 0 100 100">
-          <Circle cx={playerX} cy={playerY} r="3" fill="red"></Circle>
-          <Circle cx={player2X} cy={player2Y} r="3" fill="lightgreen"></Circle>
           <Circle cx={player3X} cy={player3Y} r="3" fill="dodgerblue"></Circle>
+          <Circle cx={player2X} cy={player2Y} r="3" fill="lightgreen"></Circle>
+          <Circle cx={playerX} cy={playerY} r="3" fill="red"></Circle>
         </Svg>
       </View>
       <View
