@@ -311,7 +311,6 @@ function findNeighbour(cell: any, searchGrid: any) {
 
   // Add all unvisited neighbours to neighbours
   for (let i = 0; i < defined.length; i++) {
-    //console.log("defined ", defined);
     cell.neighbours.push(defined[i]);
   }
 }
