@@ -315,7 +315,7 @@ function findNeighbour(cell: any, searchGrid: any) {
   }
 }
 
-const ClassicGameplayScreen = ({ navigation }) => {
+const ClassicGameplayScreen = ({ navigation, route }) => {
   const [playerX, setplayerX] = useState(55);
   const [playerY, setplayerY] = useState(15);
   const [player2X, setplayer2X] = useState(85);
@@ -326,6 +326,15 @@ const ClassicGameplayScreen = ({ navigation }) => {
   const [search2IntervalId, setSearch2IntervalId] = useState<any>(null);
   const [player2Started, setPlayer2Started] = useState<any>(false);
   const [gameOver, setGameOver] = useState(false);
+  let configDetails = route.params;
+  let difficulty =
+    configDetails.difficulty === "Meh"
+      ? 700
+      : configDetails.difficulty === "Oh OK"
+      ? 500
+      : configDetails.difficulty === "Hang On"
+      ? 400
+      : 300;
 
   useEffect(() => {
     generateCells();
@@ -333,6 +342,7 @@ const ClassicGameplayScreen = ({ navigation }) => {
     trimMaze();
     makeSearchGrid(searchGrid1);
     makeSearchGrid(searchGrid2);
+    console.log("configDetails ", configDetails);
   }, []);
 
   const movePlayerUp = () => {
@@ -482,7 +492,7 @@ const ClassicGameplayScreen = ({ navigation }) => {
               setplayer2Y(searchPath[index][0] + 5);
             index++;
           }
-        }, 800)
+        }, difficulty)
       );
       clearInterval(search1IntervalId);
     } else if (player === "player3") {
@@ -493,7 +503,7 @@ const ClassicGameplayScreen = ({ navigation }) => {
               setplayer3Y(searchPath[index][0] + 5);
             index++;
           }
-        }, 800)
+        }, difficulty)
       );
 
       clearInterval(search2IntervalId);
@@ -602,9 +612,24 @@ const ClassicGameplayScreen = ({ navigation }) => {
         ))}
 
         <Svg height="100%" width="100%" viewBox="0 0 100 100">
-          <Circle cx={player3X} cy={player3Y} r="3" fill="dodgerblue"></Circle>
-          <Circle cx={player2X} cy={player2Y} r="3" fill="lightgreen"></Circle>
-          <Circle cx={playerX} cy={playerY} r="3" fill="red"></Circle>
+          <Circle
+            cx={player3X}
+            cy={player3Y}
+            r="3"
+            fill={`${configDetails.player3Colour}`}
+          ></Circle>
+          <Circle
+            cx={player2X}
+            cy={player2Y}
+            r="3"
+            fill={`${configDetails.player2Colour}`}
+          ></Circle>
+          <Circle
+            cx={playerX}
+            cy={playerY}
+            r="3"
+            fill={`${configDetails.colour}`}
+          ></Circle>
         </Svg>
       </View>
       <View

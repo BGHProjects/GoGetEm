@@ -18,7 +18,7 @@ const ClassicRolesScreen = ({ navigation, route }) => {
   //console.log("\nConfigDetails ", configDetails);
 
   const onPressSubmit = () => {
-    navigation.navigate("Classic Gameplay");
+    navigation.navigate("Classic Gameplay", configDetails);
   };
 
   return (
@@ -28,7 +28,7 @@ const ClassicRolesScreen = ({ navigation, route }) => {
           height: 50,
           width: 50,
           borderRadius: 90,
-          backgroundColor: `${route.params.colour}`,
+          backgroundColor: `${configDetails.colour}`,
           marginBottom: 50,
         }}
       ></View>
@@ -41,7 +41,7 @@ const ClassicRolesScreen = ({ navigation, route }) => {
           position: "absolute",
           left: 190,
           top: 180,
-          transform: [{ rotate: "325deg" }],
+          transform: [{ rotate: "145deg" }],
         }}
       />
 
@@ -53,7 +53,7 @@ const ClassicRolesScreen = ({ navigation, route }) => {
           position: "absolute",
           left: 130,
           top: 180,
-          transform: [{ rotate: "215deg" }],
+          transform: [{ rotate: "35deg" }],
         }}
       />
 
@@ -70,7 +70,7 @@ const ClassicRolesScreen = ({ navigation, route }) => {
             height: 50,
             width: 50,
             borderRadius: 90,
-            backgroundColor: `${route.params.player2Colour}`,
+            backgroundColor: `${configDetails.player3Colour}`,
           }}
         ></View>
         <Ionicons
@@ -80,7 +80,7 @@ const ClassicRolesScreen = ({ navigation, route }) => {
           style={{
             position: "absolute",
             left: 140,
-            transform: [{ rotate: "90deg" }],
+            transform: [{ rotate: "270deg" }],
           }}
         />
         <View
@@ -88,7 +88,7 @@ const ClassicRolesScreen = ({ navigation, route }) => {
             height: 50,
             width: 50,
             borderRadius: 90,
-            backgroundColor: `${route.params.player3Colour}`,
+            backgroundColor: `${configDetails.player2Colour}`,
           }}
         ></View>
       </View>
