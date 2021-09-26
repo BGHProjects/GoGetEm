@@ -23,6 +23,9 @@ let searchGrid1: any = [];
 let searchGrid2: any = [];
 let searchPath1: any = [];
 let searchPath2: any = [];
+let player1Score: any;
+let player2Score: any;
+let player3Score: any;
 
 const generateCells = () => {
   mazeGrid.length = 0;
@@ -326,13 +329,13 @@ const ClassicGameplayScreen = ({ navigation, route }) => {
   const [search2IntervalId, setSearch2IntervalId] = useState<any>(null);
   const [player2Started, setPlayer2Started] = useState<any>(false);
   const [gameOver, setGameOver] = useState(false);
-  let configDetails = route.params;
+  let gameDetails = route.params;
   let difficulty =
-    configDetails.difficulty === "Meh"
+    gameDetails.difficulty === "Meh"
       ? 700
-      : configDetails.difficulty === "Oh OK"
+      : gameDetails.difficulty === "Oh OK"
       ? 500
-      : configDetails.difficulty === "Hang On"
+      : gameDetails.difficulty === "Hang On"
       ? 400
       : 300;
 
@@ -342,7 +345,10 @@ const ClassicGameplayScreen = ({ navigation, route }) => {
     trimMaze();
     makeSearchGrid(searchGrid1);
     makeSearchGrid(searchGrid2);
-    console.log("configDetails ", configDetails);
+    player1Score = gameDetails.player1Score;
+    player2Score = gameDetails.player2Score;
+    player3Score = gameDetails.player3Score;
+    console.log("gameDetails ", gameDetails);
   }, []);
 
   const movePlayerUp = () => {
@@ -564,18 +570,18 @@ const ClassicGameplayScreen = ({ navigation, route }) => {
 
   useEffect(() => {
     if (playerX === player3X && playerY === player3Y) {
+      player1Score++;
       setGameOver(true);
-      console.log("\n Player caught Player 3!");
     }
 
     if (player3X === player2X && player3Y === player2Y) {
+      player3Score++;
       setGameOver(true);
-      console.log("\n Player 3 caught Player 2!");
     }
 
     if (player2X === playerX && player2Y === playerY) {
+      player2Score++;
       setGameOver(true);
-      console.log("\n Player 2 caught Player!");
     }
   }, [playerX, playerY, player2X, player2Y, player3X, player3Y]);
 
@@ -584,7 +590,15 @@ const ClassicGameplayScreen = ({ navigation, route }) => {
       clearInterval(search1IntervalId);
       clearInterval(search2IntervalId);
       console.log("\n\n GAME OVER");
-      navigation.navigate("Classic Config");
+      gameDetails.player1Score = player1Score;
+      gameDetails.player2Score = player2Score;
+      gameDetails.player3Score = player3Score;
+      gameDetails.flag = "gameplay";
+      gameDetails.currentRound++;
+      if (gameDetails.currentRound > gameDetails.rounds) {
+        gameDetails.gameOver = true;
+      }
+      navigation.navigate("Classic Roles", gameDetails);
     }
   }, [gameOver]);
 
@@ -616,19 +630,19 @@ const ClassicGameplayScreen = ({ navigation, route }) => {
             cx={player3X}
             cy={player3Y}
             r="3"
-            fill={`${configDetails.player3Colour}`}
+            fill={`${gameDetails.player3Colour}`}
           ></Circle>
           <Circle
             cx={player2X}
             cy={player2Y}
             r="3"
-            fill={`${configDetails.player2Colour}`}
+            fill={`${gameDetails.player2Colour}`}
           ></Circle>
           <Circle
             cx={playerX}
             cy={playerY}
             r="3"
-            fill={`${configDetails.colour}`}
+            fill={`${gameDetails.colour}`}
           ></Circle>
         </Svg>
       </View>

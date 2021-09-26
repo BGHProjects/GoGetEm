@@ -50,6 +50,7 @@ const ClassicConfigScreen = ({ navigation }) => {
     let otherColours = getOtherColours();
 
     let configDetails = {
+      flag: "config",
       colour: selectedColour,
       rounds: selectedRound,
       difficulty: difficulty,

@@ -15,11 +15,31 @@ const height = Dimensions.get("window").height;
 
 const ClassicRolesScreen = ({ navigation, route }) => {
   const configDetails = route.params;
-  //console.log("\nConfigDetails ", configDetails);
+  let scoreDetails;
+
+  if (configDetails.flag === "config") {
+    scoreDetails = {
+      player1Score: 0,
+      player2Score: 0,
+      player3Score: 0,
+      currentRound: 1,
+      gameOver: false,
+    };
+  }
+
+  let totalDetails = { ...configDetails, ...scoreDetails };
+
+  console.log("totalDetails ", totalDetails);
 
   const onPressSubmit = () => {
-    navigation.navigate("Classic Gameplay", configDetails);
+    navigation.navigate("Classic Gameplay", totalDetails);
   };
+
+  if (totalDetails.gameOver) {
+    setTimeout(() => {
+      navigation.navigate("Main Menu");
+    }, 3000);
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -30,8 +50,21 @@ const ClassicRolesScreen = ({ navigation, route }) => {
           borderRadius: 90,
           backgroundColor: `${configDetails.colour}`,
           marginBottom: 50,
+          justifyContent: "center",
         }}
-      ></View>
+      >
+        {totalDetails.flag === "gameplay" && (
+          <Text
+            style={{
+              fontSize: 30,
+              color: "black",
+              alignSelf: "center",
+            }}
+          >
+            {totalDetails.player1Score}
+          </Text>
+        )}
+      </View>
 
       <Ionicons
         name="arrow-down"
@@ -71,8 +104,21 @@ const ClassicRolesScreen = ({ navigation, route }) => {
             width: 50,
             borderRadius: 90,
             backgroundColor: `${configDetails.player3Colour}`,
+            justifyContent: "center",
           }}
-        ></View>
+        >
+          {totalDetails.flag === "gameplay" && (
+            <Text
+              style={{
+                fontSize: 30,
+                color: "black",
+                alignSelf: "center",
+              }}
+            >
+              {totalDetails.player3Score}
+            </Text>
+          )}
+        </View>
         <Ionicons
           name="arrow-down"
           size={40}
@@ -89,15 +135,32 @@ const ClassicRolesScreen = ({ navigation, route }) => {
             width: 50,
             borderRadius: 90,
             backgroundColor: `${configDetails.player2Colour}`,
+            justifyContent: "center",
           }}
-        ></View>
+        >
+          {totalDetails.flag === "gameplay" && (
+            <Text
+              style={{
+                fontSize: 30,
+                color: "black",
+                alignSelf: "center",
+              }}
+            >
+              {totalDetails.player2Score}
+            </Text>
+          )}
+        </View>
       </View>
 
-      <View style={styles.beginButton}>
-        <TouchableOpacity onPress={() => onPressSubmit()}>
-          <Text style={styles.beginButtonLabel}>Ready?</Text>
-        </TouchableOpacity>
-      </View>
+      {!totalDetails.gameOver ? (
+        <View style={styles.beginButton}>
+          <TouchableOpacity onPress={() => onPressSubmit()}>
+            <Text style={styles.beginButtonLabel}>{`Start\nRound`}</Text>
+          </TouchableOpacity>
+        </View>
+      ) : (
+        <View style={styles.noBeginButton}></View>
+      )}
     </SafeAreaView>
   );
 };
@@ -115,10 +178,19 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 100,
   },
+  noBeginButton: {
+    backgroundColor: "black",
+    width: width / 1.5,
+    borderRadius: 10,
+    alignItems: "center",
+    marginTop: 100,
+    paddingVertical: 10,
+  },
   beginButtonLabel: {
     color: "white",
     fontSize: 25,
     paddingVertical: 10,
+    textAlign: "center",
   },
   container: {
     flex: 1,
