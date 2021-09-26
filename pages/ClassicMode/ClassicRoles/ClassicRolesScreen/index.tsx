@@ -29,8 +29,6 @@ const ClassicRolesScreen = ({ navigation, route }) => {
 
   let totalDetails = { ...configDetails, ...scoreDetails };
 
-  console.log("totalDetails ", totalDetails);
-
   const onPressSubmit = () => {
     navigation.navigate("Classic Gameplay", totalDetails);
   };
@@ -45,24 +43,12 @@ const ClassicRolesScreen = ({ navigation, route }) => {
     <SafeAreaView style={styles.container}>
       <View
         style={{
-          height: 50,
-          width: 50,
-          borderRadius: 90,
+          ...styles.playerRepresentation,
           backgroundColor: `${configDetails.colour}`,
-          marginBottom: 50,
-          justifyContent: "center",
         }}
       >
         {totalDetails.flag === "gameplay" && (
-          <Text
-            style={{
-              fontSize: 30,
-              color: "black",
-              alignSelf: "center",
-            }}
-          >
-            {totalDetails.player1Score}
-          </Text>
+          <Text style={styles.scoreText}>{totalDetails.player1Score}</Text>
         )}
       </View>
 
@@ -70,84 +56,41 @@ const ClassicRolesScreen = ({ navigation, route }) => {
         name="arrow-down"
         size={40}
         color={"white"}
-        style={{
-          position: "absolute",
-          left: 190,
-          top: 180,
-          transform: [{ rotate: "145deg" }],
-        }}
+        style={styles.rightToTopArrow}
       />
 
       <Ionicons
         name="arrow-down"
         size={40}
         color={"white"}
-        style={{
-          position: "absolute",
-          left: 130,
-          top: 180,
-          transform: [{ rotate: "35deg" }],
-        }}
+        style={styles.topToLeftArrow}
       />
 
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-evenly",
-          width: width * 0.9,
-          alignItems: "center",
-        }}
-      >
+      <View style={styles.leftPlayerMiddleArrowRightPlayer}>
         <View
           style={{
-            height: 50,
-            width: 50,
-            borderRadius: 90,
+            ...styles.playerRepresentation,
             backgroundColor: `${configDetails.player3Colour}`,
-            justifyContent: "center",
           }}
         >
           {totalDetails.flag === "gameplay" && (
-            <Text
-              style={{
-                fontSize: 30,
-                color: "black",
-                alignSelf: "center",
-              }}
-            >
-              {totalDetails.player3Score}
-            </Text>
+            <Text style={styles.scoreText}>{totalDetails.player3Score}</Text>
           )}
         </View>
         <Ionicons
           name="arrow-down"
           size={40}
           color={"white"}
-          style={{
-            position: "absolute",
-            left: 140,
-            transform: [{ rotate: "270deg" }],
-          }}
+          style={styles.leftToRightArrow}
         />
         <View
           style={{
-            height: 50,
-            width: 50,
-            borderRadius: 90,
+            ...styles.playerRepresentation,
             backgroundColor: `${configDetails.player2Colour}`,
-            justifyContent: "center",
           }}
         >
           {totalDetails.flag === "gameplay" && (
-            <Text
-              style={{
-                fontSize: 30,
-                color: "black",
-                alignSelf: "center",
-              }}
-            >
-              {totalDetails.player2Score}
-            </Text>
+            <Text style={styles.scoreText}>{totalDetails.player2Score}</Text>
           )}
         </View>
       </View>
@@ -197,6 +140,41 @@ const styles = StyleSheet.create({
     backgroundColor: "black",
     alignItems: "center",
     justifyContent: "center",
+  },
+  playerRepresentation: {
+    height: 50,
+    width: 50,
+    borderRadius: 90,
+    marginBottom: 50,
+    justifyContent: "center",
+  },
+  scoreText: {
+    fontSize: 30,
+    color: "black",
+    alignSelf: "center",
+  },
+  topToLeftArrow: {
+    position: "absolute",
+    left: 130,
+    top: 180,
+    transform: [{ rotate: "35deg" }],
+  },
+  rightToTopArrow: {
+    position: "absolute",
+    left: 190,
+    top: 180,
+    transform: [{ rotate: "145deg" }],
+  },
+  leftToRightArrow: {
+    position: "absolute",
+    left: 140,
+    transform: [{ rotate: "270deg" }],
+  },
+  leftPlayerMiddleArrowRightPlayer: {
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    width: width * 0.9,
+    alignItems: "center",
   },
 });
 

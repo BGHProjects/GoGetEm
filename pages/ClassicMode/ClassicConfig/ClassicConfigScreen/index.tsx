@@ -63,52 +63,24 @@ const ClassicConfigScreen = ({ navigation }) => {
   const renderColour = (item?: any) => {
     return (
       <View
-        style={{
-          width: selectionWidth,
-          height: selectionWidth,
-          borderRadius: 100,
-          backgroundColor: `${item.item}`,
-          alignItems: "center",
-          justifyContent: "center",
-        }}
+        style={{ ...styles.renderColourLabel, backgroundColor: `${item.item}` }}
       ></View>
     );
   };
 
   const renderNumber = (item?: any) => {
-    return (
-      <Text style={{ alignSelf: "center", color: "white", fontSize: 36 }}>
-        {item.item}
-      </Text>
-    );
+    return <Text style={styles.renderNumberLabel}>{item.item}</Text>;
   };
 
   const renderDifficulty = (item?: any) => {
-    return (
-      <Text
-        style={{
-          alignSelf: "center",
-          color: "white",
-          fontSize: 20,
-          textAlign: "center",
-        }}
-      >
-        {item.item}
-      </Text>
-    );
+    return <Text style={styles.renderDifficultyLabel}>{item.item}</Text>;
   };
 
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
-        <View
-          style={{
-            alignSelf: "center",
-            justifyContent: "center",
-            paddingTop: 20,
-          }}
-        >
-          <Text style={{ fontSize: 20, color: "white" }}>COLOUR</Text>
+        <View style={styles.textLabelContainer}>
+          <Text style={styles.textLabel}>COLOUR</Text>
         </View>
         <View style={{ paddingTop: 30 }}>
           <Carousel
@@ -123,14 +95,8 @@ const ClassicConfigScreen = ({ navigation }) => {
             firstItem={Math.floor(colourValues.length / 2)}
           />
         </View>
-        <View
-          style={{
-            alignSelf: "center",
-            justifyContent: "center",
-            paddingTop: 20,
-          }}
-        >
-          <Text style={{ fontSize: 20, color: "white" }}>ROUNDS</Text>
+        <View style={styles.textLabelContainer}>
+          <Text style={styles.textLabel}>ROUNDS</Text>
         </View>
         <View style={{ paddingTop: 30 }}>
           <Carousel
@@ -146,14 +112,8 @@ const ClassicConfigScreen = ({ navigation }) => {
           />
         </View>
 
-        <View
-          style={{
-            alignSelf: "center",
-            justifyContent: "center",
-            paddingTop: 20,
-          }}
-        >
-          <Text style={{ fontSize: 20, color: "white" }}>DIFFICULTY</Text>
+        <View style={styles.textLabelContainer}>
+          <Text style={styles.textLabel}>DIFFICULTY</Text>
         </View>
         <View style={{ paddingTop: 30 }}>
           <Carousel
@@ -190,7 +150,6 @@ const styles = StyleSheet.create({
     width: width / 1.5,
     borderRadius: 10,
     alignItems: "center",
-    marginTop: height / 24,
     alignSelf: "center",
     marginTop: 40,
   },
@@ -204,6 +163,27 @@ const styles = StyleSheet.create({
     backgroundColor: "black",
     alignItems: "center",
   },
+  renderNumberLabel: { alignSelf: "center", color: "white", fontSize: 36 },
+  renderDifficultyLabel: {
+    alignSelf: "center",
+    color: "white",
+    fontSize: 20,
+    textAlign: "center",
+  },
+  renderColourLabel: {
+    width: selectionWidth,
+    height: selectionWidth,
+    borderRadius: 100,
+
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  textLabelContainer: {
+    alignSelf: "center",
+    justifyContent: "center",
+    paddingTop: 20,
+  },
+  textLabel: { fontSize: 20, color: "white" },
 });
 
 export default ClassicConfigScreen;

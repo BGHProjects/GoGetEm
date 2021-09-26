@@ -1,22 +1,20 @@
-import React, { FC, useState, useEffect } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  SafeAreaView,
-  TouchableOpacity,
-  Dimensions,
-  FlatList,
-} from "react-native";
-import MazeCell from "../MazeCell";
+import React, { useState, useEffect } from "react";
+import { StyleSheet, Text, View, SafeAreaView, Dimensions } from "react-native";
 import { Svg, Circle } from "react-native-svg";
+import {
+  generateCells,
+  makeMaze,
+  trimMaze,
+  makeSearchGrid,
+} from "../../../../tools/MazeAndGridGeneration";
+import { aStarSearch } from "../../../../tools/BotBrain";
 
-const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
 const mazeSideLength = height * 0.4;
 const cellSize = height * 0.04;
 let mazeGrid: any = [];
 const wallWidth = 1;
+const gridSquareLength = 10;
 const stack: any = [];
 let gridColor = "white";
 let searchGrid1: any = [];
@@ -27,308 +25,17 @@ let player1Score: any;
 let player2Score: any;
 let player3Score: any;
 
-const generateCells = () => {
-  mazeGrid.length = 0;
-  for (let rowNum = 0; rowNum < 10; rowNum++) {
-    for (let colNum = 0; colNum < 10; colNum++) {
-      mazeGrid.push({
-        row: rowNum * 10,
-        col: colNum * 10,
-        top: wallWidth,
-        right: wallWidth,
-        bottom: wallWidth,
-        left: wallWidth,
-        visited: false,
-        color: null,
-      });
-      //console.log((`${rowNum}` + `${colNum}`).toString());
-    }
-  }
-};
-
-const checkNeighbours = (cell: any) => {
-  let neighbours = [];
-  let defined = [];
-
-  // Finds the neighbours in the grid
-  let top = mazeGrid.filter(
-    (item: any) => item.row === cell.row - 10 && item.col === cell.col
-  );
-  let right = mazeGrid.filter(
-    (item: any) => item.col === cell.col + 10 && item.row === cell.row
-  );
-  let bottom = mazeGrid.filter(
-    (item: any) => item.row === cell.row + 10 && item.col === cell.col
-  );
-  let left = mazeGrid.filter(
-    (item: any) => item.col === cell.col - 10 && item.row === cell.row
-  );
-
-  // If there is a neighbour for that cell, add it to defined
-  if (top.length > 0) {
-    defined.push(top[0]);
-  }
-
-  if (right.length > 0) {
-    defined.push(right[0]);
-  }
-
-  if (bottom.length > 0) {
-    defined.push(bottom[0]);
-  }
-
-  if (left.length > 0) {
-    defined.push(left[0]);
-  }
-
-  // Add all unvisited neighbours to neighbours
-  for (let i = 0; i < defined.length; i++) {
-    if (defined[i].visited === false) {
-      neighbours.push(defined[i]);
-    }
-  }
-
-  // Pick a random neighbour
-  if (neighbours.length > 0) {
-    let r = Math.floor(Math.random() * neighbours.length + 1);
-    return neighbours[r - 1];
-  } else {
-    return undefined;
-  }
-};
-
-const removeWalls = (current: any, neighbour: any) => {
-  if (neighbour.row < current.row) {
-    current.top = 0;
-    neighbour.bottom = 0;
-  } else if (neighbour.col > current.col) {
-    current.right = 0;
-    neighbour.left = 0;
-  } else if (neighbour.row > current.row) {
-    current.bottom = 0;
-    neighbour.top = 0;
-  } else if (neighbour.col < current.col) {
-    current.left = 0;
-    neighbour.right = 0;
-  }
-};
-
-const makeMaze = () => {
-  let current = mazeGrid[0];
-  current.visited = true;
-
-  for (let i = 0; i < 300; i++) {
-    if (mazeGrid.every((cell: any) => cell.visited === true) === false) {
-      // Get the next cell to visit
-      let next = checkNeighbours(current);
-      if (next) {
-        next.visited = true;
-        stack.push(current);
-        removeWalls(current, next);
-        current = next;
-      } else if (stack.length > 0) {
-        current = stack.pop();
-        // Finds the previous current, to find a new next
-      }
-    }
-  }
-};
-
-function trimMaze() {
-  let result = mazeGrid.map(function (cell: any, index: any, elements: any) {
-    if (cell.top > 0) {
-      if (index > 9) {
-        // Don't take any from the top border wall
-        // Get the right and left neighbours
-        let right = mazeGrid.filter(
-          (item: any) => item.col === cell.col + 10 && item.row === cell.row
-        );
-
-        let left = mazeGrid.filter(
-          (item: any) => item.col === cell.col - 10 && item.row === cell.row
-        );
-
-        // If there are neighbours
-        if (right[0] !== undefined && left[0] !== undefined) {
-          // If the neighbours also have a top border
-          if (right[0].top > 0 && left[0].top > 0) {
-            cell.top = 0;
-          }
-        }
-      }
-    }
-
-    if (cell.bottom > 0) {
-      if (index < 90) {
-        // Don't take any from the bottom border wall
-        // Get the right and left neighbours
-        let right = mazeGrid.filter(
-          (item: any) => item.col === cell.col + 10 && item.row === cell.row
-        );
-
-        let left = mazeGrid.filter(
-          (item: any) => item.col === cell.col - 10 && item.row === cell.row
-        );
-
-        // If there are neighbours
-        if (right[0] !== undefined && left[0] !== undefined) {
-          // If the neighbours also have a bottom border
-          if (right[0].bottom > 0 && left[0].bottom > 0) {
-            cell.bottom = 0;
-          }
-        }
-      }
-    }
-
-    if (cell.right > 0) {
-      if (
-        Number(index.toString()[index.toString().length - 1]) !== 9 &&
-        Number(index.toString()[index.toString().length - 1]) !== 0
-      ) {
-        // Don't take any from the right border wall
-        // Get the top and bottom neighbours
-        let top = mazeGrid.filter(
-          (item: any) => item.row === cell.row - 10 && item.col === cell.col
-        );
-
-        let bottom = mazeGrid.filter(
-          (item: any) => item.row === cell.row + 10 && item.col === cell.col
-        );
-
-        let right = mazeGrid.filter(
-          (item: any) => item.col === cell.col + 10 && item.row === cell.row
-        );
-
-        // If there are neighbours
-        if (top[0] !== undefined && bottom[0] !== undefined) {
-          // If the neighbours also have a right border
-          if (top[0].right > 0 && bottom[0].right > 0) {
-            cell.right = 0;
-            if (right[0] !== undefined) {
-              right[0].left = 0;
-            }
-          }
-        }
-      }
-    }
-
-    if (cell.left > 0) {
-      if (
-        Number(index.toString()[index.toString().length - 1]) !== 0 &&
-        Number(index.toString()[index.toString().length - 1]) !== 9
-      ) {
-        // Don't take any from the right border wall
-        // Get the top and bottom neighbours
-        let top = mazeGrid.filter(
-          (item: any) => item.row === cell.row - 10 && item.col === cell.col
-        );
-
-        let bottom = mazeGrid.filter(
-          (item: any) => item.row === cell.row + 10 && item.col === cell.col
-        );
-
-        let left = mazeGrid.filter(
-          (item: any) => item.col === cell.col - 10 && item.row === cell.row
-        );
-
-        // If there are neighbours
-        if (top[0] !== undefined && bottom[0] !== undefined) {
-          // If the neighbours also have a right border
-          if (top[0].left > 0 && bottom[0].left > 0) {
-            cell.left = 0;
-            if (left[0] !== undefined) {
-              left[0].right = 0;
-            }
-          }
-        }
-      }
-    }
-
-    return cell;
-  });
-}
-
-function makeSearchGrid(searchGrid: any) {
-  searchGrid.length = 0;
-
-  for (let i = 0; i < mazeGrid.length; i++) {
-    let object = {
-      row: mazeGrid[i].row,
-      col: mazeGrid[i].col,
-      top: mazeGrid[i].top,
-      right: mazeGrid[i].right,
-      bottom: mazeGrid[i].bottom,
-      left: mazeGrid[i].left,
-      f: 0,
-      g: 0,
-      h: 0,
-      neighbours: [],
-      previous: null,
-    };
-    searchGrid.push(object);
-  }
-
-  return searchGrid;
-}
-
-function findNeighbour(cell: any, searchGrid: any) {
-  let defined = [];
-
-  let top = searchGrid.filter(
-    (item: any) => item.row === cell.row - 10 && item.col === cell.col
-  );
-  let right = searchGrid.filter(
-    (item: any) => item.col === cell.col + 10 && item.row === cell.row
-  );
-  let bottom = searchGrid.filter(
-    (item: any) => item.row === cell.row + 10 && item.col === cell.col
-  );
-  let left = searchGrid.filter(
-    (item: any) => item.col === cell.col - 10 && item.row === cell.row
-  );
-
-  // If there is a neighbour for that cell, add it to defined
-  if (top.length > 0) {
-    if (top[0].bottom === 0) {
-      defined.push(top[0]);
-    }
-  }
-
-  if (right.length > 0) {
-    if (right[0].left === 0) {
-      defined.push(right[0]);
-    }
-  }
-
-  if (bottom.length > 0) {
-    if (bottom[0].top === 0) {
-      defined.push(bottom[0]);
-    }
-  }
-
-  if (left.length > 0) {
-    if (left[0].right === 0) {
-      defined.push(left[0]);
-    }
-  }
-
-  // Add all unvisited neighbours to neighbours
-  for (let i = 0; i < defined.length; i++) {
-    cell.neighbours.push(defined[i]);
-  }
-}
-
 const ClassicGameplayScreen = ({ navigation, route }) => {
   const [playerX, setplayerX] = useState(55);
   const [playerY, setplayerY] = useState(15);
-  const [player2X, setplayer2X] = useState(85);
+  const [player2X, setplayer2X] = useState(95);
   const [player2Y, setplayer2Y] = useState(85);
   const [player3X, setplayer3X] = useState(5);
   const [player3Y, setplayer3Y] = useState(85);
   const [search1IntervalId, setSearch1IntervalId] = useState<any>(null);
   const [search2IntervalId, setSearch2IntervalId] = useState<any>(null);
   const [player2Started, setPlayer2Started] = useState<any>(false);
-  const [gameOver, setGameOver] = useState(false);
+  const [roundOver, setRoundOver] = useState(false);
   let gameDetails = route.params;
   let difficulty =
     gameDetails.difficulty === "Meh"
@@ -340,52 +47,51 @@ const ClassicGameplayScreen = ({ navigation, route }) => {
       : 300;
 
   useEffect(() => {
-    generateCells();
-    makeMaze();
-    trimMaze();
-    makeSearchGrid(searchGrid1);
-    makeSearchGrid(searchGrid2);
+    generateCells(mazeGrid, wallWidth, gridSquareLength);
+    makeMaze(mazeGrid, stack);
+    trimMaze(mazeGrid);
+    makeSearchGrid(mazeGrid, searchGrid1);
+    makeSearchGrid(mazeGrid, searchGrid2);
     player1Score = gameDetails.player1Score;
     player2Score = gameDetails.player2Score;
     player3Score = gameDetails.player3Score;
-    console.log("gameDetails ", gameDetails);
   }, []);
 
   const movePlayerUp = () => {
-    let mazeCell = getPlayerMazeCell();
+    let mazeCell = getMazeCell(playerX, playerY);
 
-    if (playerY > 5 && mazeCell.top === 0 && !gameOver) {
+    if (playerY > 5 && mazeCell.top === 0 && !roundOver) {
       setplayerY(playerY - 10);
     }
   };
 
   const movePlayerRight = () => {
-    let mazeCell = getPlayerMazeCell();
+    let mazeCell = getMazeCell(playerX, playerY);
 
-    if (playerX < 95 && mazeCell.right === 0 && !gameOver) {
+    if (playerX < 95 && mazeCell.right === 0 && !roundOver) {
       setplayerX(playerX + 10);
     }
   };
 
   const movePlayerLeft = () => {
-    let mazeCell = getPlayerMazeCell();
+    let mazeCell = getMazeCell(playerX, playerY);
 
-    if (playerX > 5 && mazeCell.left === 0 && !gameOver) {
+    if (playerX > 5 && mazeCell.left === 0 && !roundOver) {
       setplayerX(playerX - 10);
     }
   };
 
   const movePlayerDown = () => {
-    let mazeCell = getPlayerMazeCell();
+    let mazeCell = getMazeCell(playerX, playerY);
 
-    if (playerY < 95 && mazeCell.bottom === 0 && !gameOver) {
+    if (playerY < 95 && mazeCell.bottom === 0 && !roundOver) {
       setplayerY(playerY + 10);
     }
   };
 
-  const getPlayerMazeCell = () => {
-    let digit1 = (playerX - 5).toString();
-    let digit2 = (playerY - 5).toString();
+  function getMazeCell(X: any, Y: any) {
+    let digit1 = (X - 5).toString();
+    let digit2 = (Y - 5).toString();
     let digits;
 
     if (digit2 === "0") {
@@ -395,96 +101,7 @@ const ClassicGameplayScreen = ({ navigation, route }) => {
     }
 
     return mazeGrid[digits];
-  };
-
-  const getPlayer2MazeCell = () => {
-    let digit1 = (player2X - 5).toString();
-    let digit2 = (player2Y - 5).toString();
-    let digits;
-
-    if (digit2 === "0") {
-      digits = digit1[0];
-    } else {
-      digits = digit2[0] + digit1[0];
-    }
-
-    return mazeGrid[digits];
-  };
-
-  function heuristic(a: any, b: any) {
-    let xs = Number(b.row) - Number(a.row);
-    let ys = Number(b.col) - Number(a.col);
-    let answer = Math.abs(xs) + Math.abs(ys);
-
-    return answer;
   }
-
-  const aStarSearch = (whichPlayer?: any) => {
-    let openSet = [];
-    let closedSet = [];
-    let start;
-    let end;
-    let searchPath;
-    let searchGrid;
-
-    if (whichPlayer === "player2") {
-      start = searchGrid1[89];
-
-      end = searchGrid1.filter(
-        (item: any) => item.row === playerY - 5 && item.col === playerX - 5
-      )[0];
-      searchPath = searchPath1;
-      searchGrid = searchGrid1;
-    } else if (whichPlayer === "player3") {
-      start = searchGrid2[80];
-      end = searchGrid2[89];
-      searchPath = searchPath2;
-      searchGrid = searchGrid2;
-    }
-
-    openSet.push(start);
-
-    while (openSet.length > 0) {
-      let lowestIndex = 0;
-
-      let current: any = openSet[lowestIndex];
-
-      if (current === end) {
-        searchPath.length = 0;
-        let temp = current;
-        searchPath.push([temp.row, temp.col]);
-        while (temp.previous) {
-          searchPath.push([temp.previous.row, temp.previous.col]);
-          temp = temp.previous;
-        }
-      }
-
-      openSet.splice(lowestIndex, 1);
-      closedSet.push(current);
-
-      findNeighbour(current, searchGrid);
-
-      for (let i = 0; i < current.neighbours.length; i++) {
-        let neighbour: any = current.neighbours[i];
-        if (!closedSet.includes(neighbour)) {
-          let tempG = current.g + 1;
-
-          if (openSet.includes(neighbour)) {
-            if (tempG < neighbour.g) {
-              neighbour.g = tempG;
-            }
-          } else {
-            neighbour.g = tempG;
-            openSet.push(neighbour);
-          }
-
-          neighbour.h = heuristic(neighbour, end);
-          neighbour.f = neighbour.g + neighbour.h;
-          neighbour.previous = current;
-        }
-      }
-    }
-  };
 
   function followPath(player: any, searchPath: any) {
     let index = 0;
@@ -517,8 +134,15 @@ const ClassicGameplayScreen = ({ navigation, route }) => {
   }
 
   useEffect(() => {
-    aStarSearch("player2");
-    aStarSearch("player3");
+    aStarSearch(searchGrid1, searchPath1, player2X, player2Y, playerX, playerY);
+    aStarSearch(
+      searchGrid2,
+      searchPath2,
+      player3X,
+      player3Y,
+      player2X,
+      player2Y
+    );
     //Search Paths are compiled in reverse
     searchPath1 = searchPath1.reverse();
     searchPath2 = searchPath2.reverse();
@@ -527,7 +151,7 @@ const ClassicGameplayScreen = ({ navigation, route }) => {
   }, []);
 
   useEffect(() => {
-    let player1Cell = getPlayerMazeCell();
+    let player1Cell = getMazeCell(playerX, playerY);
     /*
       This ensures that if the player backtracks on the search path
       those entries are removed instead of explored by the bot
@@ -553,7 +177,7 @@ const ClassicGameplayScreen = ({ navigation, route }) => {
 
   useEffect(() => {
     if (player2Started) {
-      let player2Cell = getPlayer2MazeCell();
+      let player2Cell = getMazeCell(player2X, player2Y);
       /*
       This ensures that if player2 backtracks on the search path
       those entries are removed instead of explored by the bot
@@ -571,25 +195,24 @@ const ClassicGameplayScreen = ({ navigation, route }) => {
   useEffect(() => {
     if (playerX === player3X && playerY === player3Y) {
       player1Score++;
-      setGameOver(true);
+      setRoundOver(true);
     }
 
     if (player3X === player2X && player3Y === player2Y) {
       player3Score++;
-      setGameOver(true);
+      setRoundOver(true);
     }
 
     if (player2X === playerX && player2Y === playerY) {
       player2Score++;
-      setGameOver(true);
+      setRoundOver(true);
     }
   }, [playerX, playerY, player2X, player2Y, player3X, player3Y]);
 
   useEffect(() => {
-    if (gameOver) {
+    if (roundOver) {
       clearInterval(search1IntervalId);
       clearInterval(search2IntervalId);
-      console.log("\n\n GAME OVER");
       gameDetails.player1Score = player1Score;
       gameDetails.player2Score = player2Score;
       gameDetails.player3Score = player3Score;
@@ -600,7 +223,7 @@ const ClassicGameplayScreen = ({ navigation, route }) => {
       }
       navigation.navigate("Classic Roles", gameDetails);
     }
-  }, [gameOver]);
+  }, [roundOver]);
 
   return (
     <SafeAreaView style={styles.container}>

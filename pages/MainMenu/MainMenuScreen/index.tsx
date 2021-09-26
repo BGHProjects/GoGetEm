@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
     marginTop: height / 24,
   },
   tagTeamModeButton: {
-    backgroundColor: "lime",
+    backgroundColor: "darkgreen",
     width: width / 1.5,
     borderRadius: 10,
     alignItems: "center",
