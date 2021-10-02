@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -33,8 +33,6 @@ const ClassicConfigScreen = ({ navigation }) => {
     roundNumbers[Math.floor(roundNumbers.length / 2)]
   );
   const [difficulty, setDifficulty] = useState<any>(difficulties[0]);
-  const [player2Colour, setPlayer2Colour] = useState<any>();
-  const [player3Colour, setPlayer3Colour] = useState<any>();
 
   function getOtherColours() {
     let colours = [...colourValues];
@@ -88,7 +86,9 @@ const ClassicConfigScreen = ({ navigation }) => {
             renderItem={renderColour}
             sliderWidth={width}
             itemWidth={selectionWidth + 10}
-            onSnapToItem={(value) => setSelectedColour(colourValues[value])}
+            onSnapToItem={(value) => {
+              setSelectedColour(colourValues[value]);
+            }}
             layout={"default"}
             inactiveSlideOpacity={0.3}
             activeAnimationType={"spring"}

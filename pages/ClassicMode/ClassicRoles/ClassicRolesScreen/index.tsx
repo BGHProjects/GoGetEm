@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useEffect, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -16,6 +16,10 @@ const height = Dimensions.get("window").height;
 const ClassicRolesScreen = ({ navigation, route }) => {
   const configDetails = route.params;
   let scoreDetails;
+  const [leftColour, setLeftColour] = useState(configDetails.player2Colour);
+  const [rightColour, setRightColour] = useState(configDetails.player3Colour);
+  const [leftScore, setLeftScore] = useState(configDetails.player2Score);
+  const [rightScore, setRightScore] = useState(configDetails.player3Score);
 
   if (configDetails.flag === "config") {
     scoreDetails = {
@@ -26,6 +30,20 @@ const ClassicRolesScreen = ({ navigation, route }) => {
       gameOver: false,
     };
   }
+
+  useEffect(() => {
+    if (configDetails.currentRound % 2 < 1) {
+      setLeftColour(configDetails.player3Colour);
+      setRightColour(configDetails.player2Colour);
+      setLeftScore(configDetails.player3Score);
+      setRightScore(configDetails.player2Score);
+    } else {
+      setLeftColour(configDetails.player2Colour);
+      setRightColour(configDetails.player3Colour);
+      setLeftScore(configDetails.player2Score);
+      setRightScore(configDetails.player3Score);
+    }
+  }, [configDetails]);
 
   let totalDetails = { ...configDetails, ...scoreDetails };
 
@@ -70,11 +88,11 @@ const ClassicRolesScreen = ({ navigation, route }) => {
         <View
           style={{
             ...styles.playerRepresentation,
-            backgroundColor: `${configDetails.player3Colour}`,
+            backgroundColor: `${rightColour}`,
           }}
         >
           {totalDetails.flag === "gameplay" && (
-            <Text style={styles.scoreText}>{totalDetails.player3Score}</Text>
+            <Text style={styles.scoreText}>{rightScore}</Text>
           )}
         </View>
         <Ionicons
@@ -86,11 +104,11 @@ const ClassicRolesScreen = ({ navigation, route }) => {
         <View
           style={{
             ...styles.playerRepresentation,
-            backgroundColor: `${configDetails.player2Colour}`,
+            backgroundColor: `${leftColour}`,
           }}
         >
           {totalDetails.flag === "gameplay" && (
-            <Text style={styles.scoreText}>{totalDetails.player2Score}</Text>
+            <Text style={styles.scoreText}>{leftScore}</Text>
           )}
         </View>
       </View>

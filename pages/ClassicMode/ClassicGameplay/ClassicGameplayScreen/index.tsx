@@ -10,8 +10,8 @@ import {
 import { aStarSearch } from "../../../../tools/BotBrain";
 
 const height = Dimensions.get("window").height;
-const mazeSideLength = height * 0.4;
-const cellSize = height * 0.04;
+const mazeSideLength = height * 0.45;
+const cellSize = height * 0.045;
 let mazeGrid: any = [];
 const wallWidth = 1;
 const gridSquareLength = 10;
@@ -24,19 +24,27 @@ let searchPath2: any = [];
 let player1Score: any;
 let player2Score: any;
 let player3Score: any;
+let playerSize = 4;
+const leftStart = [5, 85];
+const rightStart = [95, 85];
 
 const ClassicGameplayScreen = ({ navigation, route }) => {
+  let gameDetails = route.params;
   const [playerX, setplayerX] = useState(55);
   const [playerY, setplayerY] = useState(15);
-  const [player2X, setplayer2X] = useState(95);
+  const [player2X, setplayer2X] = useState(
+    gameDetails.currentRound % 2 < 1 ? 5 : 95
+  );
   const [player2Y, setplayer2Y] = useState(85);
-  const [player3X, setplayer3X] = useState(5);
+  const [player3X, setplayer3X] = useState(
+    gameDetails.currentRound % 2 < 1 ? 95 : 5
+  );
   const [player3Y, setplayer3Y] = useState(85);
   const [search1IntervalId, setSearch1IntervalId] = useState<any>(null);
   const [search2IntervalId, setSearch2IntervalId] = useState<any>(null);
   const [player2Started, setPlayer2Started] = useState<any>(false);
   const [roundOver, setRoundOver] = useState(false);
-  let gameDetails = route.params;
+
   let difficulty =
     gameDetails.difficulty === "Meh"
       ? 700
@@ -134,15 +142,41 @@ const ClassicGameplayScreen = ({ navigation, route }) => {
   }
 
   useEffect(() => {
-    aStarSearch(searchGrid1, searchPath1, player2X, player2Y, playerX, playerY);
-    aStarSearch(
-      searchGrid2,
-      searchPath2,
-      player3X,
-      player3Y,
-      player2X,
-      player2Y
-    );
+    gameDetails.currentRound % 2 < 1
+      ? aStarSearch(
+          searchGrid1,
+          searchPath1,
+          player2X,
+          player2Y,
+          player3X,
+          player3Y
+        )
+      : aStarSearch(
+          searchGrid1,
+          searchPath1,
+          player2X,
+          player2Y,
+          playerX,
+          playerY
+        );
+
+    gameDetails.currentRound % 2 < 1
+      ? aStarSearch(
+          searchGrid2,
+          searchPath2,
+          player3X,
+          player3Y,
+          playerX,
+          playerY
+        )
+      : aStarSearch(
+          searchGrid2,
+          searchPath2,
+          player3X,
+          player3Y,
+          player2X,
+          player2Y
+        );
     //Search Paths are compiled in reverse
     searchPath1 = searchPath1.reverse();
     searchPath2 = searchPath2.reverse();
@@ -194,17 +228,30 @@ const ClassicGameplayScreen = ({ navigation, route }) => {
 
   useEffect(() => {
     if (playerX === player3X && playerY === player3Y) {
-      player1Score++;
+      if (gameDetails.currentRound % 2 === 0) {
+        player3Score++;
+      } else {
+        player1Score++;
+      }
+
       setRoundOver(true);
     }
 
     if (player3X === player2X && player3Y === player2Y) {
-      player3Score++;
+      if (gameDetails.currentRound % 2 < 1) {
+        player2Score++;
+      } else {
+        player3Score++;
+      }
       setRoundOver(true);
     }
 
     if (player2X === playerX && player2Y === playerY) {
-      player2Score++;
+      if (gameDetails.currentRound % 2 < 1) {
+        player1Score++;
+      } else {
+        player2Score++;
+      }
       setRoundOver(true);
     }
   }, [playerX, playerY, player2X, player2Y, player3X, player3Y]);
@@ -252,19 +299,19 @@ const ClassicGameplayScreen = ({ navigation, route }) => {
           <Circle
             cx={player3X}
             cy={player3Y}
-            r="3"
+            r={playerSize.toString()}
             fill={`${gameDetails.player3Colour}`}
           ></Circle>
           <Circle
             cx={player2X}
             cy={player2Y}
-            r="3"
+            r={playerSize.toString()}
             fill={`${gameDetails.player2Colour}`}
           ></Circle>
           <Circle
             cx={playerX}
             cy={playerY}
-            r="3"
+            r={playerSize.toString()}
             fill={`${gameDetails.colour}`}
           ></Circle>
         </Svg>

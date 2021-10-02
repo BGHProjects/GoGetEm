@@ -27,7 +27,7 @@ const MainMenuScreen = ({ navigation }) => {
           </TouchableOpacity>
         </View>
         <View style={styles.chaseDownModeButton}>
-          <TouchableOpacity onPress={() => onPressButton("ChaseDown Config")}>
+          <TouchableOpacity onPress={() => onPressButton("Chasedown Config")}>
             <Text style={styles.buttonLabel}>ChaseDown Mode</Text>
           </TouchableOpacity>
         </View>

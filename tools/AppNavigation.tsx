@@ -5,7 +5,9 @@ import MainMenu from "../pages/MainMenu/MainMenuScreen";
 import ClassicConfigScreen from "../pages/ClassicMode/ClassicConfig/ClassicConfigScreen";
 import ClassicRolesScreen from "../pages/ClassicMode/ClassicRoles/ClassicRolesScreen";
 import ClassicGameplayScreen from "../pages/ClassicMode/ClassicGameplay/ClassicGameplayScreen";
-import { StyleSheet, Text, View, SafeAreaView } from "react-native";
+import ChasedownConfigScreen from "../pages/ChasedownMode/ChasedownConfig/ChasedownConfigScreen";
+import ChasedownRolesScreen from "../pages/ChasedownMode/ChasedownRoles/ChasedownRolesScreen";
+import ChasedownGameplayScreen from "../pages/ChasedownMode/ChasedownGameplay/ChasedownGameplayScreen";
 
 const AppNavigation = () => {
   const Stack = createStackNavigator();
@@ -31,6 +33,21 @@ const AppNavigation = () => {
       <Stack.Screen
         name="Classic Gameplay"
         component={ClassicGameplayScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Chasedown Config"
+        component={ChasedownConfigScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Chasedown Roles"
+        component={ChasedownRolesScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Chasedown Gameplay"
+        component={ChasedownGameplayScreen}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>
