@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -6,122 +6,135 @@ import {
   SafeAreaView,
   TouchableOpacity,
   Dimensions,
+  ScrollView,
 } from "react-native";
-import { Svg, Line } from "react-native-svg";
-import { Ionicons } from "@expo/vector-icons";
+import Carousel from "react-native-snap-carousel";
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
 
-const ChasedownConfigScreen = ({ navigation, route }) => {
-  const configDetails = route.params;
-  let scoreDetails;
-  const [leftColour, setLeftColour] = useState(configDetails.player2Colour);
-  const [rightColour, setRightColour] = useState(configDetails.player3Colour);
-  const [leftScore, setLeftScore] = useState(configDetails.player2Score);
-  const [rightScore, setRightScore] = useState(configDetails.player3Score);
+const colourValues = [
+  "#FE3131",
+  "#F6FF3E",
+  "#3EB0FF",
+  "#0BE500",
+  "#FEA025",
+  "#A441FF",
+];
+const selectionWidth = 60;
+const roundNumbers = [1, 2, 3, 4, 5, 6, 7];
+const difficulties = ["Meh", "Oh OK", "Hang On", "What The"];
 
-  if (configDetails.flag === "config") {
-    scoreDetails = {
-      player1Score: 0,
-      player2Score: 0,
-      player3Score: 0,
-      currentRound: 1,
-      gameOver: false,
-    };
+const ChasedownConfigScreen = ({ navigation }) => {
+  const [selectedColour, setSelectedColour] = useState<any>(
+    colourValues[Math.floor(colourValues.length / 2)]
+  );
+  const [selectedRound, setSelectedRound] = useState<any>(
+    roundNumbers[Math.floor(roundNumbers.length / 2)]
+  );
+  const [difficulty, setDifficulty] = useState<any>(difficulties[0]);
+
+  function getOtherColours() {
+    let colours = [...colourValues];
+    colours = colours.filter((value) => value !== selectedColour);
+    let player2colour = colours[Math.floor(Math.random() * colours.length)];
+    colours = colours.filter((value) => value !== player2colour);
+    let player3colour = colours[Math.floor(Math.random() * colours.length)];
+
+    return [player2colour, player3colour];
   }
-
-  useEffect(() => {
-    if (configDetails.currentRound % 2 < 1) {
-      setLeftColour(configDetails.player3Colour);
-      setRightColour(configDetails.player2Colour);
-      setLeftScore(configDetails.player3Score);
-      setRightScore(configDetails.player2Score);
-    } else {
-      setLeftColour(configDetails.player2Colour);
-      setRightColour(configDetails.player3Colour);
-      setLeftScore(configDetails.player2Score);
-      setRightScore(configDetails.player3Score);
-    }
-  }, [configDetails]);
-
-  let totalDetails = { ...configDetails, ...scoreDetails };
 
   const onPressSubmit = () => {
-    navigation.navigate("Classic Gameplay", totalDetails);
+    let otherColours = getOtherColours();
+
+    let configDetails = {
+      flag: "config",
+      colour: selectedColour,
+      rounds: selectedRound,
+      difficulty: difficulty,
+      player2Colour: otherColours[0],
+      player3Colour: otherColours[1],
+    };
+    navigation.navigate("Chasedown Roles", configDetails);
   };
 
-  if (totalDetails.gameOver) {
-    setTimeout(() => {
-      navigation.navigate("Main Menu");
-    }, 3000);
-  }
+  const renderColour = (item?: any) => {
+    return (
+      <View
+        style={{ ...styles.renderColourLabel, backgroundColor: `${item.item}` }}
+      ></View>
+    );
+  };
+
+  const renderNumber = (item?: any) => {
+    return <Text style={styles.renderNumberLabel}>{item.item}</Text>;
+  };
+
+  const renderDifficulty = (item?: any) => {
+    return <Text style={styles.renderDifficultyLabel}>{item.item}</Text>;
+  };
 
   return (
     <SafeAreaView style={styles.container}>
-      <View
-        style={{
-          ...styles.playerRepresentation,
-          backgroundColor: `${configDetails.colour}`,
-        }}
-      >
-        {totalDetails.flag === "gameplay" && (
-          <Text style={styles.scoreText}>{totalDetails.player1Score}</Text>
-        )}
-      </View>
-
-      <Ionicons
-        name="arrow-down"
-        size={40}
-        color={"white"}
-        style={styles.rightToTopArrow}
-      />
-
-      <Ionicons
-        name="arrow-down"
-        size={40}
-        color={"white"}
-        style={styles.topToLeftArrow}
-      />
-
-      <View style={styles.leftPlayerMiddleArrowRightPlayer}>
-        <View
-          style={{
-            ...styles.playerRepresentation,
-            backgroundColor: `${rightColour}`,
-          }}
-        >
-          {totalDetails.flag === "gameplay" && (
-            <Text style={styles.scoreText}>{rightScore}</Text>
-          )}
+      <ScrollView>
+        <View style={styles.textLabelContainer}>
+          <Text style={styles.textLabel}>COLOUR</Text>
         </View>
-        <Ionicons
-          name="arrow-down"
-          size={40}
-          color={"white"}
-          style={styles.leftToRightArrow}
-        />
-        <View
-          style={{
-            ...styles.playerRepresentation,
-            backgroundColor: `${leftColour}`,
-          }}
-        >
-          {totalDetails.flag === "gameplay" && (
-            <Text style={styles.scoreText}>{leftScore}</Text>
-          )}
+        <View style={{ paddingTop: 30 }}>
+          <Carousel
+            data={colourValues}
+            renderItem={renderColour}
+            sliderWidth={width}
+            itemWidth={selectionWidth + 10}
+            onSnapToItem={(value) => {
+              setSelectedColour(colourValues[value]);
+            }}
+            layout={"default"}
+            inactiveSlideOpacity={0.3}
+            activeAnimationType={"spring"}
+            firstItem={Math.floor(colourValues.length / 2)}
+          />
         </View>
-      </View>
+        <View style={styles.textLabelContainer}>
+          <Text style={styles.textLabel}>ROUNDS</Text>
+        </View>
+        <View style={{ paddingTop: 30 }}>
+          <Carousel
+            data={roundNumbers}
+            renderItem={renderNumber}
+            sliderWidth={width}
+            itemWidth={selectionWidth + 10}
+            onSnapToItem={(value) => setSelectedRound(roundNumbers[value])}
+            layout={"default"}
+            inactiveSlideOpacity={0.3}
+            activeAnimationType={"spring"}
+            firstItem={Math.floor(roundNumbers.length / 2)}
+          />
+        </View>
 
-      {!totalDetails.gameOver ? (
+        <View style={styles.textLabelContainer}>
+          <Text style={styles.textLabel}>DIFFICULTY</Text>
+        </View>
+        <View style={{ paddingTop: 30 }}>
+          <Carousel
+            data={difficulties}
+            renderItem={renderDifficulty}
+            sliderWidth={width}
+            itemWidth={selectionWidth + 50}
+            onSnapToItem={(value) => setDifficulty(difficulties[value])}
+            layout={"default"}
+            inactiveSlideOpacity={0.3}
+            activeAnimationType={"spring"}
+            firstItem={0}
+          />
+        </View>
+
         <View style={styles.beginButton}>
           <TouchableOpacity onPress={() => onPressSubmit()}>
-            <Text style={styles.beginButtonLabel}>{`Start\nRound`}</Text>
+            <Text style={styles.beginButtonLabel}>Submit</Text>
           </TouchableOpacity>
         </View>
-      ) : (
-        <View style={styles.noBeginButton}></View>
-      )}
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -137,63 +150,40 @@ const styles = StyleSheet.create({
     width: width / 1.5,
     borderRadius: 10,
     alignItems: "center",
-    marginTop: 100,
-  },
-  noBeginButton: {
-    backgroundColor: "black",
-    width: width / 1.5,
-    borderRadius: 10,
-    alignItems: "center",
-    marginTop: 100,
-    paddingVertical: 10,
+    alignSelf: "center",
+    marginTop: 40,
   },
   beginButtonLabel: {
     color: "white",
     fontSize: 25,
     paddingVertical: 10,
-    textAlign: "center",
   },
   container: {
     flex: 1,
     backgroundColor: "black",
     alignItems: "center",
-    justifyContent: "center",
   },
-  playerRepresentation: {
-    height: 50,
-    width: 50,
-    borderRadius: 90,
-    marginBottom: 50,
-    justifyContent: "center",
-  },
-  scoreText: {
-    fontSize: 30,
-    color: "black",
+  renderNumberLabel: { alignSelf: "center", color: "white", fontSize: 36 },
+  renderDifficultyLabel: {
     alignSelf: "center",
+    color: "white",
+    fontSize: 20,
+    textAlign: "center",
   },
-  topToLeftArrow: {
-    position: "absolute",
-    left: 130,
-    top: 180,
-    transform: [{ rotate: "35deg" }],
-  },
-  rightToTopArrow: {
-    position: "absolute",
-    left: 190,
-    top: 180,
-    transform: [{ rotate: "145deg" }],
-  },
-  leftToRightArrow: {
-    position: "absolute",
-    left: 140,
-    transform: [{ rotate: "270deg" }],
-  },
-  leftPlayerMiddleArrowRightPlayer: {
-    flexDirection: "row",
-    justifyContent: "space-evenly",
-    width: width * 0.9,
+  renderColourLabel: {
+    width: selectionWidth,
+    height: selectionWidth,
+    borderRadius: 100,
+
     alignItems: "center",
+    justifyContent: "center",
   },
+  textLabelContainer: {
+    alignSelf: "center",
+    justifyContent: "center",
+    paddingTop: 20,
+  },
+  textLabel: { fontSize: 20, color: "white" },
 });
 
 export default ChasedownConfigScreen;

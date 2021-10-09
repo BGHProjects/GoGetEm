@@ -22,7 +22,7 @@ const colourValues = [
   "#A441FF",
 ];
 const selectionWidth = 60;
-const roundNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+const roundNumbers = [1, 2, 3, 4, 5, 6, 7];
 const difficulties = ["Meh", "Oh OK", "Hang On", "What The"];
 
 const ClassicConfigScreen = ({ navigation }) => {

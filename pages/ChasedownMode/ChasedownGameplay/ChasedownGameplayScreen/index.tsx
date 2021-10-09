@@ -25,19 +25,89 @@ let player1Score: any;
 let player2Score: any;
 let player3Score: any;
 let playerSize = 4;
+const targetStart = [55, 55];
+const topLeftStart = [5, 5];
+const topRightStart = [95, 5];
+const bottomLeftStart = [5, 95];
+const bottomRightStart = [95, 95];
 
 const ChasedownGameplayScreen = ({ navigation, route }) => {
-  const [playerX, setplayerX] = useState(55);
-  const [playerY, setplayerY] = useState(15);
-  const [player2X, setplayer2X] = useState(95);
-  const [player2Y, setplayer2Y] = useState(85);
-  const [player3X, setplayer3X] = useState(5);
-  const [player3Y, setplayer3Y] = useState(85);
+  let gameDetails = route.params;
+  const [playerX, setplayerX] = useState(
+    gameDetails.currentRound === 1 || gameDetails.currentRound === 7
+      ? topLeftStart[0]
+      : gameDetails.currentRound === 2 || gameDetails.currentRound === 5
+      ? targetStart[0]
+      : gameDetails.currentRound === 3
+      ? bottomRightStart[0]
+      : gameDetails.currentRound === 4
+      ? topRightStart[0]
+      : bottomLeftStart[0]
+  );
+  const [playerY, setplayerY] = useState(
+    gameDetails.currentRound === 1 || gameDetails.currentRound === 7
+      ? topLeftStart[1]
+      : gameDetails.currentRound === 2 || gameDetails.currentRound === 5
+      ? targetStart[1]
+      : gameDetails.currentRound === 3
+      ? bottomRightStart[1]
+      : gameDetails.currentRound === 4
+      ? topRightStart[1]
+      : bottomLeftStart[1]
+  );
+  const [player2X, setplayer2X] = useState(
+    gameDetails.currentRound === 1 ||
+      gameDetails.currentRound === 4 ||
+      gameDetails.currentRound === 7
+      ? targetStart[0]
+      : gameDetails.currentRound === 2
+      ? bottomLeftStart[0]
+      : gameDetails.currentRound === 3
+      ? topLeftStart[0]
+      : gameDetails.currentRound === 5
+      ? bottomRightStart[0]
+      : topRightStart[0]
+  );
+  const [player2Y, setplayer2Y] = useState(
+    gameDetails.currentRound === 1 ||
+      gameDetails.currentRound === 4 ||
+      gameDetails.currentRound === 7
+      ? targetStart[1]
+      : gameDetails.currentRound === 2
+      ? bottomLeftStart[1]
+      : gameDetails.currentRound === 3
+      ? topLeftStart[1]
+      : gameDetails.currentRound === 5
+      ? bottomRightStart[1]
+      : topRightStart[1]
+  );
+  const [player3X, setplayer3X] = useState(
+    gameDetails.currentRound === 3 || gameDetails.currentRound === 6
+      ? targetStart[0]
+      : gameDetails.currentRound === 1 || gameDetails.currentRound === 7
+      ? bottomRightStart[0]
+      : gameDetails.currentRound === 2
+      ? topRightStart[0]
+      : gameDetails.currentRound === 4
+      ? bottomLeftStart[0]
+      : topLeftStart[0]
+  );
+  const [player3Y, setplayer3Y] = useState(
+    gameDetails.currentRound === 3 || gameDetails.currentRound === 6
+      ? targetStart[1]
+      : gameDetails.currentRound === 1 || gameDetails.currentRound === 7
+      ? bottomRightStart[1]
+      : gameDetails.currentRound === 2
+      ? topRightStart[1]
+      : gameDetails.currentRound === 4
+      ? bottomLeftStart[1]
+      : topLeftStart[1]
+  );
   const [search1IntervalId, setSearch1IntervalId] = useState<any>(null);
   const [search2IntervalId, setSearch2IntervalId] = useState<any>(null);
   const [player2Started, setPlayer2Started] = useState<any>(false);
   const [roundOver, setRoundOver] = useState(false);
-  let gameDetails = route.params;
+
   let difficulty =
     gameDetails.difficulty === "Meh"
       ? 700
@@ -135,15 +205,41 @@ const ChasedownGameplayScreen = ({ navigation, route }) => {
   }
 
   useEffect(() => {
-    aStarSearch(searchGrid1, searchPath1, player2X, player2Y, playerX, playerY);
-    aStarSearch(
-      searchGrid2,
-      searchPath2,
-      player3X,
-      player3Y,
-      player2X,
-      player2Y
-    );
+    gameDetails.currentRound % 2 < 1
+      ? aStarSearch(
+          searchGrid1,
+          searchPath1,
+          player2X,
+          player2Y,
+          player3X,
+          player3Y
+        )
+      : aStarSearch(
+          searchGrid1,
+          searchPath1,
+          player2X,
+          player2Y,
+          playerX,
+          playerY
+        );
+
+    gameDetails.currentRound % 2 < 1
+      ? aStarSearch(
+          searchGrid2,
+          searchPath2,
+          player3X,
+          player3Y,
+          playerX,
+          playerY
+        )
+      : aStarSearch(
+          searchGrid2,
+          searchPath2,
+          player3X,
+          player3Y,
+          player2X,
+          player2Y
+        );
     //Search Paths are compiled in reverse
     searchPath1 = searchPath1.reverse();
     searchPath2 = searchPath2.reverse();
@@ -195,18 +291,33 @@ const ChasedownGameplayScreen = ({ navigation, route }) => {
 
   useEffect(() => {
     if (playerX === player3X && playerY === player3Y) {
-      player1Score++;
-      setRoundOver(true);
+      if (gameDetails.targetPlayer === 1) {
+        player3Score++;
+        setRoundOver(true);
+      } else if (gameDetails.targetPlayer === 3) {
+        player1Score++;
+        setRoundOver(true);
+      }
     }
 
     if (player3X === player2X && player3Y === player2Y) {
-      player3Score++;
-      setRoundOver(true);
+      if (gameDetails.targetPlayer === 2) {
+        player3Score++;
+        setRoundOver(true);
+      } else if (gameDetails.targetPlayer === 3) {
+        player2Score++;
+        setRoundOver(true);
+      }
     }
 
     if (player2X === playerX && player2Y === playerY) {
-      player2Score++;
-      setRoundOver(true);
+      if (gameDetails.targetPlayer === 2) {
+        player1Score++;
+        setRoundOver(true);
+      } else if (gameDetails.targetPlayer === 1) {
+        player2Score++;
+        setRoundOver(true);
+      }
     }
   }, [playerX, playerY, player2X, player2Y, player3X, player3Y]);
 
@@ -222,13 +333,12 @@ const ChasedownGameplayScreen = ({ navigation, route }) => {
       if (gameDetails.currentRound > gameDetails.rounds) {
         gameDetails.gameOver = true;
       }
-      navigation.navigate("Classic Roles", gameDetails);
+      navigation.navigate("Chasedown Roles", gameDetails);
     }
   }, [roundOver]);
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.titleLabel}>Classic Gameplay</Text>
       <View style={styles.mazeContainer}>
         {mazeGrid.map((item: any) => (
           <View

@@ -16,10 +16,12 @@ const height = Dimensions.get("window").height;
 const ChasedownRolesScreen = ({ navigation, route }) => {
   const configDetails = route.params;
   let scoreDetails;
-  const [leftColour, setLeftColour] = useState(configDetails.player2Colour);
-  const [rightColour, setRightColour] = useState(configDetails.player3Colour);
-  const [leftScore, setLeftScore] = useState(configDetails.player2Score);
-  const [rightScore, setRightScore] = useState(configDetails.player3Score);
+  const [topColour, setTopColour] = useState(configDetails.colour);
+  const [topScore, setTopScore] = useState(configDetails.player1Score);
+  const [middleColour, setMiddleColour] = useState(configDetails.player2Colour);
+  const [middleScore, setMiddleScore] = useState(configDetails.player2Score);
+  const [bottomColour, setBottomColour] = useState(configDetails.player3Colour);
+  const [bottomScore, setBottomScore] = useState(configDetails.player3Score);
 
   if (configDetails.flag === "config") {
     scoreDetails = {
@@ -28,27 +30,48 @@ const ChasedownRolesScreen = ({ navigation, route }) => {
       player3Score: 0,
       currentRound: 1,
       gameOver: false,
+      targetPlayer: 2,
     };
   }
 
-  useEffect(() => {
-    if (configDetails.currentRound % 2 < 1) {
-      setLeftColour(configDetails.player3Colour);
-      setRightColour(configDetails.player2Colour);
-      setLeftScore(configDetails.player3Score);
-      setRightScore(configDetails.player2Score);
-    } else {
-      setLeftColour(configDetails.player2Colour);
-      setRightColour(configDetails.player3Colour);
-      setLeftScore(configDetails.player2Score);
-      setRightScore(configDetails.player3Score);
-    }
-  }, [configDetails]);
-
   let totalDetails = { ...configDetails, ...scoreDetails };
 
+  useEffect(() => {
+    if (totalDetails.currentRound === 4 || totalDetails.currentRound === 7) {
+      setTopColour(totalDetails.colour);
+      setTopScore(totalDetails.player1Score);
+      setMiddleColour(totalDetails.player2Colour);
+      setMiddleScore(totalDetails.player2Score);
+      setBottomColour(totalDetails.player3Colour);
+      setBottomScore(totalDetails.player3Score);
+      totalDetails.targetPlayer = 2;
+    } else if (
+      totalDetails.currentRound === 2 ||
+      totalDetails.currentRound === 5
+    ) {
+      setTopColour(totalDetails.player3Colour);
+      setTopScore(totalDetails.player3Score);
+      setMiddleColour(totalDetails.colour);
+      setMiddleScore(totalDetails.player1Score);
+      setBottomColour(totalDetails.player2Colour);
+      setBottomScore(totalDetails.player2Score);
+      totalDetails.targetPlayer = 1;
+    } else if (
+      totalDetails.currentRound === 3 ||
+      totalDetails.currentRound === 6
+    ) {
+      setTopColour(totalDetails.player2Colour);
+      setTopScore(totalDetails.player2Score);
+      setMiddleColour(totalDetails.player3Colour);
+      setMiddleScore(totalDetails.player3Score);
+      setBottomColour(totalDetails.colour);
+      setBottomScore(totalDetails.player1Score);
+      totalDetails.targetPlayer = 3;
+    }
+  }, [totalDetails]);
+
   const onPressSubmit = () => {
-    navigation.navigate("Classic Gameplay", totalDetails);
+    navigation.navigate("Chasedown Gameplay", totalDetails);
   };
 
   if (totalDetails.gameOver) {
@@ -61,54 +84,83 @@ const ChasedownRolesScreen = ({ navigation, route }) => {
     <SafeAreaView style={styles.container}>
       <View
         style={{
-          ...styles.playerRepresentation,
-          backgroundColor: `${configDetails.colour}`,
+          right: totalDetails.currentRound % 2 === 0 ? -80 : 80,
+          top: 0,
+          marginVertical: -30,
         }}
       >
-        {totalDetails.flag === "gameplay" && (
-          <Text style={styles.scoreText}>{totalDetails.player1Score}</Text>
-        )}
+        <View
+          style={{
+            ...styles.playerRepresentation,
+            backgroundColor: `${topColour}`,
+          }}
+        >
+          {totalDetails.flag === "gameplay" && (
+            <Text style={styles.scoreText}>{topScore}</Text>
+          )}
+        </View>
       </View>
 
       <Ionicons
         name="arrow-down"
         size={40}
         color={"white"}
-        style={styles.rightToTopArrow}
+        style={{
+          right: totalDetails.currentRound % 2 === 0 ? -45 : 45,
+          top: -5,
+          marginVertical: -10,
+          transform: [
+            {
+              rotate: totalDetails.currentRound % 2 === 0 ? "55deg" : "325deg",
+            },
+          ],
+        }}
       />
+
+      <View style={{ right: 0, top: 12, marginVertical: -10 }}>
+        <View
+          style={{
+            ...styles.playerRepresentation,
+            backgroundColor: `${middleColour}`,
+          }}
+        >
+          {totalDetails.flag === "gameplay" && (
+            <Text style={styles.scoreText}>{middleScore}</Text>
+          )}
+        </View>
+      </View>
 
       <Ionicons
         name="arrow-down"
         size={40}
         color={"white"}
-        style={styles.topToLeftArrow}
+        style={{
+          right: totalDetails.currentRound % 2 === 0 ? 45 : -45,
+          top: -10,
+          marginVertical: -10,
+          transform: [
+            {
+              rotate: totalDetails.currentRound % 2 === 0 ? "235deg" : "145deg",
+            },
+          ],
+        }}
       />
 
-      <View style={styles.leftPlayerMiddleArrowRightPlayer}>
+      <View
+        style={{
+          right: totalDetails.currentRound % 2 === 0 ? 80 : -80,
+          top: 0,
+          marginBottom: -100,
+        }}
+      >
         <View
           style={{
             ...styles.playerRepresentation,
-            backgroundColor: `${rightColour}`,
+            backgroundColor: `${bottomColour}`,
           }}
         >
           {totalDetails.flag === "gameplay" && (
-            <Text style={styles.scoreText}>{rightScore}</Text>
-          )}
-        </View>
-        <Ionicons
-          name="arrow-down"
-          size={40}
-          color={"white"}
-          style={styles.leftToRightArrow}
-        />
-        <View
-          style={{
-            ...styles.playerRepresentation,
-            backgroundColor: `${leftColour}`,
-          }}
-        >
-          {totalDetails.flag === "gameplay" && (
-            <Text style={styles.scoreText}>{leftScore}</Text>
+            <Text style={styles.scoreText}>{bottomScore}</Text>
           )}
         </View>
       </View>
@@ -170,29 +222,6 @@ const styles = StyleSheet.create({
     fontSize: 30,
     color: "black",
     alignSelf: "center",
-  },
-  topToLeftArrow: {
-    position: "absolute",
-    left: 130,
-    top: 180,
-    transform: [{ rotate: "35deg" }],
-  },
-  rightToTopArrow: {
-    position: "absolute",
-    left: 190,
-    top: 180,
-    transform: [{ rotate: "145deg" }],
-  },
-  leftToRightArrow: {
-    position: "absolute",
-    left: 140,
-    transform: [{ rotate: "270deg" }],
-  },
-  leftPlayerMiddleArrowRightPlayer: {
-    flexDirection: "row",
-    justifyContent: "space-evenly",
-    width: width * 0.9,
-    alignItems: "center",
   },
 });
 

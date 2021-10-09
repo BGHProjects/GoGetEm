@@ -25,19 +25,21 @@ let player1Score: any;
 let player2Score: any;
 let player3Score: any;
 let playerSize = 4;
+const playerStart = [55, 15];
 const leftStart = [5, 85];
 const rightStart = [95, 85];
 
 const ClassicGameplayScreen = ({ navigation, route }) => {
   let gameDetails = route.params;
-  const [playerX, setplayerX] = useState(55);
-  const [playerY, setplayerY] = useState(15);
+  const [playerX, setplayerX] = useState(playerStart[0]);
+  const [playerY, setplayerY] = useState(playerStart[1]);
+  // Currently, both AIs start at the same Y position
   const [player2X, setplayer2X] = useState(
-    gameDetails.currentRound % 2 < 1 ? 5 : 95
+    gameDetails.currentRound % 2 < 1 ? leftStart[0] : rightStart[0]
   );
   const [player2Y, setplayer2Y] = useState(85);
   const [player3X, setplayer3X] = useState(
-    gameDetails.currentRound % 2 < 1 ? 95 : 5
+    gameDetails.currentRound % 2 < 1 ? rightStart[0] : leftStart[0]
   );
   const [player3Y, setplayer3Y] = useState(85);
   const [search1IntervalId, setSearch1IntervalId] = useState<any>(null);
