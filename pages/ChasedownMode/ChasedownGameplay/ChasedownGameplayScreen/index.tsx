@@ -7,7 +7,7 @@ import {
   trimMaze,
   makeSearchGrid,
 } from "../../../../tools/MazeAndGridGeneration";
-import { aStarSearch } from "../../../../tools/BotBrain";
+import { aStarSearch, findNeighbour } from "../../../../tools/BotBrain";
 
 const height = Dimensions.get("window").height;
 const mazeSideLength = height * 0.45;
@@ -33,7 +33,7 @@ const bottomRightStart = [95, 95];
 
 const ChasedownGameplayScreen = ({ navigation, route }) => {
   let gameDetails = route.params;
-  const [playerX, setplayerX] = useState(
+  const [playerX, setPlayerX] = useState(
     gameDetails.currentRound === 1 || gameDetails.currentRound === 7
       ? topLeftStart[0]
       : gameDetails.currentRound === 2 || gameDetails.currentRound === 5
@@ -44,7 +44,7 @@ const ChasedownGameplayScreen = ({ navigation, route }) => {
       ? topRightStart[0]
       : bottomLeftStart[0]
   );
-  const [playerY, setplayerY] = useState(
+  const [playerY, setPlayerY] = useState(
     gameDetails.currentRound === 1 || gameDetails.currentRound === 7
       ? topLeftStart[1]
       : gameDetails.currentRound === 2 || gameDetails.currentRound === 5
@@ -55,7 +55,7 @@ const ChasedownGameplayScreen = ({ navigation, route }) => {
       ? topRightStart[1]
       : bottomLeftStart[1]
   );
-  const [player2X, setplayer2X] = useState(
+  const [player2X, setPlayer2X] = useState(
     gameDetails.currentRound === 1 ||
       gameDetails.currentRound === 4 ||
       gameDetails.currentRound === 7
@@ -68,7 +68,7 @@ const ChasedownGameplayScreen = ({ navigation, route }) => {
       ? bottomRightStart[0]
       : topRightStart[0]
   );
-  const [player2Y, setplayer2Y] = useState(
+  const [player2Y, setPlayer2Y] = useState(
     gameDetails.currentRound === 1 ||
       gameDetails.currentRound === 4 ||
       gameDetails.currentRound === 7
@@ -81,7 +81,7 @@ const ChasedownGameplayScreen = ({ navigation, route }) => {
       ? bottomRightStart[1]
       : topRightStart[1]
   );
-  const [player3X, setplayer3X] = useState(
+  const [player3X, setPlayer3X] = useState(
     gameDetails.currentRound === 3 || gameDetails.currentRound === 6
       ? targetStart[0]
       : gameDetails.currentRound === 1 || gameDetails.currentRound === 7
@@ -92,7 +92,7 @@ const ChasedownGameplayScreen = ({ navigation, route }) => {
       ? bottomLeftStart[0]
       : topLeftStart[0]
   );
-  const [player3Y, setplayer3Y] = useState(
+  const [player3Y, setPlayer3Y] = useState(
     gameDetails.currentRound === 3 || gameDetails.currentRound === 6
       ? targetStart[1]
       : gameDetails.currentRound === 1 || gameDetails.currentRound === 7
@@ -107,6 +107,14 @@ const ChasedownGameplayScreen = ({ navigation, route }) => {
   const [search2IntervalId, setSearch2IntervalId] = useState<any>(null);
   const [player2Started, setPlayer2Started] = useState<any>(false);
   const [roundOver, setRoundOver] = useState(false);
+  const [runAwayIntervalId, setRunAwayIntervalId] = useState<any>(null);
+
+  const [player2Pos, setPlayer2Pos] = useState<any>([
+    player2X,
+    player2Y,
+    -1,
+    -1,
+  ]);
 
   let difficulty =
     gameDetails.difficulty === "Meh"
@@ -126,13 +134,14 @@ const ChasedownGameplayScreen = ({ navigation, route }) => {
     player1Score = gameDetails.player1Score;
     player2Score = gameDetails.player2Score;
     player3Score = gameDetails.player3Score;
+    console.log("\n Target player ", gameDetails.targetPlayer);
   }, []);
 
   const movePlayerUp = () => {
     let mazeCell = getMazeCell(playerX, playerY);
 
     if (playerY > 5 && mazeCell.top === 0 && !roundOver) {
-      setplayerY(playerY - 10);
+      setPlayerY(playerY - 10);
     }
   };
 
@@ -140,7 +149,7 @@ const ChasedownGameplayScreen = ({ navigation, route }) => {
     let mazeCell = getMazeCell(playerX, playerY);
 
     if (playerX < 95 && mazeCell.right === 0 && !roundOver) {
-      setplayerX(playerX + 10);
+      setPlayerX(playerX + 10);
     }
   };
 
@@ -148,7 +157,7 @@ const ChasedownGameplayScreen = ({ navigation, route }) => {
     let mazeCell = getMazeCell(playerX, playerY);
 
     if (playerX > 5 && mazeCell.left === 0 && !roundOver) {
-      setplayerX(playerX - 10);
+      setPlayerX(playerX - 10);
     }
   };
 
@@ -156,7 +165,7 @@ const ChasedownGameplayScreen = ({ navigation, route }) => {
     let mazeCell = getMazeCell(playerX, playerY);
 
     if (playerY < 95 && mazeCell.bottom === 0 && !roundOver) {
-      setplayerY(playerY + 10);
+      setPlayerY(playerY + 10);
     }
   };
 
@@ -182,8 +191,8 @@ const ChasedownGameplayScreen = ({ navigation, route }) => {
       setSearch1IntervalId(
         setInterval(() => {
           if (index < searchPath.length) {
-            setplayer2X(searchPath[index][1] + 5),
-              setplayer2Y(searchPath[index][0] + 5);
+            setPlayer2X(searchPath[index][1] + 5);
+            setPlayer2Y(searchPath[index][0] + 5);
             index++;
           }
         }, difficulty)
@@ -193,8 +202,8 @@ const ChasedownGameplayScreen = ({ navigation, route }) => {
       setSearch2IntervalId(
         setInterval(() => {
           if (index < searchPath.length) {
-            setplayer3X(searchPath[index][1] + 5),
-              setplayer3Y(searchPath[index][0] + 5);
+            setPlayer3X(searchPath[index][1] + 5);
+            setPlayer3Y(searchPath[index][0] + 5);
             index++;
           }
         }, difficulty)
@@ -204,47 +213,232 @@ const ChasedownGameplayScreen = ({ navigation, route }) => {
     }
   }
 
-  useEffect(() => {
-    gameDetails.currentRound % 2 < 1
-      ? aStarSearch(
-          searchGrid1,
-          searchPath1,
-          player2X,
-          player2Y,
-          player3X,
-          player3Y
-        )
-      : aStarSearch(
-          searchGrid1,
-          searchPath1,
-          player2X,
-          player2Y,
-          playerX,
-          playerY
-        );
+  function runAway() {
+    // Get all the neighbouring cells
+    // Remove neighbouring cells that are part of any search paths
+    // Pick a random cell from the random, and move to it
 
-    gameDetails.currentRound % 2 < 1
-      ? aStarSearch(
-          searchGrid2,
-          searchPath2,
-          player3X,
-          player3Y,
-          playerX,
-          playerY
-        )
-      : aStarSearch(
-          searchGrid2,
-          searchPath2,
-          player3X,
-          player3Y,
-          player2X,
-          player2Y
-        );
-    //Search Paths are compiled in reverse
-    searchPath1 = searchPath1.reverse();
-    searchPath2 = searchPath2.reverse();
-    followPath("player2", searchPath1);
-    followPath("player3", searchPath2);
+    setRunAwayIntervalId(
+      setInterval(() => {
+        if (!roundOver) {
+          if (gameDetails.targetPlayer === 2) {
+            setPlayer2Pos((currentPlayer2Pos: any) => {
+              let neighbours = [];
+              let potentialMovements = [];
+
+              // Finds the neighbours in the grid
+              if (currentPlayer2Pos[1] !== 5) {
+                console.log("\n currentPlayer2Pos[1] ", currentPlayer2Pos[1]);
+                let top = getMazeCell(
+                  currentPlayer2Pos[0],
+                  currentPlayer2Pos[1] - 10
+                );
+                if (top.bottom === 0) {
+                  neighbours.push(top);
+                }
+              }
+
+              if (currentPlayer2Pos[1] !== 95) {
+                let bottom = getMazeCell(
+                  currentPlayer2Pos[0],
+                  currentPlayer2Pos[1] + 10
+                );
+                if (bottom.top === 0) {
+                  neighbours.push(bottom);
+                }
+              }
+
+              if (currentPlayer2Pos[0] !== 95) {
+                let right = getMazeCell(
+                  currentPlayer2Pos[0] + 10,
+                  currentPlayer2Pos[1]
+                );
+                if (right.left === 0) {
+                  neighbours.push(right);
+                }
+              }
+
+              if (currentPlayer2Pos[0] !== 5) {
+                let left = getMazeCell(
+                  currentPlayer2Pos[0] - 10,
+                  currentPlayer2Pos[1]
+                );
+                if (left.right === 0) {
+                  neighbours.push(left);
+                }
+              }
+
+              for (let i = 0; i < neighbours.length - 1; i++) {
+                if (
+                  (neighbours[i].row !==
+                    searchPath1[searchPath1.length - 1].row &&
+                    neighbours[i].col !==
+                      searchPath1[searchPath1.length - 1].col) ||
+                  (neighbours[i].row !==
+                    searchPath1[searchPath1.length - 2].row &&
+                    neighbours[i].col !==
+                      searchPath1[searchPath1.length - 2].col) ||
+                  (neighbours[i].row !==
+                    searchPath2[searchPath2.length - 1].row &&
+                    neighbours[i].col !==
+                      searchPath2[searchPath2.length - 1].col) ||
+                  (neighbours[i].row !==
+                    searchPath2[searchPath2.length - 2].row &&
+                    neighbours[i].col !==
+                      searchPath2[searchPath2.length - 2].col)
+                ) {
+                  potentialMovements.push(neighbours[i]);
+                }
+              }
+              let nextLocation: any;
+
+              if (potentialMovements.length === 0) {
+                let r = Math.floor(Math.random() * neighbours.length + 1);
+
+                if (
+                  neighbours[r - 1].col + 5 === currentPlayer2Pos[2] &&
+                  neighbours[r - 1].row + 5 === currentPlayer2Pos[3]
+                ) {
+                  console.log("\n Its the previous neighbour");
+                  if (neighbours.length > 1) {
+                    neighbours.splice(r - 1, 1);
+                    r = Math.floor(Math.random() * neighbours.length + 1);
+                  }
+
+                  nextLocation = neighbours[r - 1];
+                } else {
+                  nextLocation = neighbours[r - 1];
+                }
+              } else {
+                let r = Math.floor(
+                  Math.random() * potentialMovements.length + 1
+                );
+
+                if (
+                  potentialMovements[r - 1].col + 5 === currentPlayer2Pos[2] &&
+                  potentialMovements[r - 1].row + 5 === currentPlayer2Pos[3]
+                ) {
+                  console.log("\n Its the previous potentialMove");
+                  if (potentialMovements.length > 1) {
+                    potentialMovements.splice(r - 1, 1);
+                    r = Math.floor(
+                      Math.random() * potentialMovements.length + 1
+                    );
+                    nextLocation = potentialMovements[r - 1];
+                  } else {
+                    console.log("\nsearch for neighbour");
+                    neighbours.filter((item: any) => {
+                      potentialMovements.includes(item);
+                    });
+
+                    neighbours.filter((item: any) => {
+                      item.col + 5 !== currentPlayer2Pos[2] &&
+                        item.row + 5 !== currentPlayer2Pos[3];
+                    });
+                    console.log(
+                      "\n neighbours ",
+                      neighbours,
+                      "\n previousPos ",
+                      currentPlayer2Pos[2],
+                      currentPlayer2Pos[3]
+                    );
+                    r = Math.floor(Math.random() * neighbours.length + 1);
+                    nextLocation = neighbours[r - 1];
+                  }
+                } else {
+                  nextLocation = potentialMovements[r - 1];
+                }
+              }
+
+              console.log("\n nextLocation ", nextLocation);
+
+              return [
+                nextLocation.col + 5,
+                nextLocation.row + 5,
+                currentPlayer2Pos[0],
+                currentPlayer2Pos[1],
+              ];
+            });
+          }
+        }
+      }, difficulty)
+    );
+
+    clearInterval(runAwayIntervalId);
+  }
+
+  useEffect(() => {
+    setPlayer2X(player2Pos[0]);
+    setPlayer2Y(player2Pos[1]);
+  }, [player2Pos]);
+
+  useEffect(() => {
+    if (gameDetails.targetPlayer === 1) {
+      aStarSearch(
+        searchGrid1,
+        searchPath1,
+        player2X,
+        player2Y,
+        playerX,
+        playerY
+      );
+      aStarSearch(
+        searchGrid2,
+        searchPath2,
+        player3X,
+        player3Y,
+        playerX,
+        playerY
+      );
+      searchPath1 = searchPath1.reverse();
+      searchPath2 = searchPath2.reverse();
+      followPath("player2", searchPath1);
+      followPath("player3", searchPath2);
+    } else if (gameDetails.targetPlayer === 2) {
+      aStarSearch(
+        searchGrid1,
+        searchPath1,
+        playerX,
+        playerY,
+        player2X,
+        player2Y
+      );
+      aStarSearch(
+        searchGrid2,
+        searchPath2,
+        player3X,
+        player3Y,
+        player2X,
+        player2Y
+      );
+      searchPath1 = searchPath1.reverse();
+      //searchPath1.splice(1, searchPath1.length - 1);
+      searchPath2 = searchPath2.reverse();
+      followPath("player3", searchPath2);
+      runAway();
+    } else if (gameDetails.targetPlayer === 3) {
+      aStarSearch(
+        searchGrid1,
+        searchPath1,
+        playerX,
+        playerY,
+        player3X,
+        player3Y
+      );
+      aStarSearch(
+        searchGrid2,
+        searchPath2,
+        player2X,
+        player2Y,
+        player3X,
+        player3Y
+      );
+      searchPath1 = searchPath1.reverse();
+      //searchPath1.splice(1, searchPath1.length - 1);
+      searchPath2 = searchPath2.reverse();
+      followPath("player2", searchPath2);
+      runAway();
+    }
   }, []);
 
   useEffect(() => {
@@ -325,6 +519,7 @@ const ChasedownGameplayScreen = ({ navigation, route }) => {
     if (roundOver) {
       clearInterval(search1IntervalId);
       clearInterval(search2IntervalId);
+      clearInterval(runAwayIntervalId);
       gameDetails.player1Score = player1Score;
       gameDetails.player2Score = player2Score;
       gameDetails.player3Score = player3Score;
