@@ -24,6 +24,19 @@ const colourValues = [
 const selectionWidth = 60;
 const roundNumbers = [1, 2, 3, 4, 5, 6, 7];
 const difficulties = ["Meh", "Oh OK", "Hang On", "What The"];
+const timeLabels = [
+  "0:30",
+  "1:00",
+  "1:30",
+  "2:00",
+  "2:30",
+  "3:00",
+  "3:30",
+  "4:00",
+  "4:30",
+  "5:00",
+];
+const timeActuals = [30, 60, 90, 120, 150, 180, 210, 240, 270, 300];
 
 const ChasedownConfigScreen = ({ navigation }) => {
   const [selectedColour, setSelectedColour] = useState<any>(
@@ -33,6 +46,7 @@ const ChasedownConfigScreen = ({ navigation }) => {
     roundNumbers[Math.floor(roundNumbers.length / 2)]
   );
   const [difficulty, setDifficulty] = useState<any>(difficulties[0]);
+  const [timeLimit, setTimeLimit] = useState<any>(timeActuals[0]);
 
   function getOtherColours() {
     let colours = [...colourValues];
@@ -51,6 +65,7 @@ const ChasedownConfigScreen = ({ navigation }) => {
       flag: "config",
       colour: selectedColour,
       rounds: selectedRound,
+      timeLimit: timeLimit,
       difficulty: difficulty,
       player2Colour: otherColours[0],
       player3Colour: otherColours[1],
@@ -105,6 +120,23 @@ const ChasedownConfigScreen = ({ navigation }) => {
             sliderWidth={width}
             itemWidth={selectionWidth + 10}
             onSnapToItem={(value) => setSelectedRound(roundNumbers[value])}
+            layout={"default"}
+            inactiveSlideOpacity={0.3}
+            activeAnimationType={"spring"}
+            firstItem={Math.floor(roundNumbers.length / 2)}
+          />
+        </View>
+
+        <View style={styles.textLabelContainer}>
+          <Text style={styles.textLabel}>TIME LIMIT</Text>
+        </View>
+        <View style={{ paddingTop: 30 }}>
+          <Carousel
+            data={timeLabels}
+            renderItem={renderNumber}
+            sliderWidth={width}
+            itemWidth={selectionWidth + 30}
+            onSnapToItem={(value) => setTimeLimit(timeActuals[value])}
             layout={"default"}
             inactiveSlideOpacity={0.3}
             activeAnimationType={"spring"}

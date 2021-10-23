@@ -115,3 +115,165 @@ export const aStarSearch = (
     }
   }
 };
+
+function getMazeCell(X: any, Y: any, mazeGrid: any) {
+  let digit1 = (X - 5).toString();
+  let digit2 = (Y - 5).toString();
+  let digits;
+
+  if (digit2 === "0") {
+    digits = digit1[0];
+  } else {
+    digits = digit2[0] + digit1[0];
+  }
+
+  return mazeGrid[digits];
+}
+
+export function runAwayAlgorithm(
+  currentPlayerPos: any,
+  searchPath1: any,
+  searchPath2: any,
+  mazeGrid: any
+) {
+  let neighbours = [];
+  let potentialMovements = [];
+
+  // Finds the neighbours in the grid
+  if (currentPlayerPos[1] !== 5) {
+    let top = getMazeCell(
+      currentPlayerPos[0],
+      currentPlayerPos[1] - 10,
+      mazeGrid
+    );
+    if (top.bottom === 0) {
+      neighbours.push(top);
+    }
+  }
+
+  if (currentPlayerPos[1] !== 95) {
+    let bottom = getMazeCell(
+      currentPlayerPos[0],
+      currentPlayerPos[1] + 10,
+      mazeGrid
+    );
+    if (bottom.top === 0) {
+      neighbours.push(bottom);
+    }
+  }
+
+  if (currentPlayerPos[0] !== 95) {
+    let right = getMazeCell(
+      currentPlayerPos[0] + 10,
+      currentPlayerPos[1],
+      mazeGrid
+    );
+    if (right.left === 0) {
+      neighbours.push(right);
+    }
+  }
+
+  if (currentPlayerPos[0] !== 5) {
+    let left = getMazeCell(
+      currentPlayerPos[0] - 10,
+      currentPlayerPos[1],
+      mazeGrid
+    );
+    if (left.right === 0) {
+      neighbours.push(left);
+    }
+  }
+
+  for (let i = 0; i < neighbours.length - 1; i++) {
+    if (
+      (neighbours[i].row !== searchPath1[searchPath1.length - 1].row &&
+        neighbours[i].col !== searchPath1[searchPath1.length - 1].col) ||
+      (neighbours[i].row !== searchPath1[searchPath1.length - 2].row &&
+        neighbours[i].col !== searchPath1[searchPath1.length - 2].col) ||
+      (neighbours[i].row !== searchPath2[searchPath2.length - 1].row &&
+        neighbours[i].col !== searchPath2[searchPath2.length - 1].col) ||
+      (neighbours[i].row !== searchPath2[searchPath2.length - 2].row &&
+        neighbours[i].col !== searchPath2[searchPath2.length - 2].col)
+    ) {
+      potentialMovements.push(neighbours[i]);
+    }
+  }
+  let nextLocation: any;
+
+  if (potentialMovements.length === 0) {
+    let r = Math.floor(Math.random() * neighbours.length + 1);
+
+    if (
+      neighbours[r - 1].col + 5 === currentPlayerPos[2] &&
+      neighbours[r - 1].row + 5 === currentPlayerPos[3]
+    ) {
+      if (neighbours.length > 1) {
+        neighbours.splice(r - 1, 1);
+        r = Math.floor(Math.random() * neighbours.length + 1);
+      }
+
+      nextLocation = neighbours[r - 1];
+    } else {
+      nextLocation = neighbours[r - 1];
+    }
+  } else {
+    let r = Math.floor(Math.random() * potentialMovements.length + 1);
+
+    if (
+      potentialMovements[r - 1].col + 5 === currentPlayerPos[2] &&
+      potentialMovements[r - 1].row + 5 === currentPlayerPos[3]
+    ) {
+      if (potentialMovements.length > 1) {
+        potentialMovements.splice(r - 1, 1);
+        r = Math.floor(Math.random() * potentialMovements.length + 1);
+        nextLocation = potentialMovements[r - 1];
+      } else {
+        neighbours.filter((item: any) => {
+          potentialMovements.includes(item);
+        });
+
+        neighbours.filter((item: any) => {
+          item.col + 5 !== currentPlayerPos[2] &&
+            item.row + 5 !== currentPlayerPos[3];
+        });
+        r = Math.floor(Math.random() * neighbours.length + 1);
+        nextLocation = neighbours[r - 1];
+      }
+    } else {
+      nextLocation = potentialMovements[r - 1];
+    }
+  }
+
+  return [
+    nextLocation.col + 5,
+    nextLocation.row + 5,
+    currentPlayerPos[0],
+    currentPlayerPos[1],
+  ];
+}
+
+export function updateSearchPath(
+  X: any,
+  Y: any,
+  searchPath: any,
+  mazeGrid: any
+) {
+  let playerCell = getMazeCell(X, Y, mazeGrid);
+
+  if (
+    playerCell.row === searchPath[searchPath.length - 2][0] &&
+    playerCell.col === searchPath[searchPath.length - 2][1]
+  ) {
+    searchPath.splice(searchPath.length - 2, 2);
+  }
+  searchPath.push([playerCell.row, playerCell.col]);
+
+  // Removes duplicates if there are any
+  if (
+    searchPath[searchPath.length - 1].every(
+      (val, index) => val === searchPath[searchPath.length - 2][index]
+    )
+  ) {
+    searchPath.splice(searchPath.length - 1, 1);
+  }
+}

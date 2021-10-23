@@ -7,7 +7,12 @@ import {
   trimMaze,
   makeSearchGrid,
 } from "../../../../tools/MazeAndGridGeneration";
-import { aStarSearch, findNeighbour } from "../../../../tools/BotBrain";
+import {
+  aStarSearch,
+  runAwayAlgorithm,
+  updateSearchPath,
+} from "../../../../tools/BotBrain";
+import { CountdownCircleTimer } from "react-native-countdown-circle-timer";
 
 const height = Dimensions.get("window").height;
 const mazeSideLength = height * 0.45;
@@ -33,6 +38,7 @@ const bottomRightStart = [95, 95];
 
 const ChasedownGameplayScreen = ({ navigation, route }) => {
   let gameDetails = route.params;
+  //console.log("\n gameDetails.timeLimit ", gameDetails.timeLimit);
   const [playerX, setPlayerX] = useState(
     gameDetails.currentRound === 1 || gameDetails.currentRound === 7
       ? topLeftStart[0]
@@ -105,13 +111,20 @@ const ChasedownGameplayScreen = ({ navigation, route }) => {
   );
   const [search1IntervalId, setSearch1IntervalId] = useState<any>(null);
   const [search2IntervalId, setSearch2IntervalId] = useState<any>(null);
-  const [player2Started, setPlayer2Started] = useState<any>(false);
   const [roundOver, setRoundOver] = useState(false);
   const [runAwayIntervalId, setRunAwayIntervalId] = useState<any>(null);
+  const [timerRunning, setTimerRunning] = useState(false);
 
   const [player2Pos, setPlayer2Pos] = useState<any>([
     player2X,
     player2Y,
+    -1,
+    -1,
+  ]);
+
+  const [player3Pos, setPlayer3Pos] = useState<any>([
+    player3X,
+    player3Y,
     -1,
     -1,
   ]);
@@ -134,7 +147,7 @@ const ChasedownGameplayScreen = ({ navigation, route }) => {
     player1Score = gameDetails.player1Score;
     player2Score = gameDetails.player2Score;
     player3Score = gameDetails.player3Score;
-    console.log("\n Target player ", gameDetails.targetPlayer);
+    setTimerRunning(true);
   }, []);
 
   const movePlayerUp = () => {
@@ -187,7 +200,6 @@ const ChasedownGameplayScreen = ({ navigation, route }) => {
     let index = 0;
 
     if (player === "player2") {
-      setPlayer2Started(true);
       setSearch1IntervalId(
         setInterval(() => {
           if (index < searchPath.length) {
@@ -214,150 +226,26 @@ const ChasedownGameplayScreen = ({ navigation, route }) => {
   }
 
   function runAway() {
-    // Get all the neighbouring cells
-    // Remove neighbouring cells that are part of any search paths
-    // Pick a random cell from the random, and move to it
-
     setRunAwayIntervalId(
       setInterval(() => {
         if (!roundOver) {
           if (gameDetails.targetPlayer === 2) {
             setPlayer2Pos((currentPlayer2Pos: any) => {
-              let neighbours = [];
-              let potentialMovements = [];
-
-              // Finds the neighbours in the grid
-              if (currentPlayer2Pos[1] !== 5) {
-                console.log("\n currentPlayer2Pos[1] ", currentPlayer2Pos[1]);
-                let top = getMazeCell(
-                  currentPlayer2Pos[0],
-                  currentPlayer2Pos[1] - 10
-                );
-                if (top.bottom === 0) {
-                  neighbours.push(top);
-                }
-              }
-
-              if (currentPlayer2Pos[1] !== 95) {
-                let bottom = getMazeCell(
-                  currentPlayer2Pos[0],
-                  currentPlayer2Pos[1] + 10
-                );
-                if (bottom.top === 0) {
-                  neighbours.push(bottom);
-                }
-              }
-
-              if (currentPlayer2Pos[0] !== 95) {
-                let right = getMazeCell(
-                  currentPlayer2Pos[0] + 10,
-                  currentPlayer2Pos[1]
-                );
-                if (right.left === 0) {
-                  neighbours.push(right);
-                }
-              }
-
-              if (currentPlayer2Pos[0] !== 5) {
-                let left = getMazeCell(
-                  currentPlayer2Pos[0] - 10,
-                  currentPlayer2Pos[1]
-                );
-                if (left.right === 0) {
-                  neighbours.push(left);
-                }
-              }
-
-              for (let i = 0; i < neighbours.length - 1; i++) {
-                if (
-                  (neighbours[i].row !==
-                    searchPath1[searchPath1.length - 1].row &&
-                    neighbours[i].col !==
-                      searchPath1[searchPath1.length - 1].col) ||
-                  (neighbours[i].row !==
-                    searchPath1[searchPath1.length - 2].row &&
-                    neighbours[i].col !==
-                      searchPath1[searchPath1.length - 2].col) ||
-                  (neighbours[i].row !==
-                    searchPath2[searchPath2.length - 1].row &&
-                    neighbours[i].col !==
-                      searchPath2[searchPath2.length - 1].col) ||
-                  (neighbours[i].row !==
-                    searchPath2[searchPath2.length - 2].row &&
-                    neighbours[i].col !==
-                      searchPath2[searchPath2.length - 2].col)
-                ) {
-                  potentialMovements.push(neighbours[i]);
-                }
-              }
-              let nextLocation: any;
-
-              if (potentialMovements.length === 0) {
-                let r = Math.floor(Math.random() * neighbours.length + 1);
-
-                if (
-                  neighbours[r - 1].col + 5 === currentPlayer2Pos[2] &&
-                  neighbours[r - 1].row + 5 === currentPlayer2Pos[3]
-                ) {
-                  console.log("\n Its the previous neighbour");
-                  if (neighbours.length > 1) {
-                    neighbours.splice(r - 1, 1);
-                    r = Math.floor(Math.random() * neighbours.length + 1);
-                  }
-
-                  nextLocation = neighbours[r - 1];
-                } else {
-                  nextLocation = neighbours[r - 1];
-                }
-              } else {
-                let r = Math.floor(
-                  Math.random() * potentialMovements.length + 1
-                );
-
-                if (
-                  potentialMovements[r - 1].col + 5 === currentPlayer2Pos[2] &&
-                  potentialMovements[r - 1].row + 5 === currentPlayer2Pos[3]
-                ) {
-                  console.log("\n Its the previous potentialMove");
-                  if (potentialMovements.length > 1) {
-                    potentialMovements.splice(r - 1, 1);
-                    r = Math.floor(
-                      Math.random() * potentialMovements.length + 1
-                    );
-                    nextLocation = potentialMovements[r - 1];
-                  } else {
-                    console.log("\nsearch for neighbour");
-                    neighbours.filter((item: any) => {
-                      potentialMovements.includes(item);
-                    });
-
-                    neighbours.filter((item: any) => {
-                      item.col + 5 !== currentPlayer2Pos[2] &&
-                        item.row + 5 !== currentPlayer2Pos[3];
-                    });
-                    console.log(
-                      "\n neighbours ",
-                      neighbours,
-                      "\n previousPos ",
-                      currentPlayer2Pos[2],
-                      currentPlayer2Pos[3]
-                    );
-                    r = Math.floor(Math.random() * neighbours.length + 1);
-                    nextLocation = neighbours[r - 1];
-                  }
-                } else {
-                  nextLocation = potentialMovements[r - 1];
-                }
-              }
-
-              console.log("\n nextLocation ", nextLocation);
-
-              return [
-                nextLocation.col + 5,
-                nextLocation.row + 5,
-                currentPlayer2Pos[0],
-                currentPlayer2Pos[1],
-              ];
+              return runAwayAlgorithm(
+                currentPlayer2Pos,
+                searchPath1,
+                searchPath2,
+                mazeGrid
+              );
+            });
+          } else if (gameDetails.targetPlayer === 3) {
+            setPlayer3Pos((currentPlayer3Pos: any) => {
+              return runAwayAlgorithm(
+                currentPlayer3Pos,
+                searchPath1,
+                searchPath2,
+                mazeGrid
+              );
             });
           }
         }
@@ -371,6 +259,11 @@ const ChasedownGameplayScreen = ({ navigation, route }) => {
     setPlayer2X(player2Pos[0]);
     setPlayer2Y(player2Pos[1]);
   }, [player2Pos]);
+
+  useEffect(() => {
+    setPlayer3X(player3Pos[0]);
+    setPlayer3Y(player3Pos[1]);
+  }, [player3Pos]);
 
   useEffect(() => {
     if (gameDetails.targetPlayer === 1) {
@@ -412,7 +305,6 @@ const ChasedownGameplayScreen = ({ navigation, route }) => {
         player2Y
       );
       searchPath1 = searchPath1.reverse();
-      //searchPath1.splice(1, searchPath1.length - 1);
       searchPath2 = searchPath2.reverse();
       followPath("player3", searchPath2);
       runAway();
@@ -434,7 +326,6 @@ const ChasedownGameplayScreen = ({ navigation, route }) => {
         player3Y
       );
       searchPath1 = searchPath1.reverse();
-      //searchPath1.splice(1, searchPath1.length - 1);
       searchPath2 = searchPath2.reverse();
       followPath("player2", searchPath2);
       runAway();
@@ -442,48 +333,15 @@ const ChasedownGameplayScreen = ({ navigation, route }) => {
   }, []);
 
   useEffect(() => {
-    let player1Cell = getMazeCell(playerX, playerY);
-    /*
-      This ensures that if the player backtracks on the search path
-      those entries are removed instead of explored by the bot
-       */
-
-    if (
-      playerY - 5 === searchPath1[searchPath1.length - 2][0] &&
-      playerX - 5 === searchPath1[searchPath1.length - 2][1]
-    ) {
-      searchPath1.splice(searchPath1.length - 1, 1);
-    } else {
-      if (
-        [playerY - 5, playerX - 5] !==
-        [
-          searchPath1[searchPath1.length - 1][0],
-          searchPath1[searchPath1.length - 1][1],
-        ]
-      ) {
-        searchPath1.push([player1Cell.row, player1Cell.col]);
-      }
+    if (gameDetails.targetPlayer === 1) {
+      updateSearchPath(playerX, playerY, searchPath1, mazeGrid);
+      updateSearchPath(playerX, playerY, searchPath2, mazeGrid);
+    } else if (gameDetails.targetPlayer === 2) {
+      updateSearchPath(player2X, player2Y, searchPath2, mazeGrid);
+    } else if (gameDetails.targetPlayer === 3) {
+      updateSearchPath(player3X, player3Y, searchPath2, mazeGrid);
     }
-  }, [playerX, playerY]);
 
-  useEffect(() => {
-    if (player2Started) {
-      let player2Cell = getMazeCell(player2X, player2Y);
-      /*
-      This ensures that if player2 backtracks on the search path
-      those entries are removed instead of explored by the bot
-       */
-      if (
-        player2Cell.row === searchPath2[searchPath2.length - 2][0] &&
-        player2Cell.col === searchPath2[searchPath2.length - 2][1]
-      ) {
-        searchPath2.splice(searchPath2.length - 2, 2);
-      }
-      searchPath2.push([player2Cell.row, player2Cell.col]);
-    }
-  }, [player2X, player2Y, searchPath1]);
-
-  useEffect(() => {
     if (playerX === player3X && playerY === player3Y) {
       if (gameDetails.targetPlayer === 1) {
         player3Score++;
@@ -532,8 +390,40 @@ const ChasedownGameplayScreen = ({ navigation, route }) => {
     }
   }, [roundOver]);
 
+  function timerExpired() {
+    if (gameDetails.targetPlayer === 1) {
+      player1Score++;
+    } else if (gameDetails.targetPlayer === 2) {
+      player2Score++;
+    } else if (gameDetails.targetPlayer === 3) {
+      player3Score++;
+    }
+    setRoundOver(true);
+  }
+
   return (
     <SafeAreaView style={styles.container}>
+      <View style={{ marginTop: 20 }}>
+        <CountdownCircleTimer
+          isPlaying={timerRunning}
+          duration={gameDetails.timeLimit}
+          colors={[
+            ["#00ff00", 0.4],
+            ["#ffff00", 0.4],
+            ["#ff0000", 0.2],
+          ]}
+          size={60}
+          strokeWidth={2}
+          onComplete={() => timerExpired()}
+        >
+          {({ remainingTime }) => (
+            <Text style={{ color: "white", fontSize: 20 }}>
+              {Math.floor(remainingTime / 60)}:{remainingTime % 60}
+              {remainingTime % 60 === 0 && 0}
+            </Text>
+          )}
+        </CountdownCircleTimer>
+      </View>
       <View style={styles.mazeContainer}>
         {mazeGrid.map((item: any) => (
           <View
