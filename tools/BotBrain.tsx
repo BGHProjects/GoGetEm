@@ -137,7 +137,7 @@ export function runAwayAlgorithm(
   mazeGrid: any
 ) {
   let neighbours = [];
-  let potentialMovements = [];
+  let potentialMovements: any = [];
 
   // Finds the neighbours in the grid
   if (currentPlayerPos[1] !== 5) {

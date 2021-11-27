@@ -32,7 +32,7 @@ const MainMenuScreen = ({ navigation }) => {
           </TouchableOpacity>
         </View>
         <View style={styles.huntModeButton}>
-          <TouchableOpacity onPress={() => onPressButton("Classic Config")}>
+          <TouchableOpacity onPress={() => onPressButton("Hunt Config")}>
             <Text style={styles.buttonLabel}>Hunt Mode</Text>
           </TouchableOpacity>
         </View>

@@ -2,12 +2,15 @@ import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import Splash from "../pages/Splash/SplashScreen";
 import MainMenu from "../pages/MainMenu/MainMenuScreen";
-import ClassicConfigScreen from "../pages/ClassicMode/ClassicConfig/ClassicConfigScreen";
-import ClassicRolesScreen from "../pages/ClassicMode/ClassicRoles/ClassicRolesScreen";
-import ClassicGameplayScreen from "../pages/ClassicMode/ClassicGameplay/ClassicGameplayScreen";
-import ChasedownConfigScreen from "../pages/ChasedownMode/ChasedownConfig/ChasedownConfigScreen";
-import ChasedownRolesScreen from "../pages/ChasedownMode/ChasedownRoles/ChasedownRolesScreen";
-import ChasedownGameplayScreen from "../pages/ChasedownMode/ChasedownGameplay/ChasedownGameplayScreen";
+import ClassicConfigScreen from "../pages/ClassicMode/ClassicConfig";
+import ClassicRolesScreen from "../pages/ClassicMode/ClassicRoles";
+import ClassicGameplayScreen from "../pages/ClassicMode/ClassicGameplay";
+import ChasedownConfigScreen from "../pages/ChasedownMode/ChasedownConfig";
+import ChasedownRolesScreen from "../pages/ChasedownMode/ChasedownRoles";
+import ChasedownGameplayScreen from "../pages/ChasedownMode/ChasedownGameplay";
+import HuntConfig from "../pages/HuntMode/HuntConfig";
+import HuntRoles from "../pages/HuntMode/HuntRoles";
+import HuntGameplay from "../pages/HuntMode/HuntGameplay";
 
 const AppNavigation = () => {
   const Stack = createStackNavigator();
@@ -48,6 +51,21 @@ const AppNavigation = () => {
       <Stack.Screen
         name="Chasedown Gameplay"
         component={ChasedownGameplayScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Hunt Config"
+        component={HuntConfig}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Hunt Roles"
+        component={HuntRoles}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Hunt Gameplay"
+        component={HuntGameplay}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>
