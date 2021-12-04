@@ -185,6 +185,16 @@ const HuntGameplay = ({ navigation, route }) => {
     }
   }, [playerX, playerY, player2X, player2Y]);
 
+  useEffect(() => {
+    clearInterval(search1IntervalId);
+    searchGrid1 = [];
+    searchPath1 = [];
+    makeSearchGrid(mazeGrid, searchGrid1);
+    aStarSearch(searchGrid1, searchPath1, player2X, player2Y, targetX, targetY);
+    searchPath1 = searchPath1.reverse();
+    followPath(searchPath1);
+  }, [targetX, targetY]);
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={{ marginTop: 20 }}>

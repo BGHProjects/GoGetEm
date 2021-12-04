@@ -1,7 +1,7 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import Splash from "../pages/Splash/SplashScreen";
-import MainMenu from "../pages/MainMenu/MainMenuScreen";
+import MainMenu from "../pages/MainMenu";
 import ClassicConfigScreen from "../pages/ClassicMode/ClassicConfig";
 import ClassicRolesScreen from "../pages/ClassicMode/ClassicRoles";
 import ClassicGameplayScreen from "../pages/ClassicMode/ClassicGameplay";
@@ -11,6 +11,8 @@ import ChasedownGameplayScreen from "../pages/ChasedownMode/ChasedownGameplay";
 import HuntConfig from "../pages/HuntMode/HuntConfig";
 import HuntRoles from "../pages/HuntMode/HuntRoles";
 import HuntGameplay from "../pages/HuntMode/HuntGameplay";
+import TagTeamConfig from "../pages/TagTeamMode/TagTeamConfig";
+import TagTeamRoles from "../pages/TagTeamMode/TagTeamRoles";
 
 const AppNavigation = () => {
   const Stack = createStackNavigator();
@@ -66,6 +68,16 @@ const AppNavigation = () => {
       <Stack.Screen
         name="Hunt Gameplay"
         component={HuntGameplay}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="TagTeam Config"
+        component={TagTeamConfig}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="TagTeam Roles"
+        component={TagTeamRoles}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>
