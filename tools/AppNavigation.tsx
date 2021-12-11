@@ -13,6 +13,7 @@ import HuntRoles from "../pages/HuntMode/HuntRoles";
 import HuntGameplay from "../pages/HuntMode/HuntGameplay";
 import TagTeamConfig from "../pages/TagTeamMode/TagTeamConfig";
 import TagTeamRoles from "../pages/TagTeamMode/TagTeamRoles";
+import TagTeamGameplay from "../pages/TagTeamMode/TagTeamGameplay";
 
 const AppNavigation = () => {
   const Stack = createStackNavigator();
@@ -78,6 +79,12 @@ const AppNavigation = () => {
       <Stack.Screen
         name="TagTeam Roles"
         component={TagTeamRoles}
+        options={{ headerShown: false }}
+      />
+
+      <Stack.Screen
+        name="TagTeam Gameplay"
+        component={TagTeamGameplay}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>

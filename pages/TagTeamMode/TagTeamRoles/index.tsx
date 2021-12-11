@@ -28,7 +28,7 @@ const TagTeamRoles = ({ navigation, route }) => {
   let totalDetails = { ...configDetails, ...scoreDetails };
 
   const onPressSubmit = () => {
-    navigation.navigate("Hunt Gameplay", totalDetails);
+    navigation.navigate("TagTeam Gameplay", totalDetails);
   };
 
   if (totalDetails.gameOver) {

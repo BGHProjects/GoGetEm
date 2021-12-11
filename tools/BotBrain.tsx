@@ -252,6 +252,123 @@ export function runAwayAlgorithm(
   ];
 }
 
+export function runAwaySingleChaser(
+  currentPlayerPos: any,
+  searchPath: any,
+  mazeGrid: any
+) {
+  let neighbours = [];
+  let potentialMovements: any = [];
+
+  // Finds the neighbours in the grid
+  if (currentPlayerPos[1] !== 5) {
+    let top = getMazeCell(
+      currentPlayerPos[0],
+      currentPlayerPos[1] - 10,
+      mazeGrid
+    );
+    if (top.bottom === 0) {
+      neighbours.push(top);
+    }
+  }
+
+  if (currentPlayerPos[1] !== 95) {
+    let bottom = getMazeCell(
+      currentPlayerPos[0],
+      currentPlayerPos[1] + 10,
+      mazeGrid
+    );
+    if (bottom.top === 0) {
+      neighbours.push(bottom);
+    }
+  }
+
+  if (currentPlayerPos[0] !== 95) {
+    let right = getMazeCell(
+      currentPlayerPos[0] + 10,
+      currentPlayerPos[1],
+      mazeGrid
+    );
+    if (right.left === 0) {
+      neighbours.push(right);
+    }
+  }
+
+  if (currentPlayerPos[0] !== 5) {
+    let left = getMazeCell(
+      currentPlayerPos[0] - 10,
+      currentPlayerPos[1],
+      mazeGrid
+    );
+    if (left.right === 0) {
+      neighbours.push(left);
+    }
+  }
+
+  for (let i = 0; i < neighbours.length - 1; i++) {
+    if (
+      (neighbours[i].row !== searchPath[searchPath.length - 1].row &&
+        neighbours[i].col !== searchPath[searchPath.length - 1].col) ||
+      (neighbours[i].row !== searchPath[searchPath.length - 2].row &&
+        neighbours[i].col !== searchPath[searchPath.length - 2].col)
+    ) {
+      potentialMovements.push(neighbours[i]);
+    }
+  }
+  let nextLocation: any;
+
+  if (potentialMovements.length === 0) {
+    let r = Math.floor(Math.random() * neighbours.length + 1);
+
+    if (
+      neighbours[r - 1].col + 5 === currentPlayerPos[2] &&
+      neighbours[r - 1].row + 5 === currentPlayerPos[3]
+    ) {
+      if (neighbours.length > 1) {
+        neighbours.splice(r - 1, 1);
+        r = Math.floor(Math.random() * neighbours.length + 1);
+      }
+
+      nextLocation = neighbours[r - 1];
+    } else {
+      nextLocation = neighbours[r - 1];
+    }
+  } else {
+    let r = Math.floor(Math.random() * potentialMovements.length + 1);
+
+    if (
+      potentialMovements[r - 1].col + 5 === currentPlayerPos[2] &&
+      potentialMovements[r - 1].row + 5 === currentPlayerPos[3]
+    ) {
+      if (potentialMovements.length > 1) {
+        potentialMovements.splice(r - 1, 1);
+        r = Math.floor(Math.random() * potentialMovements.length + 1);
+        nextLocation = potentialMovements[r - 1];
+      } else {
+        neighbours.filter((item: any) => {
+          potentialMovements.includes(item);
+        });
+
+        neighbours.filter((item: any) => {
+          item.col + 5 !== currentPlayerPos[2] &&
+            item.row + 5 !== currentPlayerPos[3];
+        });
+        r = Math.floor(Math.random() * neighbours.length + 1);
+        nextLocation = neighbours[r - 1];
+      }
+    } else {
+      nextLocation = potentialMovements[r - 1];
+    }
+  }
+
+  return [
+    nextLocation.col + 5,
+    nextLocation.row + 5,
+    currentPlayerPos[0],
+    currentPlayerPos[1],
+  ];
+}
+
 export function updateSearchPath(
   X: any,
   Y: any,
