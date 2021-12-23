@@ -186,8 +186,8 @@ const TagTeamGameplay = ({ navigation, route }) => {
   }, [player3Pos]);
 
   useEffect(() => {
-    setPlayer3X(player4Pos[0]);
-    setPlayer3Y(player4Pos[1]);
+    setPlayer4X(player4Pos[0]);
+    setPlayer4Y(player4Pos[1]);
   }, [player4Pos]);
 
   function runAway(
@@ -218,6 +218,7 @@ const TagTeamGameplay = ({ navigation, route }) => {
     makeMaze(mazeGrid, stack);
     trimMaze(mazeGrid);
     makeSearchGrid(mazeGrid, searchGrid1);
+    makeSearchGrid(mazeGrid, searchGrid2);
     team1Score = gameDetails.team1Score;
     team2Score = gameDetails.team2Score;
 
@@ -494,6 +495,21 @@ const TagTeamGameplay = ({ navigation, route }) => {
       gameDetails.team2Score = team2Score;
       gameDetails.flag = "gameplay";
       gameDetails.currentRound++;
+
+      // Change Team 1 Target
+      if (gameDetails.currentRound === 3 || gameDetails.currentRound === 7) {
+        gameDetails.team1Target = gameDetails.colour;
+      } else if (gameDetails.currentRound === 5) {
+        gameDetails.team1Target = gameDetails.player2Colour;
+      }
+
+      // Change Team 2 Target
+      if (gameDetails.currentRound === 2 || gameDetails.currentRound === 6) {
+        gameDetails.team2Target = gameDetails.player4Colour;
+      } else if (gameDetails.currentRound === 4) {
+        gameDetails.team2Target = gameDetails.player3Colour;
+      }
+
       if (gameDetails.currentRound > gameDetails.rounds) {
         gameDetails.gameOver = true;
       }
@@ -524,51 +540,51 @@ const TagTeamGameplay = ({ navigation, route }) => {
         ))}
 
         <Svg height="100%" width="100%" viewBox="0 0 100 100">
-          {gameDetails.currentRound === 3 ||
+          {(gameDetails.currentRound === 3 ||
             gameDetails.currentRound === 4 ||
-            (gameDetails.currentRound === 7 && (
-              <Circle
-                cx={playerX}
-                cy={playerY}
-                r={(playerSize + 1).toString()}
-                fill={"white"}
-              />
-            ))}
+            gameDetails.currentRound === 7) && (
+            <Circle
+              cx={playerX}
+              cy={playerY}
+              r={(playerSize + 1).toString()}
+              fill={"white"}
+            />
+          )}
 
-          {gameDetails.currentRound === 1 ||
+          {(gameDetails.currentRound === 1 ||
             gameDetails.currentRound === 2 ||
             gameDetails.currentRound === 5 ||
-            (gameDetails.currentRound === 6 && (
-              <Circle
-                cx={player2X}
-                cy={player2Y}
-                r={(playerSize + 1).toString()}
-                fill={"white"}
-              />
-            ))}
+            gameDetails.currentRound === 6) && (
+            <Circle
+              cx={player2X}
+              cy={player2Y}
+              r={(playerSize + 1).toString()}
+              fill={"white"}
+            />
+          )}
 
-          {gameDetails.currentRound === 1 ||
+          {(gameDetails.currentRound === 1 ||
             gameDetails.currentRound === 4 ||
-            (gameDetails.currentRound === 5 && (
-              <Circle
-                cx={player3X}
-                cy={player3Y}
-                r={(playerSize + 1).toString()}
-                fill={"white"}
-              />
-            ))}
+            gameDetails.currentRound === 5) && (
+            <Circle
+              cx={player3X}
+              cy={player3Y}
+              r={(playerSize + 1).toString()}
+              fill={"white"}
+            />
+          )}
 
-          {gameDetails.currentRound === 2 ||
+          {(gameDetails.currentRound === 2 ||
             gameDetails.currentRound === 3 ||
             gameDetails.currentRound === 6 ||
-            (gameDetails.currentRound === 7 && (
-              <Circle
-                cx={player4X}
-                cy={player4Y}
-                r={(playerSize + 1).toString()}
-                fill={"white"}
-              />
-            ))}
+            gameDetails.currentRound === 7) && (
+            <Circle
+              cx={player4X}
+              cy={player4Y}
+              r={(playerSize + 1).toString()}
+              fill={"white"}
+            />
+          )}
 
           <Circle
             cx={playerX}

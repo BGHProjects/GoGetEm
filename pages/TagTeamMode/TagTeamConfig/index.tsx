@@ -60,7 +60,7 @@ const TagTeamConfig = ({ navigation }) => {
       team1: [selectedColour, otherColours[0]],
       team1Target: otherColours[0],
       team2: [otherColours[1], otherColours[2]],
-      team2Target: otherColours[2],
+      team2Target: otherColours[1],
     };
     navigation.navigate("TagTeam Roles", configDetails);
   };

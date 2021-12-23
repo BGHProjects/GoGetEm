@@ -82,6 +82,7 @@ export const aStarSearch = (
     if (current === end) {
       searchPath.length = 0;
       let temp = current;
+
       searchPath.push([temp.row, temp.col]);
       while (temp.previous) {
         searchPath.push([temp.previous.row, temp.previous.col]);

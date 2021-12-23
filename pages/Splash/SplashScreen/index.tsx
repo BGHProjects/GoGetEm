@@ -18,7 +18,7 @@ const SplashScreen = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.titleLabel}>Splash Screen</Text>
+      <Text style={styles.titleLabel}>GoGetEm</Text>
       <View style={styles.beginButton}>
         <TouchableOpacity onPress={() => onPressBegin()}>
           <Text style={styles.beginButtonLabel}>Go to Main Menu</Text>
@@ -33,6 +33,10 @@ const styles = StyleSheet.create({
     fontSize: 40,
     color: "white",
     marginTop: height / 12,
+    fontFamily: "Ninja-Italics-Condensed",
+    width: "100%",
+    alignSelf: "center",
+    textAlign: "center",
   },
   beginButton: {
     backgroundColor: "orange",

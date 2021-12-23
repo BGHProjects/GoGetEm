@@ -82,37 +82,29 @@ const TagTeamRoles = ({ navigation, route }) => {
         <View
           style={{
             ...styles.playerRepresentation,
-            backgroundColor: `${configDetails.colour}`,
-            borderWidth:
-              configDetails.team1Target === configDetails.colour ? 5 : 0,
-            borderColor: "white",
-            height:
-              configDetails.team1Target === configDetails.colour ? 60 : 50,
-            width: configDetails.team1Target === configDetails.colour ? 60 : 50,
+            backgroundColor: `${
+              configDetails.team1Target === configDetails.player2Colour
+                ? configDetails.colour
+                : configDetails.player2Colour
+            }`,
+            height: 50,
+            width: 50,
           }}
         />
-
-        {configDetails.team1Target === configDetails.colour ? (
-          <Ionicons name="arrow-back" size={40} color={"white"} />
-        ) : (
-          <Ionicons name="arrow-forward" size={40} color={"white"} />
-        )}
+        <Ionicons name="arrow-forward" size={40} color={"white"} />
 
         <View
           style={{
             ...styles.playerRepresentation,
-            backgroundColor: `${configDetails.player4Colour}`,
-            borderWidth:
-              configDetails.team2Target === configDetails.player4Colour ? 5 : 0,
+            backgroundColor: `${
+              configDetails.team2Target === configDetails.player3Colour
+                ? configDetails.player3Colour
+                : configDetails.player4Colour
+            }`,
+            borderWidth: 5,
             borderColor: "white",
-            height:
-              configDetails.team2Target === configDetails.player4Colour
-                ? 60
-                : 50,
-            width:
-              configDetails.team2Target === configDetails.player4Colour
-                ? 60
-                : 50,
+            height: 60,
+            width: 60,
           }}
         />
       </View>
@@ -129,36 +121,28 @@ const TagTeamRoles = ({ navigation, route }) => {
         <View
           style={{
             ...styles.playerRepresentation,
-            backgroundColor: `${configDetails.player2Colour}`,
-            borderWidth:
-              configDetails.team1Target === configDetails.player2Colour ? 5 : 0,
+            backgroundColor: `${
+              configDetails.team1Target === configDetails.player2Colour
+                ? configDetails.player2Colour
+                : configDetails.colour
+            }`,
+            borderWidth: 5,
             borderColor: "white",
-            height:
-              configDetails.team1Target === configDetails.player2Colour
-                ? 60
-                : 50,
-            width:
-              configDetails.team1Target === configDetails.player2Colour
-                ? 60
-                : 50,
+            height: 60,
+            width: 60,
           }}
         />
         <Ionicons name="arrow-back" size={40} color={"white"} />
         <View
           style={{
             ...styles.playerRepresentation,
-            backgroundColor: `${configDetails.player3Colour}`,
-            borderWidth:
-              configDetails.team2Target === configDetails.player3Colour ? 5 : 0,
-            borderColor: "white",
-            height:
+            backgroundColor: `${
               configDetails.team2Target === configDetails.player3Colour
-                ? 60
-                : 50,
-            width:
-              configDetails.team2Target === configDetails.player3Colour
-                ? 60
-                : 50,
+                ? configDetails.player4Colour
+                : configDetails.player3Colour
+            }`,
+            height: 50,
+            width: 50,
           }}
         />
       </View>
@@ -221,11 +205,6 @@ const styles = StyleSheet.create({
     fontSize: 30,
     color: "black",
     alignSelf: "center",
-    transform: [
-      {
-        rotate: "-45deg",
-      },
-    ],
   },
 });
 
