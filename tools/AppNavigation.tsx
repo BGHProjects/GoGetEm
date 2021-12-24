@@ -1,6 +1,6 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import Splash from "../pages/Splash/SplashScreen";
+import Splash from "../pages/Splash";
 import MainMenu from "../pages/MainMenu";
 import ClassicConfigScreen from "../pages/ClassicMode/ClassicConfig";
 import ClassicRolesScreen from "../pages/ClassicMode/ClassicRoles";
@@ -20,7 +20,11 @@ const AppNavigation = () => {
 
   return (
     <Stack.Navigator initialRouteName="Splash" screenOptions={{}}>
-      <Stack.Screen name="Splash" component={Splash} options={{}} />
+      <Stack.Screen
+        name="Splash"
+        component={Splash}
+        options={{ headerShown: false }}
+      />
       <Stack.Screen
         name="Main Menu"
         component={MainMenu}

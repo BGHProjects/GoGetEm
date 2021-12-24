@@ -6,7 +6,9 @@ import {
   SafeAreaView,
   TouchableOpacity,
   Dimensions,
+  ImageBackground,
 } from "react-native";
+import { Asset } from "expo-asset";
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
@@ -18,12 +20,18 @@ const SplashScreen = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.titleLabel}>GoGetEm</Text>
-      <View style={styles.beginButton}>
-        <TouchableOpacity onPress={() => onPressBegin()}>
-          <Text style={styles.beginButtonLabel}>Go to Main Menu</Text>
-        </TouchableOpacity>
-      </View>
+      <ImageBackground
+        source={require("../../assets/GoGetEm_MainMenuBackground.jpg")}
+        resizeMode="cover"
+        style={{ flex: 1, justifyContent: "center" }}
+      >
+        <Text style={styles.titleLabel}>GoGetEm</Text>
+        <View style={styles.beginButton}>
+          <TouchableOpacity onPress={() => onPressBegin()}>
+            <Text style={styles.beginButtonLabel}>Go to Main Menu</Text>
+          </TouchableOpacity>
+        </View>
+      </ImageBackground>
     </SafeAreaView>
   );
 };
@@ -52,8 +60,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: "black",
-    alignItems: "center",
+    justifyContent: "center",
   },
 });
 
