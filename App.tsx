@@ -5,6 +5,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import AppNavigation from "./tools/AppNavigation";
 import { useFonts } from "expo-font";
 import AppLoading from "expo-app-loading";
+import { userDetails, UserContext } from "./tools/UserContext";
 
 export default function App() {
   let [fontsLoaded] = useFonts({
@@ -16,7 +17,9 @@ export default function App() {
   } else {
     return (
       <NavigationContainer>
-        <AppNavigation />
+        <UserContext.Provider value={userDetails}>
+          <AppNavigation />
+        </UserContext.Provider>
       </NavigationContainer>
     );
   }

@@ -14,12 +14,18 @@ import HuntGameplay from "../pages/HuntMode/HuntGameplay";
 import TagTeamConfig from "../pages/TagTeamMode/TagTeamConfig";
 import TagTeamRoles from "../pages/TagTeamMode/TagTeamRoles";
 import TagTeamGameplay from "../pages/TagTeamMode/TagTeamGameplay";
+import Preparation from "../pages/Preparation/";
 
 const AppNavigation = () => {
   const Stack = createStackNavigator();
 
   return (
-    <Stack.Navigator initialRouteName="Splash" screenOptions={{}}>
+    <Stack.Navigator initialRouteName="Preparation" screenOptions={{}}>
+      <Stack.Screen
+        name="Preparation"
+        component={Preparation}
+        options={{ headerShown: false }}
+      />
       <Stack.Screen
         name="Splash"
         component={Splash}
