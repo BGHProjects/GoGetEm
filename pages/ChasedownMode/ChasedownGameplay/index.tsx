@@ -13,6 +13,7 @@ import {
   updateSearchPath,
 } from "../../../tools/BotBrain";
 import { CountdownCircleTimer } from "react-native-countdown-circle-timer";
+import Controller from "../../../components/Controller";
 
 const height = Dimensions.get("window").height;
 const mazeSideLength = height * 0.45;
@@ -468,47 +469,12 @@ const ChasedownGameplayScreen = ({ navigation, route }) => {
           ></Circle>
         </Svg>
       </View>
-      <View
-        style={{
-          justifyContent: "center",
-          alignItems: "center",
-          height: height / 3,
-          width: height / 3,
-          paddingTop: 20,
-        }}
-      >
-        <Svg height="100%" width="100%" viewBox="0 0 100 100">
-          <Circle cx="45%" cy="50%" r={height / 13} fill="darkblue"></Circle>
-          <Circle
-            cx="45%"
-            cy="15%"
-            r={height / 52}
-            fill="orange"
-            onPress={() => movePlayerUp()}
-          />
-          <Circle
-            cx="15%"
-            cy="50%"
-            r={height / 52}
-            fill="orange"
-            onPress={() => movePlayerLeft()}
-          />
-          <Circle
-            cx="45%"
-            cy="85%"
-            r={height / 52}
-            fill="orange"
-            onPress={() => movePlayerDown()}
-          />
-          <Circle
-            cx="75%"
-            cy="50%"
-            r={height / 52}
-            fill="orange"
-            onPress={() => movePlayerRight()}
-          />
-        </Svg>
-      </View>
+      <Controller
+        movePlayerDown={movePlayerDown}
+        movePlayerLeft={movePlayerLeft}
+        movePlayerRight={movePlayerRight}
+        movePlayerUp={movePlayerUp}
+      />
     </SafeAreaView>
   );
 };

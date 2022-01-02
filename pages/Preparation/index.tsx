@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useReducer } from "react";
+import React, { useContext, useEffect, useReducer, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -6,11 +6,13 @@ import {
   SafeAreaView,
   TouchableOpacity,
   Dimensions,
-  ImageBackground,
+  Alert,
 } from "react-native";
 import { UserContext, userReducer } from "../../tools/UserContext";
+import { Colors } from "../../constants/Colors";
 import * as firebase from "firebase";
 import * as Device from "expo-device";
+import NetInfo from "@react-native-community/netinfo";
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
@@ -56,117 +58,185 @@ const firebaseConfig = {
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
-function viewDatabase() {
-  const db = firebase.database();
-  //console.log("db ", db);
-  let uniqueName = Device.modelName + " " + Device.deviceName;
-  console.log("uniqueName ", uniqueName);
+// function viewDatabase() {
+//   const db = firebase.database();
+//   //console.log("db ", db);
+//   let uniqueName = Device.modelName + " " + Device.deviceName;
+//   console.log("uniqueName ", uniqueName);
 
-  // Write to the database
-  //   db.ref("users/" + uniqueName).set({
-  //     username: uniqueName,
-  //   });
+//   // Write to the database
+//   //   db.ref("users/" + uniqueName).set({
+//   //     username: uniqueName,
+//   //   });
 
-  // Read from the database
-  //let dbRef = db.ref();
-  //   dbRef
-  //     .child("users")
-  //     .child(uniqueName)
-  //     .get()
-  //     .then((snapshot) => {
-  //       if (snapshot.exists()) {
-  //         //console.log("\nsnapshot.val() ", snapshot.val());
-  //         console.log("\nsnapshot.val().username ", snapshot.val().username);
-  //       } else {
-  //         console.log("User doesn't exist");
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       console.error(error);
-  //     });
-  //   dbRef
-  //     .child("users")
-  //     .child("Some Other String")
-  //     .get()
-  //     .then((snapshot) => {
-  //       if (snapshot.exists()) {
-  //         //console.log("\nsnapshot.val() ", snapshot.val());
-  //         console.log("\nsnapshot.val().username ", snapshot.val().username);
-  //       } else {
-  //         console.log("User doesn't exist");
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       console.error(error);
-  //     });
+//   // Read from the database
+//   //let dbRef = db.ref();
+//   //   dbRef
+//   //     .child("users")
+//   //     .child(uniqueName)
+//   //     .get()
+//   //     .then((snapshot) => {
+//   //       if (snapshot.exists()) {
+//   //         //console.log("\nsnapshot.val() ", snapshot.val());
+//   //         console.log("\nsnapshot.val().username ", snapshot.val().username);
+//   //       } else {
+//   //         console.log("User doesn't exist");
+//   //       }
+//   //     })
+//   //     .catch((error) => {
+//   //       console.error(error);
+//   //     });
+//   //   dbRef
+//   //     .child("users")
+//   //     .child("Some Other String")
+//   //     .get()
+//   //     .then((snapshot) => {
+//   //       if (snapshot.exists()) {
+//   //         //console.log("\nsnapshot.val() ", snapshot.val());
+//   //         console.log("\nsnapshot.val().username ", snapshot.val().username);
+//   //       } else {
+//   //         console.log("User doesn't exist");
+//   //       }
+//   //     })
+//   //     .catch((error) => {
+//   //       console.error(error);
+//   //     });
 
-  // Update a value in the database
-  db.ref("users/" + uniqueName).update({
-    connected: true,
-    defaultColour: "red",
-    controllerOutlineColour: "red",
-    controllerLeftButtonStyle: "default",
-    controllerLeftButtonColour: "default",
-    controllerRightButtonStyle: "default",
-    controllerRightButtonColour: "default",
-    controllerTopButtonStyle: "default",
-    controllerTopButtonColour: "default",
-    controllerBottomButtonStyle: "default",
-    controllerBottomButtonColour: "default",
-    totalExp: 0,
-    totalClassicWins: 0,
-    totalClassicGames: 0,
-    totalChasedownWins: 0,
-    totalChasedownGames: 0,
-    totalHuntWins: 0,
-    totalHuntGames: 0,
-    totalTagTeamWins: 0,
-    totalTagTeamGames: 0,
-    totalDiff1Wins: 0,
-    totalDiff1Games: 0,
-    totalDiff2Wins: 0,
-    totalDiff2Games: 0,
-    totalDiff3Wins: 0,
-    totalDiff3Games: 0,
-    totalDiff4Wins: 0,
-    totalDiff4Games: 0,
-  });
-}
+//   // Update a value in the database
+//   db.ref("users/" + uniqueName).update({
+//     connected: true,
+//     defaultColour: "red",
+//     controllerOutlineColour: "red",
+//     controllerLeftButtonStyle: "default",
+//     controllerLeftButtonColour: "default",
+//     controllerRightButtonStyle: "default",
+//     controllerRightButtonColour: "default",
+//     controllerTopButtonStyle: "default",
+//     controllerTopButtonColour: "default",
+//     controllerBottomButtonStyle: "default",
+//     controllerBottomButtonColour: "default",
+//     totalExp: 0,
+//     totalClassicWins: 0,
+//     totalClassicGames: 0,
+//     totalChasedownWins: 0,
+//     totalChasedownGames: 0,
+//     totalHuntWins: 0,
+//     totalHuntGames: 0,
+//     totalTagTeamWins: 0,
+//     totalTagTeamGames: 0,
+//     totalDiff1Wins: 0,
+//     totalDiff1Games: 0,
+//     totalDiff2Wins: 0,
+//     totalDiff2Games: 0,
+//     totalDiff3Wins: 0,
+//     totalDiff3Games: 0,
+//     totalDiff4Wins: 0,
+//     totalDiff4Games: 0,
+//   });
+// }
 
 /**
  *  Firebase necessities
  */
 
 const Preparation = ({ navigation }) => {
-  const proceed = () => {
+  const userContext = useContext(UserContext);
+  const [state, dispatch] = useReducer(userReducer, userContext);
+  const [connection, setConnection] = useState<boolean | null>(null);
+
+  const proceedtoSplash = () => {
     navigation.navigate("Splash");
   };
 
-  const userContext = useContext(UserContext);
+  /**
+   * Internet Connection functions
+   */
 
-  const [state, dispatch] = useReducer(userReducer, userContext);
-
-  const updateState = () => {
-    dispatch({ type: "connectionChange", payload: !userContext.connected });
-    console.log("userContext.connected ", userContext.connected);
+  const handleNoConnection = () => {
+    dispatch({ type: "connectionChange", payload: false });
+    navigation.navigate("Splash");
   };
+
+  const connectionStatus = NetInfo.fetch().then((state) => {
+    setConnection(state.isConnected);
+  });
+
+  const connectionAlert = () => {
+    Alert.alert(
+      "No Internet Connection",
+      "In order to save your progress and customisations, and to unlock content, GoGetEm requires an internet connection.\nBut you can still play without one.",
+      [
+        {
+          text: "OK I've connected",
+          onPress: () => connectionStatus,
+        },
+        {
+          text: "I'll play without an internet connection",
+          onPress: () => handleNoConnection(),
+        },
+      ]
+    );
+  };
+
+  useEffect(() => {
+    if (connection !== null) {
+      if (connection) {
+        checkDatabaseForUser();
+      } else {
+        connectionAlert();
+      }
+    }
+  }, [connection]);
+
+  /**
+   *  Database Checking functions
+   */
+
+  const checkDatabaseForUser = () => {
+    const db = firebase.database();
+    let uniqueName = Device.modelName + " " + Device.deviceName;
+    db.ref()
+      .child("users")
+      .child(uniqueName)
+      .get()
+      .then((snapshot) => {
+        if (snapshot.exists()) {
+          // Update state with user details
+          setStateFromDatabase(snapshot.val());
+        } else {
+          // Create new user in the database
+          createNewUser(uniqueName);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  const setStateFromDatabase = (userDetails: object) => {
+    dispatch({ type: "populateFromDatabase", payload: userDetails });
+    navigation.navigate("Splash");
+  };
+
+  const createNewUser = (userName: string) => {
+    dispatch({ type: "assignName", payload: userName });
+    navigation.navigate("Splash");
+  };
+
+  // What actually happens when the page is loaded
+  useEffect(() => {
+    // Step 1 - Check Internet Connection
+    if (!userContext.connected) {
+      connectionAlert();
+    } else {
+      // Step 2 - Check if the user is in the database already
+      checkDatabaseForUser();
+    }
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.titleLabel}>Setting up your account...</Text>
-      <View style={styles.beginButton}>
-        <TouchableOpacity onPress={() => proceed()}>
-          <Text style={styles.beginButtonLabel}>Proceed</Text>
-        </TouchableOpacity>
-      </View>
-
-      <View style={[styles.beginButton, { backgroundColor: "red" }]}>
-        <TouchableOpacity onPress={() => viewDatabase()}>
-          <Text style={styles.beginButtonLabel}>
-            Update Context using Reducer
-          </Text>
-        </TouchableOpacity>
-      </View>
+      <Text style={styles.titleLabel}>Preparing your account...</Text>
     </SafeAreaView>
   );
 };
@@ -195,7 +265,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: "#000026",
+    backgroundColor: Colors.primaryBackground,
   },
 });
 

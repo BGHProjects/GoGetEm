@@ -25,7 +25,8 @@
     "react-native-snap-carousel": "^3.9.1",
     "react-native-svg": "12.1.1",
     "react-native-web": "~0.13.12",
-    "expo-device": "~3.3.0"
+    "expo-device": "~3.3.0",
+    "@react-native-community/netinfo": "6.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",

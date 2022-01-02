@@ -77,6 +77,9 @@ export const userReducer = (state, action) => {
     case "assignName":
       state.userName = action.payload;
       return state;
+    case "populateFromDatabase":
+      state = action.payload;
+      return state;
     default:
       return state;
   }
