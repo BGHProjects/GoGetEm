@@ -45,14 +45,14 @@ const height = Dimensions.get("window").height;
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyDSsTjzfbbjRkPMImuMv8pChQZWnqg4o5A",
-  authDomain: "gogetem-v1.firebaseapp.com",
-  projectId: "gogetem-v1",
-  storageBucket: "gogetem-v1.appspot.com",
-  messagingSenderId: "410467064527",
-  appId: "1:410467064527:web:33381c6e63fa6fe1d7f5ba",
-  measurementId: "G-DP25PMTXE6",
-  databaseURL: "https://gogetem-v1-default-rtdb.firebaseio.com/",
+  apiKey: "AIzaSyDDZLJAFidKviKafYx2vjhRsU0MXquBHog",
+  authDomain: "gogetem-db-v1.firebaseapp.com",
+  projectId: "gogetem-db-v1",
+  storageBucket: "gogetem-db-v1.appspot.com",
+  messagingSenderId: "329346400631",
+  appId: "1:329346400631:web:62637c654bc3dbee23e172",
+  measurementId: "G-2H4RX0C0RF",
+  databaseURL: "https://gogetem-db-v1-default-rtdb.firebaseio.com/",
 };
 
 // Initialize Firebase
@@ -205,7 +205,7 @@ const Preparation = ({ navigation }) => {
           setStateFromDatabase(snapshot.val());
         } else {
           // Create new user in the database
-          createNewUser(uniqueName);
+          createNewUser(db, uniqueName);
         }
       })
       .catch((error) => {
@@ -218,7 +218,40 @@ const Preparation = ({ navigation }) => {
     navigation.navigate("Splash");
   };
 
-  const createNewUser = (userName: string) => {
+  const createNewUser = (database, userName: string) => {
+    //Write to the database
+    database.ref("users/" + userName).set({
+      username: userName,
+      connected: true,
+      defaultColour: "red",
+      controllerOutlineColour: "red",
+      controllerLeftButtonStyle: "default",
+      controllerLeftButtonColour: "default",
+      controllerRightButtonStyle: "default",
+      controllerRightButtonColour: "default",
+      controllerTopButtonStyle: "default",
+      controllerTopButtonColour: "default",
+      controllerBottomButtonStyle: "default",
+      controllerBottomButtonColour: "default",
+      totalExp: 0,
+      totalClassicWins: 0,
+      totalClassicGames: 0,
+      totalChasedownWins: 0,
+      totalChasedownGames: 0,
+      totalHuntWins: 0,
+      totalHuntGames: 0,
+      totalTagTeamWins: 0,
+      totalTagTeamGames: 0,
+      totalDiff1Wins: 0,
+      totalDiff1Games: 0,
+      totalDiff2Wins: 0,
+      totalDiff2Games: 0,
+      totalDiff3Wins: 0,
+      totalDiff3Games: 0,
+      totalDiff4Wins: 0,
+      totalDiff4Games: 0,
+    });
+
     dispatch({ type: "assignName", payload: userName });
     navigation.navigate("Splash");
   };
