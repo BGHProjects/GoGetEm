@@ -219,20 +219,18 @@ const Preparation = ({ navigation }) => {
   };
 
   const createNewUser = (database, userName: string) => {
+    // todo Change the database schema to reflect this new layout
+
     //Write to the database
     database.ref("users/" + userName).set({
       username: userName,
       connected: true,
       defaultColour: "red",
       controllerOutlineColour: "red",
-      controllerLeftButtonStyle: "default",
-      controllerLeftButtonColour: "default",
-      controllerRightButtonStyle: "default",
-      controllerRightButtonColour: "default",
-      controllerTopButtonStyle: "default",
-      controllerTopButtonColour: "default",
-      controllerBottomButtonStyle: "default",
-      controllerBottomButtonColour: "default",
+      controllerLeftButton: "default-colour",
+      controllerRightButton: "default-colour",
+      controllerTopButton: "default-colour",
+      controllerBottomButton: "default-colour",
       totalExp: 0,
       totalClassicWins: 0,
       totalClassicGames: 0,

@@ -9,6 +9,7 @@ import {
   ImageBackground,
 } from "react-native";
 import { Asset } from "expo-asset";
+import { useFonts } from "@use-expo/font";
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
@@ -26,11 +27,26 @@ const SplashScreen = ({ navigation }) => {
         style={{ flex: 1, justifyContent: "center" }}
       >
         <Text style={styles.titleLabel}>GoGetEm</Text>
-        <View style={styles.beginButton}>
-          <TouchableOpacity onPress={() => onPressBegin()}>
-            <Text style={styles.beginButtonLabel}>Go to Main Menu</Text>
-          </TouchableOpacity>
-        </View>
+        <TouchableOpacity onPress={() => onPressBegin()}>
+          <View style={styles.button}>
+            <Text style={styles.buttonLabel}>Play</Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => console.log("Implement me!")}>
+          <View style={styles.button}>
+            <Text style={styles.buttonLabel}>Profile</Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => console.log("Implement me!")}>
+          <View style={styles.button}>
+            <Text style={styles.buttonLabel}>Settings</Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => console.log("Implement me!")}>
+          <View style={styles.button}>
+            <Text style={styles.buttonLabel}>Credits</Text>
+          </View>
+        </TouchableOpacity>
       </ImageBackground>
     </SafeAreaView>
   );
@@ -46,17 +62,20 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     textAlign: "center",
   },
-  beginButton: {
+  button: {
     backgroundColor: "orange",
     width: width / 1.5,
     borderRadius: 10,
     alignItems: "center",
     marginTop: height / 24,
+    alignSelf: "center",
   },
-  beginButtonLabel: {
+  buttonLabel: {
     color: "white",
     fontSize: 25,
     paddingVertical: 10,
+    width: "100%",
+    textAlign: "center",
   },
   container: {
     flex: 1,

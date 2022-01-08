@@ -1,17 +1,13 @@
-import React, { useState, useEffect, FC } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  SafeAreaView,
-  Dimensions,
-  TouchableOpacity,
-} from "react-native";
-import { Svg, Circle, ForeignObject } from "react-native-svg";
-import { Ionicons, FontAwesome } from "@expo/vector-icons";
+import React, { FC } from "react";
+import { StyleSheet, View, Dimensions } from "react-native";
+import { Svg, Circle } from "react-native-svg";
+import CircleButton from "./CircleButton";
+import SquareButton from "./SquareButton";
+import TriangleButton from "./TriangleButton";
+import ShardButton from "./ShardButton";
+import PointerButton from "./PointerButton";
 
 const height = Dimensions.get("window").height;
-const width = Dimensions.get("window").width;
 
 interface Props {
   movePlayerUp: Function;
@@ -26,80 +22,6 @@ const Controller: FC<Props> = ({
   movePlayerDown,
   movePlayerRight,
 }) => {
-  const somethingElse = () => {
-    return (
-      <View
-        style={{
-          width: "100%",
-          height: "100%",
-          borderRadius: 200,
-          borderColor: "red",
-          borderWidth: 4,
-        }}
-      >
-        {/* Top Button */}
-        <TouchableOpacity onPress={() => movePlayerUp()}>
-          <View
-            style={{
-              backgroundColor: "transparent",
-              alignSelf: "center",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <Ionicons name="md-checkmark-circle" size={50} color={"red"} />
-          </View>
-        </TouchableOpacity>
-
-        {/* Right Button */}
-        <TouchableOpacity onPress={() => movePlayerRight()}>
-          <View
-            style={{
-              backgroundColor: "transparent",
-              alignSelf: "flex-end",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <Ionicons name="md-checkmark-circle" size={50} color={"yellow"} />
-          </View>
-        </TouchableOpacity>
-
-        {/* Bottom Button */}
-        <TouchableOpacity onPress={() => movePlayerDown()}>
-          <View
-            style={{
-              backgroundColor: "transparent",
-              alignSelf: "center",
-              alignItems: "center",
-              justifyContent: "space-between",
-            }}
-          >
-            <Ionicons name="md-checkmark-circle" size={50} color={"blue"} />
-          </View>
-        </TouchableOpacity>
-
-        {/* Left Button */}
-        <TouchableOpacity onPress={() => movePlayerLeft()}>
-          <View
-            style={{
-              backgroundColor: "transparent",
-              alignSelf: "flex-start",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <Ionicons
-              name="md-checkmark-circle"
-              size={50}
-              color={"lightgreen"}
-            />
-          </View>
-        </TouchableOpacity>
-      </View>
-    );
-  };
-
   return (
     <View style={styles.container}>
       <Svg height="100%" width="100%" viewBox="0 0 100 100">
@@ -110,46 +32,41 @@ const Controller: FC<Props> = ({
           r={height / 13}
           stroke="red"
           strokeWidth="2"
+          fill="transparent"
         />
 
         {/* Top Button */}
-        <Circle
-          cx="50%"
-          cy="15%"
-          r={height / 52}
-          onPress={() => movePlayerUp()}
-          stroke="orange"
-          strokeWidth="2"
+
+        <ShardButton
+          buttonFunction={() => movePlayerUp()}
+          colour={"orange"}
+          position={"top"}
         />
 
-        {/* Left Button */}
-        <Circle
-          cx="15%"
-          cy="50%"
-          r={height / 52}
-          stroke="orange"
-          strokeWidth="2"
-          onPress={() => movePlayerLeft()}
+        {/*
+         * ! Left Button
+         */}
+
+        <ShardButton
+          buttonFunction={() => movePlayerLeft()}
+          colour={"yellow"}
+          position={"left"}
         />
 
         {/* Down Button */}
-        <Circle
-          cx="50%"
-          cy="85%"
-          r={height / 52}
-          stroke="orange"
-          strokeWidth="2"
-          onPress={() => movePlayerDown()}
+
+        <ShardButton
+          buttonFunction={() => movePlayerDown()}
+          colour={"green"}
+          position={"down"}
         />
 
         {/* Right Button */}
-        <Circle
-          cx="85%"
-          cy="50%"
-          r={height / 52}
-          stroke="orange"
-          strokeWidth="2"
-          onPress={() => movePlayerRight()}
+
+        <ShardButton
+          buttonFunction={() => movePlayerRight()}
+          colour={"dodgerblue"}
+          position={"right"}
         />
       </Svg>
     </View>

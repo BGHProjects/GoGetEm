@@ -21,26 +21,31 @@ const MainMenuScreen = ({ navigation }) => {
     <SafeAreaView style={styles.container}>
       <Text style={styles.titleLabel}>Main Menu</Text>
       <ScrollView style={styles.scrollView}>
-        <View style={styles.classicModeButton}>
-          <TouchableOpacity onPress={() => onPressButton("Classic Config")}>
+        <TouchableOpacity onPress={() => onPressButton("Classic Config")}>
+          <View style={[styles.button, { backgroundColor: "dodgerblue" }]}>
             <Text style={styles.buttonLabel}>Classic Mode</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.chaseDownModeButton}>
-          <TouchableOpacity onPress={() => onPressButton("Chasedown Config")}>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => onPressButton("Chasedown Config")}>
+          <View style={[styles.button, { backgroundColor: "red" }]}>
             <Text style={styles.buttonLabel}>ChaseDown Mode</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.huntModeButton}>
-          <TouchableOpacity onPress={() => onPressButton("Hunt Config")}>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => onPressButton("Hunt Config")}>
+          <View style={[styles.button, { backgroundColor: "purple" }]}>
             <Text style={styles.buttonLabel}>Hunt Mode</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.tagTeamModeButton}>
-          <TouchableOpacity onPress={() => onPressButton("TagTeam Config")}>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => onPressButton("TagTeam Config")}>
+          <View style={[styles.button, { backgroundColor: "green" }]}>
             <Text style={styles.buttonLabel}>TagTeam Mode</Text>
-          </TouchableOpacity>
-        </View>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => console.log("Implement me!")}>
+          <View style={[styles.button, { backgroundColor: "orange" }]}>
+            <Text style={styles.buttonLabel}>How to Play</Text>
+          </View>
+        </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>
   );
@@ -55,29 +60,7 @@ const styles = StyleSheet.create({
   scrollView: {
     marginTop: height / 24,
   },
-  classicModeButton: {
-    backgroundColor: "dodgerblue",
-    width: width / 1.5,
-    borderRadius: 10,
-    alignItems: "center",
-    marginTop: height / 24,
-  },
-  chaseDownModeButton: {
-    backgroundColor: "red",
-    width: width / 1.5,
-    borderRadius: 10,
-    alignItems: "center",
-    marginTop: height / 24,
-  },
-  huntModeButton: {
-    backgroundColor: "purple",
-    width: width / 1.5,
-    borderRadius: 10,
-    alignItems: "center",
-    marginTop: height / 24,
-  },
-  tagTeamModeButton: {
-    backgroundColor: "darkgreen",
+  button: {
     width: width / 1.5,
     borderRadius: 10,
     alignItems: "center",
