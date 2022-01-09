@@ -144,10 +144,6 @@ const Preparation = ({ navigation }) => {
   const [state, dispatch] = useReducer(userReducer, userContext);
   const [connection, setConnection] = useState<boolean | null>(null);
 
-  const proceedtoSplash = () => {
-    navigation.navigate("Splash");
-  };
-
   /**
    * Internet Connection functions
    */
@@ -219,8 +215,6 @@ const Preparation = ({ navigation }) => {
   };
 
   const createNewUser = (database, userName: string) => {
-    // todo Change the database schema to reflect this new layout
-
     //Write to the database
     database.ref("users/" + userName).set({
       username: userName,

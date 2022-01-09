@@ -1,11 +1,12 @@
 import React, { FC } from "react";
 import { StyleSheet, View, Dimensions } from "react-native";
-import { Svg, Circle } from "react-native-svg";
+import { Svg, Circle, Text } from "react-native-svg";
 import CircleButton from "./CircleButton";
 import SquareButton from "./SquareButton";
 import TriangleButton from "./TriangleButton";
 import ShardButton from "./ShardButton";
 import PointerButton from "./PointerButton";
+import LetterButton from "./LetterButton";
 
 const height = Dimensions.get("window").height;
 
@@ -37,7 +38,7 @@ const Controller: FC<Props> = ({
 
         {/* Top Button */}
 
-        <ShardButton
+        <PointerButton
           buttonFunction={() => movePlayerUp()}
           colour={"orange"}
           position={"top"}
@@ -46,16 +47,16 @@ const Controller: FC<Props> = ({
         {/*
          * ! Left Button
          */}
-
-        <ShardButton
+        <LetterButton
           buttonFunction={() => movePlayerLeft()}
           colour={"yellow"}
           position={"left"}
+          letter="B"
         />
 
         {/* Down Button */}
 
-        <ShardButton
+        <TriangleButton
           buttonFunction={() => movePlayerDown()}
           colour={"green"}
           position={"down"}
