@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   StyleSheet,
   Text,
@@ -8,13 +8,16 @@ import {
   Dimensions,
   ImageBackground,
 } from "react-native";
-import { Asset } from "expo-asset";
-import { useFonts } from "@use-expo/font";
+
+import { UserContext } from "../../tools/UserContext";
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
 
 const SplashScreen = ({ navigation }) => {
+  const userContext = useContext(UserContext);
+  console.log(`userContext in Splash Screen`, userContext);
+
   const onPressBegin = () => {
     navigation.navigate("Main Menu");
   };

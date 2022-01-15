@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   StyleSheet,
   Text,
@@ -8,11 +8,19 @@ import {
   Dimensions,
   ScrollView,
 } from "react-native";
+import { UserContext } from "../../tools/UserContext";
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
 
 const MainMenuScreen = ({ navigation }) => {
+  // Just for testing purposes
+  const userContext = useContext(UserContext);
+  console.log(`userContext`, userContext);
+  if (userContext.username === null) {
+    console.log(`userContext.username is null`, userContext.username);
+  }
+
   const onPressButton = (gameMode: string) => {
     navigation.navigate(gameMode);
   };

@@ -1,18 +1,14 @@
 import React, { createContext, useReducer } from "react";
 
 interface User {
-  userName: string | null;
+  username: string | null;
   connected: Boolean;
   defaultColour: string;
   controllerOutlineColour: string;
-  controllerLeftButtonStyle: string;
-  controllerLeftButtonColour: string;
-  controllerRightButtonStyle: string;
-  controllerRightButtonColour: string;
-  controllerTopButtonStyle: string;
-  controllerTopButtonColour: string;
-  controllerBottomButtonStyle: string;
-  controllerBottomButtonColour: string;
+  controllerLeftButton: string;
+  controllerRightButton: string;
+  controllerTopButton: string;
+  controllerBottomButton: string;
   totalExp: number;
   totalGames: number;
   totalWins: number;
@@ -35,19 +31,17 @@ interface User {
 }
 
 export const userDetails: User = {
-  userName: null,
+  username: null,
   connected: false,
-  defaultColour: "red",
+  defaultColour: "blue",
   controllerOutlineColour: "red",
-  controllerLeftButtonStyle: "default",
-  controllerLeftButtonColour: "default",
-  controllerRightButtonStyle: "default",
-  controllerRightButtonColour: "default",
-  controllerTopButtonStyle: "default",
-  controllerTopButtonColour: "default",
-  controllerBottomButtonStyle: "default",
-  controllerBottomButtonColour: "default",
+  controllerLeftButton: "default-colour",
+  controllerRightButton: "default-colour",
+  controllerTopButton: "default-colour",
+  controllerBottomButton: "default-colour",
   totalExp: 0,
+  totalGames: 0,
+  totalWins: 0,
   totalClassicWins: 0,
   totalClassicGames: 0,
   totalChasedownWins: 0,
@@ -75,10 +69,12 @@ export const userReducer = (state, action) => {
       state.totalExp += action.payload;
       return state;
     case "assignName":
-      state.userName = action.payload;
+      state.username = action.payload;
       return state;
     case "populateFromDatabase":
+      console.log(`populateFromDatabase called`);
       state = action.payload;
+      console.log(`state`, state);
       return state;
     default:
       return state;

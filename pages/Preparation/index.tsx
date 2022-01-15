@@ -60,49 +60,46 @@ firebase.initializeApp(firebaseConfig);
 
 // function viewDatabase() {
 //   const db = firebase.database();
-//   //console.log("db ", db);
 //   let uniqueName = Device.modelName + " " + Device.deviceName;
 //   console.log("uniqueName ", uniqueName);
 
-//   // Write to the database
-//   //   db.ref("users/" + uniqueName).set({
-//   //     username: uniqueName,
-//   //   });
+// Write to the database
+//   db.ref("users/" + uniqueName).set({
+//     username: uniqueName,
+//   });
 
-//   // Read from the database
-//   //let dbRef = db.ref();
-//   //   dbRef
-//   //     .child("users")
-//   //     .child(uniqueName)
-//   //     .get()
-//   //     .then((snapshot) => {
-//   //       if (snapshot.exists()) {
-//   //         //console.log("\nsnapshot.val() ", snapshot.val());
-//   //         console.log("\nsnapshot.val().username ", snapshot.val().username);
-//   //       } else {
-//   //         console.log("User doesn't exist");
-//   //       }
-//   //     })
-//   //     .catch((error) => {
-//   //       console.error(error);
-//   //     });
-//   //   dbRef
-//   //     .child("users")
-//   //     .child("Some Other String")
-//   //     .get()
-//   //     .then((snapshot) => {
-//   //       if (snapshot.exists()) {
-//   //         //console.log("\nsnapshot.val() ", snapshot.val());
-//   //         console.log("\nsnapshot.val().username ", snapshot.val().username);
-//   //       } else {
-//   //         console.log("User doesn't exist");
-//   //       }
-//   //     })
-//   //     .catch((error) => {
-//   //       console.error(error);
-//   //     });
+// Read from the database
+//let dbRef = db.ref();
+//   dbRef
+//     .child("users")
+//     .child(uniqueName)
+//     .get()
+//     .then((snapshot) => {
+//       if (snapshot.exists()) {
+//         console.log("\nsnapshot.val().username ", snapshot.val().username);
+//       } else {
+//         console.log("User doesn't exist");
+//       }
+//     })
+//     .catch((error) => {
+//       console.error(error);
+//     });
+//   dbRef
+//     .child("users")
+//     .child("Some Other String")
+//     .get()
+//     .then((snapshot) => {
+//       if (snapshot.exists()) {
+//         console.log("\nsnapshot.val().username ", snapshot.val().username);
+//       } else {
+//         console.log("User doesn't exist");
+//       }
+//     })
+//     .catch((error) => {
+//       console.error(error);
+//     });
 
-//   // Update a value in the database
+// Update a value in the database
 //   db.ref("users/" + uniqueName).update({
 //     connected: true,
 //     defaultColour: "red",
@@ -210,12 +207,17 @@ const Preparation = ({ navigation }) => {
   };
 
   const setStateFromDatabase = (userDetails: object) => {
-    dispatch({ type: "populateFromDatabase", payload: userDetails });
+    console.log(`setStateFromDatabase was called`);
+    console.log(`userDetails`, userDetails);
+    //dispatch({ type: "populateFromDatabase", payload: userDetails });
+    dispatch({ type: "assignName", payload: userDetails?.username });
+    console.log(`userContext`, userContext);
     navigation.navigate("Splash");
   };
 
   const createNewUser = (database, userName: string) => {
     //Write to the database
+    console.log(`createNewUser was called`);
     database.ref("users/" + userName).set({
       username: userName,
       connected: true,
@@ -226,6 +228,8 @@ const Preparation = ({ navigation }) => {
       controllerTopButton: "default-colour",
       controllerBottomButton: "default-colour",
       totalExp: 0,
+      totalGames: 0,
+      totalWins: 0,
       totalClassicWins: 0,
       totalClassicGames: 0,
       totalChasedownWins: 0,

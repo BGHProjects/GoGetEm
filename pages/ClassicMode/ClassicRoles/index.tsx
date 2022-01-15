@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useEffect, useState, useContext, useReducer } from "react";
 import {
   StyleSheet,
   Text,
@@ -9,11 +9,15 @@ import {
 } from "react-native";
 import { Svg, Line } from "react-native-svg";
 import { Ionicons } from "@expo/vector-icons";
+import { UserContext, userReducer } from "../../../tools/UserContext";
+import * as firebase from "firebase";
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
 
 const ClassicRolesScreen = ({ navigation, route }) => {
+  const userContext = useContext(UserContext);
+
   const configDetails = route.params;
   let scoreDetails;
   const [leftColour, setLeftColour] = useState(configDetails.player2Colour);
@@ -52,6 +56,49 @@ const ClassicRolesScreen = ({ navigation, route }) => {
   };
 
   if (totalDetails.gameOver) {
+    /**
+     * Accrue exp functionality goes here
+     * Set base increment based on if the player won
+     * Multiply increment by number of rounds
+     * Multiply increment by difficulty played on
+     */
+    let increment = 0;
+
+    if (
+      configDetails.player1Score > configDetails.player2Score &&
+      configDetails.player1Score > configDetails.player3Score
+    ) {
+      increment = 10;
+    } else {
+      increment = 3;
+    }
+
+    increment *= Number(configDetails.rounds);
+
+    switch (configDetails.difficulty) {
+      case "Meh":
+        break;
+      case "Oh OK":
+        increment *= 2;
+        break;
+      case "Hang On":
+        increment *= 3;
+        break;
+      case "What The":
+        increment *= 4;
+        break;
+      default:
+        break;
+    }
+
+    //Update a value in the database
+    firebase
+      .database()
+      .ref("users/" + userContext.username)
+      .update({
+        totalExp: (userContext.totalExp += increment),
+      });
+
     setTimeout(() => {
       navigation.navigate("Main Menu");
     }, 3000);
