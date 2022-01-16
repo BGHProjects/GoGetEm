@@ -208,10 +208,7 @@ const Preparation = ({ navigation }) => {
 
   const setStateFromDatabase = (userDetails: object) => {
     console.log(`setStateFromDatabase was called`);
-    console.log(`userDetails`, userDetails);
-    //dispatch({ type: "populateFromDatabase", payload: userDetails });
-    dispatch({ type: "assignName", payload: userDetails?.username });
-    console.log(`userContext`, userContext);
+    dispatch({ type: "populateFromDatabase", payload: userDetails });
     navigation.navigate("Splash");
   };
 
@@ -227,6 +224,7 @@ const Preparation = ({ navigation }) => {
       controllerRightButton: "default-colour",
       controllerTopButton: "default-colour",
       controllerBottomButton: "default-colour",
+      level: 0,
       totalExp: 0,
       totalGames: 0,
       totalWins: 0,

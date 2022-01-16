@@ -15,9 +15,6 @@ const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
 
 const SplashScreen = ({ navigation }) => {
-  const userContext = useContext(UserContext);
-  console.log(`userContext in Splash Screen`, userContext);
-
   const onPressBegin = () => {
     navigation.navigate("Main Menu");
   };

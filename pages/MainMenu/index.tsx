@@ -21,6 +21,10 @@ const MainMenuScreen = ({ navigation }) => {
     console.log(`userContext.username is null`, userContext.username);
   }
 
+  if (userContext.totalWins === undefined) {
+    console.log(`userContext.totalWins isn't working`, userContext.totalWins);
+  }
+
   const onPressButton = (gameMode: string) => {
     navigation.navigate(gameMode);
   };
