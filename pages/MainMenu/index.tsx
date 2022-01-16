@@ -8,23 +8,11 @@ import {
   Dimensions,
   ScrollView,
 } from "react-native";
-import { UserContext } from "../../tools/UserContext";
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
 
 const MainMenuScreen = ({ navigation }) => {
-  // Just for testing purposes
-  const userContext = useContext(UserContext);
-  console.log(`userContext`, userContext);
-  if (userContext.username === null) {
-    console.log(`userContext.username is null`, userContext.username);
-  }
-
-  if (userContext.totalWins === undefined) {
-    console.log(`userContext.totalWins isn't working`, userContext.totalWins);
-  }
-
   const onPressButton = (gameMode: string) => {
     navigation.navigate(gameMode);
   };

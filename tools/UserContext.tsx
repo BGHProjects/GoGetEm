@@ -1,4 +1,4 @@
-import React, { createContext, useReducer } from "react";
+import React, { createContext, ReducerAction, useReducer } from "react";
 
 interface User {
   username: string | null;
@@ -62,7 +62,7 @@ export const userDetails: User = {
   totalDiff4Games: 0,
 };
 
-export const userReducer = (state, action) => {
+export const userReducer = (state: User, action) => {
   if (state !== undefined) {
     switch (action.type) {
       case "connectionChange":

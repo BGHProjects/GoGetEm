@@ -175,7 +175,7 @@ const ClassicRolesScreen = ({ navigation, route }) => {
        */
 
       const identifyNewLevel = (levelToCheck: number) => {
-        let nextLevelExp = baseX * levelToCheck ** exponent;
+        let nextLevelExp = Math.ceil(baseX * levelToCheck ** exponent);
         if (nextLevelExp < newExp) {
           user.update({
             level: userContext.level + 1,
@@ -192,8 +192,6 @@ const ClassicRolesScreen = ({ navigation, route }) => {
         totalExp: userContext.totalExp + increment,
       });
       dispatch({ type: "increaseExp", payload: increment });
-
-      //navigation.navigate("Main Menu");
 
       setTimeout(() => {
         navigation.navigate("Main Menu");
