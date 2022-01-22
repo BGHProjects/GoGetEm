@@ -1,7 +1,7 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import Splash from "../pages/Splash";
 import MainMenu from "../pages/MainMenu";
+import GameModes from "../pages/GameModes";
 import ClassicConfigScreen from "../pages/ClassicMode/ClassicConfig";
 import ClassicRolesScreen from "../pages/ClassicMode/ClassicRoles";
 import ClassicGameplayScreen from "../pages/ClassicMode/ClassicGameplay";
@@ -27,13 +27,13 @@ const AppNavigation = () => {
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name="Splash"
-        component={Splash}
+        name="Main Menu"
+        component={MainMenu}
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name="Main Menu"
-        component={MainMenu}
+        name="Game Modes"
+        component={GameModes}
         options={{ headerShown: false }}
       />
       <Stack.Screen

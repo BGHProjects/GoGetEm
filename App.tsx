@@ -11,6 +11,8 @@ import NetInfo from "@react-native-community/netinfo";
 export default function App() {
   let [fontsLoaded] = useFonts({
     "Ninja-Italics-Condensed": require("./assets/fonts/NinjaGardenCondensedItalic-Y4Rj.otf"),
+    Main: require("./assets/fonts/Quicksand-Medium.ttf"),
+    "Main-Bold": require("./assets/fonts/Quicksand-SemiBold.ttf"),
   });
 
   // Necessary to check and update internet connection

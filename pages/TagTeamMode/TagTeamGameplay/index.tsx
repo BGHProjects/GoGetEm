@@ -12,7 +12,7 @@ import {
   updateSearchPath,
   runAwaySingleChaser,
 } from "../../../tools/BotBrain";
-import Controller from "../../../components/Controller";
+import Controller from "../../../components/Controller/Controller";
 
 const height = Dimensions.get("window").height;
 const mazeSideLength = height * 0.45;

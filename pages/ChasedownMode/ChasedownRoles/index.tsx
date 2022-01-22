@@ -214,7 +214,7 @@ const ChasedownRolesScreen = ({ navigation, route }) => {
       dispatch({ type: "increaseExp", payload: increment });
 
       setTimeout(() => {
-        navigation.navigate("Main Menu");
+        navigation.navigate("Game Modes");
       }, 3000);
     }
   }, [configDetails]);

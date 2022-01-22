@@ -2,9 +2,7 @@ import React, { useContext, useEffect, useReducer, useState } from "react";
 import {
   StyleSheet,
   Text,
-  View,
   SafeAreaView,
-  TouchableOpacity,
   Dimensions,
   Alert,
 } from "react-native";
@@ -147,7 +145,7 @@ const Preparation = ({ navigation }) => {
 
   const handleNoConnection = () => {
     dispatch({ type: "connectionChange", payload: false });
-    navigation.navigate("Splash");
+    navigation.navigate("Main Menu");
   };
 
   const connectionStatus = NetInfo.fetch().then((state) => {
@@ -209,7 +207,7 @@ const Preparation = ({ navigation }) => {
   const setStateFromDatabase = (userDetails: object) => {
     console.log(`setStateFromDatabase was called`);
     dispatch({ type: "populateFromDatabase", payload: userDetails });
-    navigation.navigate("Splash");
+    navigation.navigate("Main Menu");
   };
 
   const createNewUser = (database, userName: string) => {
@@ -247,7 +245,7 @@ const Preparation = ({ navigation }) => {
     });
 
     dispatch({ type: "assignName", payload: userName });
-    navigation.navigate("Splash");
+    navigation.navigate("Main Menu");
   };
 
   // What actually happens when the page is loaded

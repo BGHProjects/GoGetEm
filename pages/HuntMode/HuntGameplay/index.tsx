@@ -9,7 +9,7 @@ import {
 } from "../../../tools/MazeAndGridGeneration";
 import { aStarSearch } from "../../../tools/BotBrain";
 import { CountdownCircleTimer } from "react-native-countdown-circle-timer";
-import Controller from "../../../components/Controller";
+import Controller from "../../../components/Controller/Controller";
 
 const height = Dimensions.get("window").height;
 const mazeSideLength = height * 0.45;

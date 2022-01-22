@@ -62,7 +62,7 @@ export const userDetails: User = {
   totalDiff4Games: 0,
 };
 
-export const userReducer = (state: User, action) => {
+export const userReducer = (state, action) => {
   if (state !== undefined) {
     switch (action.type) {
       case "connectionChange":
