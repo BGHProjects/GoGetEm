@@ -12,7 +12,7 @@ const GameModesScreen = ({ navigation }) => {
 
   return (
     <BGWithImage image="gameModes">
-      <TitleText text="Main Menu" style={{ marginBottom: 40 }} />
+      <TitleText text="Game Modes" style={{ marginBottom: 40 }} />
       <MenuButton
         text="Classic"
         shadowColour={Colors.gold}

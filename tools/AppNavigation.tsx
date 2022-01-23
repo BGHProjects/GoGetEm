@@ -15,6 +15,7 @@ import TagTeamConfig from "../pages/TagTeamMode/TagTeamConfig";
 import TagTeamRoles from "../pages/TagTeamMode/TagTeamRoles";
 import TagTeamGameplay from "../pages/TagTeamMode/TagTeamGameplay";
 import Preparation from "../pages/Preparation/";
+import Statistics from "../pages/Statistics";
 
 const AppNavigation = () => {
   const Stack = createStackNavigator();
@@ -95,6 +96,11 @@ const AppNavigation = () => {
       <Stack.Screen
         name="TagTeam Gameplay"
         component={TagTeamGameplay}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Statistics"
+        component={Statistics}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>

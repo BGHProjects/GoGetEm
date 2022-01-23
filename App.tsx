@@ -7,6 +7,7 @@ import { useFonts } from "expo-font";
 import AppLoading from "expo-app-loading";
 import { userDetails, UserContext, userReducer } from "./tools/UserContext";
 import NetInfo from "@react-native-community/netinfo";
+import { NativeBaseProvider } from "native-base";
 
 export default function App() {
   let [fontsLoaded] = useFonts({
@@ -41,7 +42,9 @@ export default function App() {
     return (
       <NavigationContainer>
         <UserContext.Provider value={userDetails}>
-          <AppNavigation />
+          <NativeBaseProvider>
+            <AppNavigation />
+          </NativeBaseProvider>
         </UserContext.Provider>
       </NavigationContainer>
     );

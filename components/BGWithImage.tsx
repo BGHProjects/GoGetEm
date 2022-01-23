@@ -2,26 +2,22 @@ import React from "react";
 import { StyleSheet, View, SafeAreaView, ImageBackground } from "react-native";
 
 import { Colors } from "../constants/Colors";
+import { Backgrounds } from "../constants/Backgrounds";
 
 interface BGWithImageProps {
   image: string;
   children: JSX.Element;
 }
 
-const images = {
-  mainMenu: require("../assets/MainMenuBG.jpg"),
-  gameModes: require("../assets/GameModesBG.jpg"),
-};
-
 const BGWithImage = ({ image, children }: BGWithImageProps) => {
   let imageUsed;
 
   switch (image) {
     case "mainMenu":
-      imageUsed = images.mainMenu;
+      imageUsed = Backgrounds.mainMenu;
       break;
     case "gameModes":
-      imageUsed = images.gameModes;
+      imageUsed = Backgrounds.gameModes;
       break;
     default:
       break;

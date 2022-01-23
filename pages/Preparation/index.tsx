@@ -1,19 +1,15 @@
 import React, { useContext, useEffect, useReducer, useState } from "react";
-import {
-  StyleSheet,
-  Text,
-  SafeAreaView,
-  Dimensions,
-  Alert,
-} from "react-native";
+import { StyleSheet, Text, SafeAreaView, View } from "react-native";
 import { UserContext, userReducer } from "../../tools/UserContext";
 import { Colors } from "../../constants/Colors";
 import * as firebase from "firebase";
 import * as Device from "expo-device";
 import NetInfo from "@react-native-community/netinfo";
 
-const width = Dimensions.get("window").width;
-const height = Dimensions.get("window").height;
+import TitleText from "../../components/TitleText";
+import LoadingDots from "react-native-loading-dots";
+import { AutoSizeText, ResizeTextMode } from "react-native-auto-size-text";
+import ModalButton from "../../components/ModalButton";
 
 /**
  * Plan for the Preparation Screen
@@ -56,79 +52,79 @@ const firebaseConfig = {
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
-// function viewDatabase() {
-//   const db = firebase.database();
-//   let uniqueName = Device.modelName + " " + Device.deviceName;
-//   console.log("uniqueName ", uniqueName);
+// // function viewDatabase() {
+// //   const db = firebase.database();
+// //   let uniqueName = Device.modelName + " " + Device.deviceName;
+// //   console.log("uniqueName ", uniqueName);
 
-// Write to the database
-//   db.ref("users/" + uniqueName).set({
-//     username: uniqueName,
-//   });
+// // Write to the database
+// //   db.ref("users/" + uniqueName).set({
+// //     username: uniqueName,
+// //   });
 
-// Read from the database
-//let dbRef = db.ref();
-//   dbRef
-//     .child("users")
-//     .child(uniqueName)
-//     .get()
-//     .then((snapshot) => {
-//       if (snapshot.exists()) {
-//         console.log("\nsnapshot.val().username ", snapshot.val().username);
-//       } else {
-//         console.log("User doesn't exist");
-//       }
-//     })
-//     .catch((error) => {
-//       console.error(error);
-//     });
-//   dbRef
-//     .child("users")
-//     .child("Some Other String")
-//     .get()
-//     .then((snapshot) => {
-//       if (snapshot.exists()) {
-//         console.log("\nsnapshot.val().username ", snapshot.val().username);
-//       } else {
-//         console.log("User doesn't exist");
-//       }
-//     })
-//     .catch((error) => {
-//       console.error(error);
-//     });
+// // Read from the database
+// //let dbRef = db.ref();
+// //   dbRef
+// //     .child("users")
+// //     .child(uniqueName)
+// //     .get()
+// //     .then((snapshot) => {
+// //       if (snapshot.exists()) {
+// //         console.log("\nsnapshot.val().username ", snapshot.val().username);
+// //       } else {
+// //         console.log("User doesn't exist");
+// //       }
+// //     })
+// //     .catch((error) => {
+// //       console.error(error);
+// //     });
+// //   dbRef
+// //     .child("users")
+// //     .child("Some Other String")
+// //     .get()
+// //     .then((snapshot) => {
+// //       if (snapshot.exists()) {
+// //         console.log("\nsnapshot.val().username ", snapshot.val().username);
+// //       } else {
+// //         console.log("User doesn't exist");
+// //       }
+// //     })
+// //     .catch((error) => {
+// //       console.error(error);
+// //     });
 
-// Update a value in the database
-//   db.ref("users/" + uniqueName).update({
-//     connected: true,
-//     defaultColour: "red",
-//     controllerOutlineColour: "red",
-//     controllerLeftButtonStyle: "default",
-//     controllerLeftButtonColour: "default",
-//     controllerRightButtonStyle: "default",
-//     controllerRightButtonColour: "default",
-//     controllerTopButtonStyle: "default",
-//     controllerTopButtonColour: "default",
-//     controllerBottomButtonStyle: "default",
-//     controllerBottomButtonColour: "default",
-//     totalExp: 0,
-//     totalClassicWins: 0,
-//     totalClassicGames: 0,
-//     totalChasedownWins: 0,
-//     totalChasedownGames: 0,
-//     totalHuntWins: 0,
-//     totalHuntGames: 0,
-//     totalTagTeamWins: 0,
-//     totalTagTeamGames: 0,
-//     totalDiff1Wins: 0,
-//     totalDiff1Games: 0,
-//     totalDiff2Wins: 0,
-//     totalDiff2Games: 0,
-//     totalDiff3Wins: 0,
-//     totalDiff3Games: 0,
-//     totalDiff4Wins: 0,
-//     totalDiff4Games: 0,
-//   });
-// }
+// // Update a value in the database
+// //   db.ref("users/" + uniqueName).update({
+// //     connected: true,
+// //     defaultColour: "red",
+// //     controllerOutlineColour: "red",
+// //     controllerLeftButtonStyle: "default",
+// //     controllerLeftButtonColour: "default",
+// //     controllerRightButtonStyle: "default",
+// //     controllerRightButtonColour: "default",
+// //     controllerTopButtonStyle: "default",
+// //     controllerTopButtonColour: "default",
+// //     controllerBottomButtonStyle: "default",
+// //     controllerBottomButtonColour: "default",
+// //     totalExp: 0,
+// //     totalClassicWins: 0,
+// //     totalClassicGames: 0,
+// //     totalChasedownWins: 0,
+// //     totalChasedownGames: 0,
+// //     totalHuntWins: 0,
+// //     totalHuntGames: 0,
+// //     totalTagTeamWins: 0,
+// //     totalTagTeamGames: 0,
+// //     totalDiff1Wins: 0,
+// //     totalDiff1Games: 0,
+// //     totalDiff2Wins: 0,
+// //     totalDiff2Games: 0,
+// //     totalDiff3Wins: 0,
+// //     totalDiff3Games: 0,
+// //     totalDiff4Wins: 0,
+// //     totalDiff4Games: 0,
+// //   });
+// // }
 
 /**
  *  Firebase necessities
@@ -138,46 +134,22 @@ const Preparation = ({ navigation }) => {
   const userContext = useContext(UserContext);
   const [state, dispatch] = useReducer(userReducer, userContext);
   const [connection, setConnection] = useState<boolean | null>(null);
+  const [showModal, setShowModal] = useState(false);
 
   /**
    * Internet Connection functions
    */
 
   const handleNoConnection = () => {
+    setShowModal(false);
     dispatch({ type: "connectionChange", payload: false });
     navigation.navigate("Main Menu");
   };
 
   const connectionStatus = NetInfo.fetch().then((state) => {
+    setShowModal(false);
     setConnection(state.isConnected);
   });
-
-  const connectionAlert = () => {
-    Alert.alert(
-      "No Internet Connection",
-      "In order to save your progress and customisations, and to unlock content, GoGetEm requires an internet connection.\nBut you can still play without one.",
-      [
-        {
-          text: "OK I've connected",
-          onPress: () => connectionStatus,
-        },
-        {
-          text: "I'll play without an internet connection",
-          onPress: () => handleNoConnection(),
-        },
-      ]
-    );
-  };
-
-  useEffect(() => {
-    if (connection !== null) {
-      if (connection) {
-        checkDatabaseForUser();
-      } else {
-        connectionAlert();
-      }
-    }
-  }, [connection]);
 
   /**
    *  Database Checking functions
@@ -250,47 +222,116 @@ const Preparation = ({ navigation }) => {
 
   // What actually happens when the page is loaded
   useEffect(() => {
-    // Step 1 - Check Internet Connection
+    //Step 1 - Check Internet Connection
     if (!userContext.connected) {
-      connectionAlert();
+      setShowModal(true);
     } else {
-      // Step 2 - Check if the user is in the database already
+      //Step 2 - Check if the user is in the database already
       checkDatabaseForUser();
     }
   }, []);
 
+  useEffect(() => {
+    if (connection !== null) {
+      if (connection) {
+        checkDatabaseForUser();
+      } else {
+        setShowModal(true);
+      }
+    }
+  }, [connection]);
+
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.titleLabel}>Preparing your account...</Text>
+      <View style={styles.contentContainer}>
+        <TitleText text="Preparing your account..." />
+        <View style={styles.loadingAnimationContainer}>
+          <LoadingDots
+            colors={[Colors.gold, Colors.green, Colors.purple, Colors.orange]}
+          />
+        </View>
+        {showModal && (
+          <View style={styles.modalContainer}>
+            <AutoSizeText
+              fontSize={50}
+              numberOfLines={2}
+              mode={ResizeTextMode.max_lines}
+              style={styles.modalTitle}
+            >
+              NO INTERNET CONNECTION DETECTED
+            </AutoSizeText>
+            <AutoSizeText
+              fontSize={20}
+              numberOfLines={6}
+              mode={ResizeTextMode.max_lines}
+              style={styles.modalContent}
+            >
+              In order to save your progress, customise, view stats, and to
+              unlock content, GoGetEm requires an internet connection {"\n\n"}
+              <Text style={{ color: Colors.green }}>
+                But you can still play without one
+              </Text>
+            </AutoSizeText>
+
+            <ModalButton
+              text="OK, I've connected"
+              shadowColour={Colors.gold}
+              operation={() => connectionStatus}
+            />
+            <ModalButton
+              text="I'll play offline"
+              shadowColour={Colors.gold}
+              operation={() => handleNoConnection()}
+            />
+          </View>
+        )}
+      </View>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  titleLabel: {
-    fontSize: 24,
-    color: "white",
-    marginTop: height / 4,
-    width: "100%",
-    alignSelf: "center",
-    textAlign: "center",
-  },
-  beginButton: {
-    backgroundColor: "orange",
-    width: width / 1.5,
+  modalContainer: {
+    height: 400,
+    width: "95%",
+    borderColor: Colors.orange,
     borderRadius: 10,
+    borderWidth: 2,
     alignSelf: "center",
-    marginTop: height / 24,
+    marginTop: -200,
+    backgroundColor: Colors.primaryBackground,
   },
-  beginButtonLabel: {
-    color: "white",
-    fontSize: 25,
-    paddingVertical: 10,
+  modalTitle: {
+    color: Colors.orange,
     textAlign: "center",
+    fontFamily: "Main-Bold",
+    width: "95%",
+    alignSelf: "center",
+    marginTop: 10,
+  },
+  modalContent: {
+    color: "white",
+    textAlign: "center",
+    fontFamily: "Main",
+    width: "95%",
+    alignSelf: "center",
+    marginTop: 10,
+  },
+  contentContainer: {
+    width: "75%",
+    justifyContent: "center",
+    alignSelf: "center",
+    marginTop: 60,
   },
   container: {
     flex: 1,
     backgroundColor: Colors.primaryBackground,
+  },
+  loadingAnimationContainer: {
+    width: 100,
+    height: 100,
+    justifyContent: "center",
+    alignSelf: "center",
   },
 });
 

@@ -5,8 +5,8 @@ import { Colors } from "../../constants/Colors";
 import TitleText from "../../components/TitleText";
 
 const MainMenu = ({ navigation }) => {
-  const onPressBegin = () => {
-    navigation.navigate("Game Modes");
+  const onPressButton = (page: string) => {
+    navigation.navigate(page);
   };
 
   return (
@@ -15,7 +15,7 @@ const MainMenu = ({ navigation }) => {
       <MenuButton
         text="Play"
         shadowColour={Colors.green}
-        operation={() => onPressBegin()}
+        operation={() => onPressButton("Game Modes")}
       />
       <MenuButton
         text="Customise"
@@ -25,7 +25,7 @@ const MainMenu = ({ navigation }) => {
       <MenuButton
         text="Statistics"
         shadowColour={Colors.red}
-        operation={() => console.log("Implement me!")}
+        operation={() => onPressButton("Statistics")}
       />
       <MenuButton
         text="Credits"
