@@ -4,21 +4,15 @@ import BGWithImage from "../../components/BGWithImage";
 import { Colors } from "../../constants/Colors";
 import { AutoSizeText, ResizeTextMode } from "react-native-auto-size-text";
 import { UserContext } from "../../tools/UserContext";
-import { TabView, SceneMap, TabBar } from "react-native-tab-view";
+import { TabView, SceneMap } from "react-native-tab-view";
 
 import BaseStats from "./components/BaseStats";
+import DifficultyStats from "./components/DifficultyStats";
+import GameModeStats from "./components/GameModeStats";
 import RenderTabBar from "./components/RenderTabBar";
 
 const Statistics = ({ navigation }) => {
   const userContext = useContext(UserContext);
-
-  const GameModeStats = () => (
-    <View style={{ flex: 1, backgroundColor: "#673ab7" }} />
-  );
-
-  const DifficultyStats = () => (
-    <View style={{ flex: 1, backgroundColor: Colors.blue }} />
-  );
 
   const renderScene = SceneMap({
     first: BaseStats,
