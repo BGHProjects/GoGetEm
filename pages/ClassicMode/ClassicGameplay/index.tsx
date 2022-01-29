@@ -9,6 +9,8 @@ import {
 } from "../../../tools/MazeAndGridGeneration";
 import { aStarSearch } from "../../../tools/BotBrain";
 import Controller from "../../../components/Controller/Controller";
+import BGWithImage from "../../../components/BGWithImage";
+import { Colors } from "../../../constants/Colors";
 
 const height = Dimensions.get("window").height;
 const mazeSideLength = height * 0.45;
@@ -276,8 +278,7 @@ const ClassicGameplayScreen = ({ navigation, route }) => {
   }, [roundOver]);
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Text style={styles.titleLabel}>Classic Gameplay</Text>
+    <BGWithImage image={"aurora"}>
       <View style={styles.mazeContainer}>
         {mazeGrid.map((item: any) => (
           <View
@@ -304,19 +305,19 @@ const ClassicGameplayScreen = ({ navigation, route }) => {
             cy={player3Y}
             r={playerSize.toString()}
             fill={`${gameDetails.player3Colour}`}
-          ></Circle>
+          />
           <Circle
             cx={player2X}
             cy={player2Y}
             r={playerSize.toString()}
             fill={`${gameDetails.player2Colour}`}
-          ></Circle>
+          />
           <Circle
             cx={playerX}
             cy={playerY}
             r={playerSize.toString()}
             fill={`${gameDetails.colour}`}
-          ></Circle>
+          />
         </Svg>
       </View>
       <Controller
@@ -325,7 +326,7 @@ const ClassicGameplayScreen = ({ navigation, route }) => {
         movePlayerRight={movePlayerRight}
         movePlayerUp={movePlayerUp}
       />
-    </SafeAreaView>
+    </BGWithImage>
   );
 };
 
@@ -336,14 +337,11 @@ const styles = StyleSheet.create({
     marginTop: height / 12,
   },
   mazeContainer: {
-    marginTop: height / 32,
+    marginTop: 50,
     width: mazeSideLength,
     height: mazeSideLength,
-  },
-  container: {
-    flex: 1,
-    backgroundColor: "black",
-    alignItems: "center",
+    backgroundColor: Colors.transparentBlack,
+    alignSelf: "center",
   },
 });
 

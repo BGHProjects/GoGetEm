@@ -13,6 +13,8 @@ import {
   runAwaySingleChaser,
 } from "../../../tools/BotBrain";
 import Controller from "../../../components/Controller/Controller";
+import { Colors } from "../../../constants/Colors";
+import BGWithImage from "../../../components/BGWithImage";
 
 const height = Dimensions.get("window").height;
 const mazeSideLength = height * 0.45;
@@ -519,107 +521,109 @@ const TagTeamGameplay = ({ navigation, route }) => {
   }, [roundOver]);
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.mazeContainer}>
-        {mazeGrid.map((item: any) => (
-          <View
-            key={(`${item.row}` + `${item.col}`).toString()}
-            style={{
-              height: cellSize,
-              width: cellSize,
-              position: "absolute",
-              left: `${item.col}%`,
-              top: `${item.row}%`,
-              borderColor: gridColor,
-              borderTopWidth: item.top,
-              borderRightWidth: item.right,
-              borderBottomWidth: item.bottom,
-              borderLeftWidth: item.left,
-              backgroundColor: item.color,
-            }}
-          />
-        ))}
+    <BGWithImage image="fire">
+      <>
+        <View style={styles.mazeContainer}>
+          {mazeGrid.map((item: any) => (
+            <View
+              key={(`${item.row}` + `${item.col}`).toString()}
+              style={{
+                height: cellSize,
+                width: cellSize,
+                position: "absolute",
+                left: `${item.col}%`,
+                top: `${item.row}%`,
+                borderColor: gridColor,
+                borderTopWidth: item.top,
+                borderRightWidth: item.right,
+                borderBottomWidth: item.bottom,
+                borderLeftWidth: item.left,
+                backgroundColor: item.color,
+              }}
+            />
+          ))}
 
-        <Svg height="100%" width="100%" viewBox="0 0 100 100">
-          {(gameDetails.currentRound === 3 ||
-            gameDetails.currentRound === 4 ||
-            gameDetails.currentRound === 7) && (
+          <Svg height="100%" width="100%" viewBox="0 0 100 100">
+            {(gameDetails.currentRound === 3 ||
+              gameDetails.currentRound === 4 ||
+              gameDetails.currentRound === 7) && (
+              <Circle
+                cx={playerX}
+                cy={playerY}
+                r={(playerSize + 1).toString()}
+                fill={"white"}
+              />
+            )}
+
+            {(gameDetails.currentRound === 1 ||
+              gameDetails.currentRound === 2 ||
+              gameDetails.currentRound === 5 ||
+              gameDetails.currentRound === 6) && (
+              <Circle
+                cx={player2X}
+                cy={player2Y}
+                r={(playerSize + 1).toString()}
+                fill={"white"}
+              />
+            )}
+
+            {(gameDetails.currentRound === 1 ||
+              gameDetails.currentRound === 4 ||
+              gameDetails.currentRound === 5) && (
+              <Circle
+                cx={player3X}
+                cy={player3Y}
+                r={(playerSize + 1).toString()}
+                fill={"white"}
+              />
+            )}
+
+            {(gameDetails.currentRound === 2 ||
+              gameDetails.currentRound === 3 ||
+              gameDetails.currentRound === 6 ||
+              gameDetails.currentRound === 7) && (
+              <Circle
+                cx={player4X}
+                cy={player4Y}
+                r={(playerSize + 1).toString()}
+                fill={"white"}
+              />
+            )}
+
             <Circle
               cx={playerX}
               cy={playerY}
-              r={(playerSize + 1).toString()}
-              fill={"white"}
+              r={playerSize.toString()}
+              fill={`${gameDetails.colour}`}
             />
-          )}
-
-          {(gameDetails.currentRound === 1 ||
-            gameDetails.currentRound === 2 ||
-            gameDetails.currentRound === 5 ||
-            gameDetails.currentRound === 6) && (
             <Circle
               cx={player2X}
               cy={player2Y}
-              r={(playerSize + 1).toString()}
-              fill={"white"}
+              r={playerSize.toString()}
+              fill={`${gameDetails.player2Colour}`}
             />
-          )}
-
-          {(gameDetails.currentRound === 1 ||
-            gameDetails.currentRound === 4 ||
-            gameDetails.currentRound === 5) && (
             <Circle
               cx={player3X}
               cy={player3Y}
-              r={(playerSize + 1).toString()}
-              fill={"white"}
+              r={playerSize.toString()}
+              fill={`${gameDetails.player3Colour}`}
             />
-          )}
-
-          {(gameDetails.currentRound === 2 ||
-            gameDetails.currentRound === 3 ||
-            gameDetails.currentRound === 6 ||
-            gameDetails.currentRound === 7) && (
             <Circle
               cx={player4X}
               cy={player4Y}
-              r={(playerSize + 1).toString()}
-              fill={"white"}
+              r={playerSize.toString()}
+              fill={`${gameDetails.player4Colour}`}
             />
-          )}
-
-          <Circle
-            cx={playerX}
-            cy={playerY}
-            r={playerSize.toString()}
-            fill={`${gameDetails.colour}`}
-          />
-          <Circle
-            cx={player2X}
-            cy={player2Y}
-            r={playerSize.toString()}
-            fill={`${gameDetails.player2Colour}`}
-          />
-          <Circle
-            cx={player3X}
-            cy={player3Y}
-            r={playerSize.toString()}
-            fill={`${gameDetails.player3Colour}`}
-          />
-          <Circle
-            cx={player4X}
-            cy={player4Y}
-            r={playerSize.toString()}
-            fill={`${gameDetails.player4Colour}`}
-          />
-        </Svg>
-      </View>
-      <Controller
-        movePlayerDown={movePlayerDown}
-        movePlayerLeft={movePlayerLeft}
-        movePlayerRight={movePlayerRight}
-        movePlayerUp={movePlayerUp}
-      />
-    </SafeAreaView>
+          </Svg>
+        </View>
+        <Controller
+          movePlayerDown={movePlayerDown}
+          movePlayerLeft={movePlayerLeft}
+          movePlayerRight={movePlayerRight}
+          movePlayerUp={movePlayerUp}
+        />
+      </>
+    </BGWithImage>
   );
 };
 
@@ -630,14 +634,11 @@ const styles = StyleSheet.create({
     marginTop: height / 12,
   },
   mazeContainer: {
-    marginTop: height / 32,
+    marginTop: 50,
     width: mazeSideLength,
     height: mazeSideLength,
-  },
-  container: {
-    flex: 1,
-    backgroundColor: "black",
-    alignItems: "center",
+    backgroundColor: Colors.transparentBlack,
+    alignSelf: "center",
   },
 });
 

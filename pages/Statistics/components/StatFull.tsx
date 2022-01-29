@@ -1,6 +1,5 @@
 import React from "react";
 import { View, Dimensions } from "react-native";
-import { VStack } from "native-base";
 import { Colors } from "../../../constants/Colors";
 import StatTitle from "./StatTitle";
 import StatValue from "./StatValue";

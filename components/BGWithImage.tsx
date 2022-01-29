@@ -19,6 +19,21 @@ const BGWithImage = ({ image, children }: BGWithImageProps) => {
     case "gameModes":
       imageUsed = Backgrounds.gameModes;
       break;
+    case "aurora":
+      imageUsed = Backgrounds.aurora;
+      break;
+    case "fire":
+      imageUsed = Backgrounds.fire;
+      break;
+    case "forest":
+      imageUsed = Backgrounds.forest;
+      break;
+    case "mountains":
+      imageUsed = Backgrounds.mountains;
+      break;
+    case "snow":
+      imageUsed = Backgrounds.snow;
+      break;
     default:
       break;
   }

@@ -1,6 +1,5 @@
-import { StatusBar } from "expo-status-bar";
 import React, { useState, useEffect, useContext, useReducer } from "react";
-import { StyleSheet, Text, View, SafeAreaView } from "react-native";
+import { StyleSheet } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import AppNavigation from "./tools/AppNavigation";
 import { useFonts } from "expo-font";

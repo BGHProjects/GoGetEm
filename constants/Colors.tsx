@@ -9,4 +9,5 @@ export const Colors = {
   purple: "#9E21FF",
   silver: "#BEBEBE",
   gold: "#FFD700",
+  transparentBlack: "rgba(0,0,0,0.5)",
 };

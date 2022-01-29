@@ -5,11 +5,13 @@ import { Colors } from "../../constants/Colors";
 import * as firebase from "firebase";
 import * as Device from "expo-device";
 import NetInfo from "@react-native-community/netinfo";
+import { Asset } from "expo-asset";
 
 import TitleText from "../../components/TitleText";
 import LoadingDots from "react-native-loading-dots";
 import { AutoSizeText, ResizeTextMode } from "react-native-auto-size-text";
 import ModalButton from "../../components/ModalButton";
+import { Backgrounds } from "../../constants/Backgrounds";
 
 /**
  * Plan for the Preparation Screen
@@ -220,15 +222,37 @@ const Preparation = ({ navigation }) => {
     navigation.navigate("Main Menu");
   };
 
+  // Image loading stuff
+  function cacheImages(images) {
+    return Object.keys(images).map((image, index) => {
+      return Asset.fromModule(images[image]).downloadAsync();
+    });
+  }
+
+  function cacheAssetsAsync(images) {
+    return Promise.all([...cacheImages(images)]);
+  }
+
+  async function _loadAssetsAsync() {
+    try {
+      await cacheAssetsAsync(Backgrounds);
+    } catch (e) {
+      console.log("e", e);
+    } finally {
+      console.log("images loaded?");
+      //Step 1 - Check Internet Connection
+      if (!userContext.connected) {
+        setShowModal(true);
+      } else {
+        //Step 2 - Check if the user is in the database already
+        checkDatabaseForUser();
+      }
+    }
+  }
+
   // What actually happens when the page is loaded
   useEffect(() => {
-    //Step 1 - Check Internet Connection
-    if (!userContext.connected) {
-      setShowModal(true);
-    } else {
-      //Step 2 - Check if the user is in the database already
-      checkDatabaseForUser();
-    }
+    _loadAssetsAsync();
   }, []);
 
   useEffect(() => {

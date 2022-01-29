@@ -7,6 +7,7 @@ import TriangleButton from "./TriangleButton";
 import ShardButton from "./ShardButton";
 import PointerButton from "./PointerButton";
 import LetterButton from "./LetterButton";
+import { Colors } from "../../constants/Colors";
 
 const height = Dimensions.get("window").height;
 
@@ -33,7 +34,7 @@ const Controller: FC<Props> = ({
           r={height / 13}
           stroke="red"
           strokeWidth="2"
-          fill="transparent"
+          fill={Colors.transparentBlack}
         />
 
         {/* Top Button */}

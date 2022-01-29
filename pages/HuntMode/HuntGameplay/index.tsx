@@ -10,6 +10,8 @@ import {
 import { aStarSearch } from "../../../tools/BotBrain";
 import { CountdownCircleTimer } from "react-native-countdown-circle-timer";
 import Controller from "../../../components/Controller/Controller";
+import { Colors } from "../../../constants/Colors";
+import BGWithImage from "../../../components/BGWithImage";
 
 const height = Dimensions.get("window").height;
 const mazeSideLength = height * 0.45;
@@ -197,80 +199,82 @@ const HuntGameplay = ({ navigation, route }) => {
   }, [targetX, targetY]);
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={{ marginTop: 20 }}>
-        <CountdownCircleTimer
-          isPlaying={timerRunning}
-          duration={gameDetails.timeLimit}
-          colors={[
-            ["#00ff00", 0.4],
-            ["#ffff00", 0.4],
-            ["#ff0000", 0.2],
-          ]}
-          size={60}
-          strokeWidth={2}
-          onComplete={() => setRoundOver(true)}
-        >
-          {({ remainingTime }) => (
-            <Text style={{ color: "white", fontSize: 20 }}>
-              {Math.floor(remainingTime / 60)}:
-              {(remainingTime % 60).toString().length === 1 &&
-              remainingTime % 60 !== 0
-                ? "0" + (remainingTime % 60)
-                : remainingTime % 60}
-              {remainingTime % 60 === 0 && 0}
-            </Text>
-          )}
-        </CountdownCircleTimer>
-      </View>
-      <View style={styles.mazeContainer}>
-        {mazeGrid.map((item: any) => (
-          <View
-            key={(`${item.row}` + `${item.col}`).toString()}
-            style={{
-              height: cellSize,
-              width: cellSize,
-              position: "absolute",
-              left: `${item.col}%`,
-              top: `${item.row}%`,
-              borderColor: gridColor,
-              borderTopWidth: item.top,
-              borderRightWidth: item.right,
-              borderBottomWidth: item.bottom,
-              borderLeftWidth: item.left,
-              backgroundColor: item.color,
-            }}
-          />
-        ))}
+    <BGWithImage image="snow">
+      <>
+        <View style={{ marginTop: 20, alignSelf: "center" }}>
+          <CountdownCircleTimer
+            isPlaying={timerRunning}
+            duration={gameDetails.timeLimit}
+            colors={[
+              ["#00ff00", 0.4],
+              ["#ffff00", 0.4],
+              ["#ff0000", 0.2],
+            ]}
+            size={60}
+            strokeWidth={2}
+            onComplete={() => setRoundOver(true)}
+          >
+            {({ remainingTime }) => (
+              <Text style={{ color: "white", fontSize: 20 }}>
+                {Math.floor(remainingTime / 60)}:
+                {(remainingTime % 60).toString().length === 1 &&
+                remainingTime % 60 !== 0
+                  ? "0" + (remainingTime % 60)
+                  : remainingTime % 60}
+                {remainingTime % 60 === 0 && 0}
+              </Text>
+            )}
+          </CountdownCircleTimer>
+        </View>
+        <View style={styles.mazeContainer}>
+          {mazeGrid.map((item: any) => (
+            <View
+              key={(`${item.row}` + `${item.col}`).toString()}
+              style={{
+                height: cellSize,
+                width: cellSize,
+                position: "absolute",
+                left: `${item.col}%`,
+                top: `${item.row}%`,
+                borderColor: gridColor,
+                borderTopWidth: item.top,
+                borderRightWidth: item.right,
+                borderBottomWidth: item.bottom,
+                borderLeftWidth: item.left,
+                backgroundColor: item.color,
+              }}
+            />
+          ))}
 
-        <Svg height="100%" width="100%" viewBox="0 0 100 100">
-          <Circle
-            cx={targetX}
-            cy={targetY}
-            r={playerSize.toString()}
-            fill={"white"}
-          />
-          <Circle
-            cx={player2X}
-            cy={player2Y}
-            r={playerSize.toString()}
-            fill={`${gameDetails.player2Colour}`}
-          />
-          <Circle
-            cx={playerX}
-            cy={playerY}
-            r={playerSize.toString()}
-            fill={`${gameDetails.colour}`}
-          />
-        </Svg>
-      </View>
-      <Controller
-        movePlayerDown={movePlayerDown}
-        movePlayerLeft={movePlayerLeft}
-        movePlayerRight={movePlayerRight}
-        movePlayerUp={movePlayerUp}
-      />
-    </SafeAreaView>
+          <Svg height="100%" width="100%" viewBox="0 0 100 100">
+            <Circle
+              cx={targetX}
+              cy={targetY}
+              r={playerSize.toString()}
+              fill={"white"}
+            />
+            <Circle
+              cx={player2X}
+              cy={player2Y}
+              r={playerSize.toString()}
+              fill={`${gameDetails.player2Colour}`}
+            />
+            <Circle
+              cx={playerX}
+              cy={playerY}
+              r={playerSize.toString()}
+              fill={`${gameDetails.colour}`}
+            />
+          </Svg>
+        </View>
+        <Controller
+          movePlayerDown={movePlayerDown}
+          movePlayerLeft={movePlayerLeft}
+          movePlayerRight={movePlayerRight}
+          movePlayerUp={movePlayerUp}
+        />
+      </>
+    </BGWithImage>
   );
 };
 
@@ -284,6 +288,8 @@ const styles = StyleSheet.create({
     marginTop: height / 32,
     width: mazeSideLength,
     height: mazeSideLength,
+    alignSelf: "center",
+    backgroundColor: Colors.transparentBlack,
   },
   container: {
     flex: 1,
