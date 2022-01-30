@@ -278,7 +278,7 @@ const ClassicGameplayScreen = ({ navigation, route }) => {
   }, [roundOver]);
 
   return (
-    <BGWithImage image={"aurora"}>
+    <BGWithImage image={"goggles"}>
       <View style={styles.mazeContainer}>
         {mazeGrid.map((item: any) => (
           <View

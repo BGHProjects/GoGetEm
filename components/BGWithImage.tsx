@@ -34,6 +34,24 @@ const BGWithImage = ({ image, children }: BGWithImageProps) => {
     case "snow":
       imageUsed = Backgrounds.snow;
       break;
+    case "goggles":
+      imageUsed = Backgrounds.goggles;
+      break;
+    case "gold":
+      imageUsed = Backgrounds.gold;
+      break;
+    case "liquid":
+      imageUsed = Backgrounds.liquid;
+      break;
+    case "neonCity":
+      imageUsed = Backgrounds.neonCity;
+      break;
+    case "neonFuture":
+      imageUsed = Backgrounds.neonFuture;
+      break;
+    case "space":
+      imageUsed = Backgrounds.space;
+      break;
     default:
       break;
   }

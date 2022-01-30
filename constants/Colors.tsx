@@ -1,6 +1,6 @@
 export const Colors = {
   primaryBackground: "#000026",
-  buttonBackground: "#5800B0",
+  buttonBackground: "#000097",
   red: "#FF0000",
   orange: "#FF881B",
   yellow: "#FFE800",
@@ -10,4 +10,7 @@ export const Colors = {
   silver: "#BEBEBE",
   gold: "#FFD700",
   transparentBlack: "rgba(0,0,0,0.5)",
+  fluroPink: "#FF3DEE",
+  fluroBlue: "#3DFFFF",
+  fluroGreen: "#27FF00",
 };

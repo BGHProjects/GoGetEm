@@ -1,6 +1,5 @@
 import React, { useState, useContext } from "react";
-import { View, StyleSheet } from "react-native";
-import BGWithImage from "../../components/BGWithImage";
+import { View, StyleSheet, ImageBackground } from "react-native";
 import { Colors } from "../../constants/Colors";
 import { AutoSizeText, ResizeTextMode } from "react-native-auto-size-text";
 import { UserContext } from "../../tools/UserContext";
@@ -10,6 +9,7 @@ import BaseStats from "./components/BaseStats";
 import DifficultyStats from "./components/DifficultyStats";
 import GameModeStats from "./components/GameModeStats";
 import RenderTabBar from "./components/RenderTabBar";
+import { Backgrounds } from "../../constants/Backgrounds";
 
 const Statistics = ({ navigation }) => {
   const userContext = useContext(UserContext);
@@ -28,8 +28,21 @@ const Statistics = ({ navigation }) => {
   ]);
 
   return (
-    <BGWithImage image={"mainMenu"}>
-      <View style={styles.topDiv}>
+    <View style={{ flex: 1, backgroundColor: Colors.primaryBackground }}>
+      <ImageBackground
+        resizeMode={"cover"}
+        source={Backgrounds.mainMenu}
+        style={styles.topDiv}
+      >
+        <View
+          style={{
+            width: "100%",
+            height: "100%",
+            backgroundColor: Colors.primaryBackground,
+            opacity: 0.5,
+            position: "absolute",
+          }}
+        />
         <View style={{ marginTop: 150 }}>
           <AutoSizeText
             fontSize={20}
@@ -50,7 +63,7 @@ const Statistics = ({ navigation }) => {
             </AutoSizeText>
           </View>
         </View>
-      </View>
+      </ImageBackground>
       <TabView
         renderTabBar={RenderTabBar}
         navigationState={{ index, routes }}
@@ -58,7 +71,7 @@ const Statistics = ({ navigation }) => {
         onIndexChange={setIndex}
         style={{ marginTop: 50 }}
       />
-    </BGWithImage>
+    </View>
   );
 };
 
@@ -96,7 +109,6 @@ const styles = StyleSheet.create({
     height: 200,
     borderRadius: 40,
     marginTop: -50,
-    backgroundColor: Colors.buttonBackground,
     justifyContent: "center",
   },
 });
