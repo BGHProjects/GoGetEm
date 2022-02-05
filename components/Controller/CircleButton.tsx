@@ -10,7 +10,7 @@ interface ButtonProps {
   position: string;
 }
 
-const CircleBottom: React.FC<ButtonProps> = ({
+const CircleButton: React.FC<ButtonProps> = ({
   buttonFunction,
   colour,
   position,
@@ -81,4 +81,4 @@ const CircleBottom: React.FC<ButtonProps> = ({
   }
 };
 
-export default CircleBottom;
+export default CircleButton;

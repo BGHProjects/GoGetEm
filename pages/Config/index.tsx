@@ -183,25 +183,24 @@ const ConfigScreen = ({ navigation, route }) => {
           />
         </View>
 
-        {whichMode === "Hunt" ||
-          (whichMode === "Chasedown" && (
-            <>
-              <SelectionHeader label="Time Limit" />
-              <View style={{ marginBottom: 30 }}>
-                <Carousel
-                  data={timeLabels}
-                  renderItem={renderNumber}
-                  sliderWidth={width}
-                  itemWidth={selectionWidth + 30}
-                  onSnapToItem={(value) => setTimeLimit(timeActuals[value])}
-                  layout={"default"}
-                  inactiveSlideOpacity={0.3}
-                  activeAnimationType={"spring"}
-                  firstItem={Math.floor(roundNumbers.length / 2)}
-                />
-              </View>
-            </>
-          ))}
+        {(whichMode === "Hunt" || whichMode === "Chasedown") && (
+          <>
+            <SelectionHeader label="Time Limit" />
+            <View style={{ marginBottom: 30 }}>
+              <Carousel
+                data={timeLabels}
+                renderItem={renderNumber}
+                sliderWidth={width}
+                itemWidth={selectionWidth + 30}
+                onSnapToItem={(value) => setTimeLimit(timeActuals[value])}
+                layout={"default"}
+                inactiveSlideOpacity={0.3}
+                activeAnimationType={"spring"}
+                firstItem={Math.floor(roundNumbers.length / 2)}
+              />
+            </View>
+          </>
+        )}
 
         <View style={{ marginBottom: 80 }}>
           <MenuButton

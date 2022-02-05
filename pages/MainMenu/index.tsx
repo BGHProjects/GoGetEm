@@ -21,7 +21,7 @@ const MainMenu = ({ navigation }) => {
         <MenuButton
           text="Customise"
           shadowColour={Colors.red}
-          operation={() => console.log("Implement me!")}
+          operation={() => onPressButton("Customise")}
         />
         <MenuButton
           text="Statistics"

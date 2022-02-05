@@ -13,6 +13,7 @@ import TagTeamGameplay from "../pages/TagTeamMode/TagTeamGameplay";
 import Preparation from "../pages/Preparation/";
 import Statistics from "../pages/Statistics";
 import ConfigScreen from "../pages/Config";
+import Customise from "../pages/Customise";
 
 const AppNavigation = () => {
   const Stack = createStackNavigator();
@@ -83,6 +84,11 @@ const AppNavigation = () => {
       <Stack.Screen
         name="Config"
         component={ConfigScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Customise"
+        component={Customise}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>

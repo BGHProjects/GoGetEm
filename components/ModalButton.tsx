@@ -20,7 +20,7 @@ const ModalButton = ({ text, operation, shadowColour }: ModalButtonProps) => {
       borderRadius={10}
       onPress={operation}
       raiseLevel={5}
-      style={{ alignSelf: "center", marginTop: 20 }}
+      style={{ alignSelf: "center" }}
     >
       <View
         style={{

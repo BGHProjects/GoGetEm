@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import { StyleSheet, View, Dimensions } from "react-native";
-import { Svg, Circle, Text } from "react-native-svg";
+import { Svg, Circle } from "react-native-svg";
 import CircleButton from "./CircleButton";
 import SquareButton from "./SquareButton";
 import TriangleButton from "./TriangleButton";
@@ -12,6 +12,7 @@ import { Colors } from "../../constants/Colors";
 const height = Dimensions.get("window").height;
 
 interface Props {
+  outerCircle?: Function;
   movePlayerUp: Function;
   movePlayerLeft: Function;
   movePlayerDown: Function;
@@ -19,6 +20,7 @@ interface Props {
 }
 
 const Controller: FC<Props> = ({
+  outerCircle,
   movePlayerUp,
   movePlayerLeft,
   movePlayerDown,
@@ -35,14 +37,16 @@ const Controller: FC<Props> = ({
           stroke="red"
           strokeWidth="2"
           fill={Colors.transparentBlack}
+          onPress={outerCircle !== undefined ? () => outerCircle() : undefined}
         />
 
         {/* Top Button */}
 
-        <PointerButton
+        <LetterButton
           buttonFunction={() => movePlayerUp()}
-          colour={"orange"}
+          colour={"yellow"}
           position={"top"}
+          letter="A"
         />
 
         {/*
