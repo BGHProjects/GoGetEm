@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import { View, StyleSheet } from "react-native";
 import { Colors } from "../../constants/Colors";
 import { UserContext } from "../../tools/UserContext";
@@ -7,16 +7,14 @@ import { TabView, SceneMap } from "react-native-tab-view";
 import RenderTabBar from "../Statistics/components/RenderTabBar";
 import ControllerOption from "./components/ControllerOption";
 
+import BackgroundOptions from "./components/BackgroundOptions";
+
 const Customise = ({ navigation }) => {
   const userContext = useContext(UserContext);
 
-  const Backgrounds = () => {
-    return <></>;
-  };
-
   const renderScene = SceneMap({
     first: ControllerOption,
-    second: Backgrounds,
+    second: BackgroundOptions,
   });
 
   const [index, setIndex] = useState(0);
@@ -37,7 +35,5 @@ const Customise = ({ navigation }) => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({});
 
 export default Customise;

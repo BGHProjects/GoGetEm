@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React from "react";
 import { View, StyleSheet, Text } from "react-native";
 import { Colors } from "../../../constants/Colors";
 
@@ -9,7 +9,16 @@ import {
   TopLetter,
   TopTriangle,
   TopSquare,
-} from "./TopButtons";
+  LeftShard,
+  RightShard,
+  DownShard,
+  LeftPointer,
+  RightPointer,
+  DownPointer,
+  DownTriangle,
+  RightTriangle,
+  LeftTriangle,
+} from "./Buttons";
 
 const ButtonOption = ({}) => {
   return (
@@ -18,7 +27,7 @@ const ButtonOption = ({}) => {
         <Text style={styles.levelLabel}>100</Text>
       </View>
       <View style={styles.buttonContainer}>
-        <TopShard />
+        <LeftTriangle />
       </View>
     </View>
   );

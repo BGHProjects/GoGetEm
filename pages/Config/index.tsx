@@ -120,7 +120,7 @@ const ConfigScreen = ({ navigation, route }) => {
     return (
       <View
         style={{ ...styles.renderColourLabel, backgroundColor: `${item.item}` }}
-      ></View>
+      />
     );
   };
 

@@ -7,7 +7,7 @@ export const Colors = {
   green: "#00DC00",
   blue: "#1A44FF",
   purple: "#9E21FF",
-  silver: "#BEBEBE",
+  silver: "#5F6C81",
   gold: "#FFD700",
   transparentBlack: "rgba(0,0,0,0.5)",
   fluroPink: "#FF3DEE",

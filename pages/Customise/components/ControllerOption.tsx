@@ -6,7 +6,7 @@ import Controller from "../../../components/Controller/Controller";
 import ControllerOptionModal from "./ControllerOptionModal";
 
 const ControllerOption = () => {
-  const [showModal, setshowModal] = useState(true);
+  const [showModal, setshowModal] = useState(false);
 
   return (
     <View style={styles.container}>
