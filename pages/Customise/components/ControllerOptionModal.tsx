@@ -1,17 +1,43 @@
 import React, { useState, useContext, useEffect } from "react";
 import { View, StyleSheet, Text, ScrollView } from "react-native";
 import { Colors } from "../../../constants/Colors";
+import _ from "lodash";
 
+import Selection from "../../../constants/Selections";
 import ModalButton from "../../../components/ModalButton";
 import ButtonOption from "./ButtonOption";
+import Unlockables from "../../../constants/Unlockables";
 
 interface ControllerOptionModalProps {
   closeFunction: Function;
+  variant: Selection;
 }
 
 const ControllerOptionModal = ({
   closeFunction,
+  variant,
 }: ControllerOptionModalProps) => {
+  let options = [];
+  const [buttonOptions, setButtonOptions] = useState([]);
+
+  function validateItem(item: Array<string>, index: string, selection: string) {
+    _.forEach(item, (element) => {
+      let positionOfElement = _.split(element, "-")[0];
+      if (positionOfElement === selection) {
+        options.push({ [index]: element });
+      }
+    });
+  }
+
+  useEffect(() => {
+    _.forEach(_.toPairs(Unlockables), (element, i) => {
+      let item = element[1];
+      let index = element[0];
+      validateItem(item, index, variant);
+    });
+    setButtonOptions(options);
+  }, []);
+
   return (
     <View style={styles.fullContainer}>
       <View style={styles.modalContainer}>
@@ -24,21 +50,12 @@ const ControllerOptionModal = ({
             justifyContent: "center",
           }}
         >
-          <ButtonOption />
-          <ButtonOption />
-          <ButtonOption />
-          <ButtonOption />
-          <ButtonOption />
-          <ButtonOption />
-          <ButtonOption />
-          <ButtonOption />
-          <ButtonOption />
-          <ButtonOption />
-          <ButtonOption />
-          <ButtonOption />
-          <ButtonOption />
-          <ButtonOption />
-          <ButtonOption />
+          {buttonOptions.map((item) => (
+            <ButtonOption
+              level={parseInt(_.keys(item)[0])}
+              variant={_.values(item)[0]}
+            />
+          ))}
         </ScrollView>
         <View style={styles.buttonContainer}>
           <ModalButton
