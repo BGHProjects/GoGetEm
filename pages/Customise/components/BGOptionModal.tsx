@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { View, StyleSheet, ImageBackground } from "react-native";
 import { Colors } from "../../../constants/Colors";
 import Carousel from "react-native-snap-carousel";
@@ -6,6 +6,8 @@ import Carousel from "react-native-snap-carousel";
 import ModalButton from "../../../components/ModalButton";
 import { Backgrounds } from "../../../constants/Backgrounds";
 import { AutoSizeText, ResizeTextMode } from "react-native-auto-size-text";
+import { forEach, toPairs, split } from "lodash";
+import Unlockables from "../../../constants/Unlockables";
 
 interface BGOptionModalProps {
   closeFunction: Function;
@@ -36,12 +38,34 @@ const renderOption = (item?: any) => {
 };
 
 const BGOptionModal = ({ closeFunction }: BGOptionModalProps) => {
+  const [buttonOptions, setButtonOptions] = useState([]);
+  let options = [];
+
+  function validateItem(item, index) {
+    forEach(item, (element) => {
+      let type = split(element, "-")[0];
+      if (type === "background") {
+        options.push({ [index]: element });
+      }
+    });
+  }
+
+  useEffect(() => {
+    forEach(toPairs(Unlockables), (element, i) => {
+      let item = element[1];
+      let index = element[0];
+      validateItem(item, index);
+    });
+    setButtonOptions(options);
+    console.log("options", options);
+  }, []);
+
   return (
     <View style={styles.fullContainer}>
       <View style={styles.modalContainer}>
         <View style={styles.scrollContainer}>
           <Carousel
-            data={bgOptions}
+            data={options}
             renderItem={renderOption}
             sliderWidth={245}
             itemWidth={160}

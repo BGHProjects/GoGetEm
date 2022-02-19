@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import { View, StyleSheet, Text, ScrollView } from "react-native";
 import { Colors } from "../../../constants/Colors";
-import _ from "lodash";
+import { forEach, split, toPairs, keys, values } from "lodash";
 
 import Selection from "../../../constants/Selections";
 import ModalButton from "../../../components/ModalButton";
@@ -21,8 +21,8 @@ const ControllerOptionModal = ({
   const [buttonOptions, setButtonOptions] = useState([]);
 
   function validateItem(item: Array<string>, index: string, selection: string) {
-    _.forEach(item, (element) => {
-      let positionOfElement = _.split(element, "-")[0];
+    forEach(item, (element) => {
+      let positionOfElement = split(element, "-")[0];
       if (positionOfElement === selection) {
         options.push({ [index]: element });
       }
@@ -30,7 +30,7 @@ const ControllerOptionModal = ({
   }
 
   useEffect(() => {
-    _.forEach(_.toPairs(Unlockables), (element, i) => {
+    forEach(toPairs(Unlockables), (element, i) => {
       let item = element[1];
       let index = element[0];
       validateItem(item, index, variant);
@@ -52,8 +52,9 @@ const ControllerOptionModal = ({
         >
           {buttonOptions.map((item) => (
             <ButtonOption
-              level={parseInt(_.keys(item)[0])}
-              variant={_.values(item)[0]}
+              level={parseInt(keys(item)[0])}
+              variant={values(item)[0]}
+              closeFunction={() => closeFunction()}
             />
           ))}
         </ScrollView>

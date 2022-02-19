@@ -8,7 +8,7 @@ interface User {
   controllerLeftButton: string;
   controllerRightButton: string;
   controllerTopButton: string;
-  controllerBottomButton: string;
+  controllerDownButton: string;
   totalExp: number;
   level: 0;
   totalGames: number;
@@ -29,17 +29,21 @@ interface User {
   totalDiff3Games: number;
   totalDiff4Wins: number;
   totalDiff4Games: number;
+  classicBackground: string;
+  chasedownBackground: string;
+  huntBackground: string;
+  tagTeamBackground: string;
 }
 
 export const userDetails: User = {
   username: null,
   connected: false,
-  defaultColour: "blue",
-  controllerOutlineColour: "red",
-  controllerLeftButton: "default-colour",
-  controllerRightButton: "default-colour",
-  controllerTopButton: "default-colour",
-  controllerBottomButton: "default-colour",
+  defaultColour: "white",
+  controllerOutlineColour: "white",
+  controllerLeftButton: "left-white-circle",
+  controllerRightButton: "right-white-circle",
+  controllerTopButton: "top-white-circle",
+  controllerDownButton: "down-white-circle",
   level: 0,
   totalExp: 0,
   totalGames: 0,
@@ -60,11 +64,30 @@ export const userDetails: User = {
   totalDiff3Games: 0,
   totalDiff4Wins: 0,
   totalDiff4Games: 0,
+  classicBackground: "forest",
+  chasedownBackground: "mountains",
+  huntBackground: "snow",
+  tagTeamBackground: "forest",
 };
 
 export const userReducer = (state, action) => {
   if (state !== undefined) {
     switch (action.type) {
+      case "changeTop":
+        state.controllerTopButton = action.payload;
+        return state;
+      case "changeLeft":
+        state.controllerLeftButton = action.payload;
+        return state;
+      case "changeRight":
+        state.controllerRightButton = action.payload;
+        return state;
+      case "changeDown":
+        state.controllerDownButton = action.payload;
+        return state;
+      case "changeOutline":
+        state.controllerOutlineColour = action.payload;
+        return state;
       case "connectionChange":
         state.connected = action.payload;
         return state;
@@ -78,7 +101,6 @@ export const userReducer = (state, action) => {
         state.totalGames += action.payload;
         return state;
       case "increaseWins":
-        console.log(`state in userReducer`, state);
         state.totalWins += action.payload;
         return state;
       case "increaseClassicGames":
@@ -140,7 +162,7 @@ export const userReducer = (state, action) => {
         state.controllerLeftButton = action.payload.controllerLeftButton;
         state.controllerRightButton = action.payload.controllerRightButton;
         state.controllerTopButton = action.payload.controllerTopButton;
-        state.controllerBottomButton = action.payload.controllerBottomButton;
+        state.controllerDownButton = action.payload.controllerDownButton;
         state.level = action.payload.level;
         state.totalExp = action.payload.totalExp;
         state.totalGames = action.payload.totalGames;
@@ -161,6 +183,10 @@ export const userReducer = (state, action) => {
         state.totalDiff3Games = action.payload.totalDiff3Games;
         state.totalDiff4Wins = action.payload.totalDiff4Wins;
         state.totalDiff4Games = action.payload.totalDiff4Games;
+        state.classicBackground = action.payload.classicBackground;
+        state.chasedownBackground = action.payload.chasedownBackground;
+        state.huntBackground = action.payload.huntBackground;
+        state.tagTeamBackground = action.payload.tagTeamBackground;
         return state;
       default:
         console.log(`default state called`);

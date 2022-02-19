@@ -1,10 +1,7 @@
 import React, { useState } from "react";
-import { View, Text, ScrollView, StyleSheet } from "react-native";
-
+import { View, StyleSheet } from "react-native";
 import Controller from "../../../components/Controller/Controller";
-
 import ControllerOptionModal from "./ControllerOptionModal";
-
 import Selection from "../../../constants/Selections";
 
 const ControllerOption = () => {

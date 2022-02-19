@@ -5,7 +5,7 @@ import { Dimensions } from "react-native";
 const height = Dimensions.get("window").height;
 
 interface ButtonProps {
-  buttonFunction: Function;
+  buttonFunction?: Function;
   colour: string;
   position: string;
 }

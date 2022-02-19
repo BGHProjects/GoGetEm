@@ -1,4 +1,5 @@
 export const Colors = {
+  white: "white",
   primaryBackground: "#000026",
   buttonBackground: "#000097",
   red: "#FF0000",

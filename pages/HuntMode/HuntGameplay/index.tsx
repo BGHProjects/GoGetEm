@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { StyleSheet, Text, View, SafeAreaView, Dimensions } from "react-native";
 import { Svg, Circle } from "react-native-svg";
 import {
@@ -12,6 +12,7 @@ import { CountdownCircleTimer } from "react-native-countdown-circle-timer";
 import Controller from "../../../components/Controller/Controller";
 import { Colors } from "../../../constants/Colors";
 import BGWithImage from "../../../components/BGWithImage";
+import { UserContext } from "../../../tools/UserContext";
 
 const height = Dimensions.get("window").height;
 const mazeSideLength = height * 0.45;
@@ -28,6 +29,8 @@ let player2Score: any;
 let playerSize = 4;
 
 const HuntGameplay = ({ navigation, route }) => {
+  const userContext = useContext(UserContext);
+
   let gameDetails = route.params;
   const [playerX, setPlayerX] = useState(5);
   const [playerY, setPlayerY] = useState(5);
@@ -199,7 +202,7 @@ const HuntGameplay = ({ navigation, route }) => {
   }, [targetX, targetY]);
 
   return (
-    <BGWithImage image="snow">
+    <BGWithImage image={userContext.huntBackground}>
       <>
         <View style={{ marginTop: 20, alignSelf: "center" }}>
           <CountdownCircleTimer

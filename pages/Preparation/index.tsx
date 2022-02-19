@@ -190,13 +190,13 @@ const Preparation = ({ navigation }) => {
     database.ref("users/" + userName).set({
       username: userName,
       connected: true,
-      defaultColour: "red",
-      controllerOutlineColour: "red",
-      controllerLeftButton: "default-colour",
-      controllerRightButton: "default-colour",
-      controllerTopButton: "default-colour",
-      controllerBottomButton: "default-colour",
-      level: 0,
+      defaultColour: "white",
+      controllerOutlineColour: "outline-white",
+      controllerLeftButton: "left-white-circle",
+      controllerRightButton: "right-white-circle",
+      controllerTopButton: "top-white-circle",
+      controllerDownButton: "down-white-circle",
+      level: 30,
       totalExp: 0,
       totalGames: 0,
       totalWins: 0,
@@ -216,6 +216,10 @@ const Preparation = ({ navigation }) => {
       totalDiff3Games: 0,
       totalDiff4Wins: 0,
       totalDiff4Games: 0,
+      classicBackground: "forest",
+      chasedownBackground: "mountains",
+      huntBackground: "snow",
+      tagTeamBackground: "forest",
     });
 
     dispatch({ type: "assignName", payload: userName });

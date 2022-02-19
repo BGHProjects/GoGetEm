@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useContext } from "react";
 import { StyleSheet, View, Dimensions } from "react-native";
 import { Svg, Circle } from "react-native-svg";
 import CircleButton from "./CircleButton";
@@ -8,6 +8,9 @@ import ShardButton from "./ShardButton";
 import PointerButton from "./PointerButton";
 import LetterButton from "./LetterButton";
 import { Colors } from "../../constants/Colors";
+import { UserContext } from "../../tools/UserContext";
+import { split, capitalize } from "lodash";
+import ControllerButton from "./ControllerButton";
 
 const height = Dimensions.get("window").height;
 
@@ -26,6 +29,9 @@ const Controller: FC<Props> = ({
   movePlayerDown,
   movePlayerRight,
 }) => {
+  const userContext = useContext(UserContext);
+  const outlineColour = split(userContext.controllerOutlineColour, "-")[1];
+
   return (
     <View style={styles.container}>
       <Svg height="100%" width="100%" viewBox="0 0 100 100">
@@ -34,45 +40,38 @@ const Controller: FC<Props> = ({
           cx="50%"
           cy="50%"
           r={height / 13}
-          stroke="red"
+          stroke={Colors[`${outlineColour}`]}
           strokeWidth="2"
           fill={Colors.transparentBlack}
           onPress={outerCircle !== undefined ? () => outerCircle() : undefined}
         />
 
         {/* Top Button */}
-
-        <LetterButton
-          buttonFunction={() => movePlayerUp()}
-          colour={"yellow"}
-          position={"top"}
-          letter="A"
+        <ControllerButton
+          whichButton={userContext.controllerTopButton}
+          operation={() => movePlayerUp()}
         />
 
         {/*
          * ! Left Button
          */}
-        <LetterButton
-          buttonFunction={() => movePlayerLeft()}
-          colour={"yellow"}
-          position={"left"}
-          letter="B"
+        <ControllerButton
+          whichButton={userContext.controllerLeftButton}
+          operation={() => movePlayerLeft()}
         />
 
         {/* Down Button */}
 
-        <TriangleButton
-          buttonFunction={() => movePlayerDown()}
-          colour={"green"}
-          position={"down"}
+        <ControllerButton
+          whichButton={userContext.controllerDownButton}
+          operation={() => movePlayerDown()}
         />
 
         {/* Right Button */}
 
-        <ShardButton
-          buttonFunction={() => movePlayerRight()}
-          colour={"dodgerblue"}
-          position={"right"}
+        <ControllerButton
+          whichButton={userContext.controllerRightButton}
+          operation={() => movePlayerRight()}
         />
       </Svg>
     </View>

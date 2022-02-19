@@ -1,5 +1,4 @@
 import React from "react";
-import { Colors } from "../../../constants/Colors";
 
 import { Svg } from "react-native-svg";
 
@@ -21,7 +20,9 @@ interface LetterProps extends ShapeProps {
 export const TopShard = ({ colour }: ShapeProps) => (
   <Svg height="100%" width="100%" viewBox="23 0 50 50">
     <ShardButton
-      buttonFunction={() => console.log("Choose this one")}
+      buttonFunction={() => {
+        return;
+      }}
       colour={colour}
       position="top"
     />
@@ -31,7 +32,9 @@ export const TopShard = ({ colour }: ShapeProps) => (
 export const LeftShard = ({ colour }: ShapeProps) => (
   <Svg height="100%" width="100%" viewBox="0 22 50 50">
     <ShardButton
-      buttonFunction={() => console.log("Choose this one")}
+      buttonFunction={() => {
+        return;
+      }}
       colour={colour}
       position="left"
     />
@@ -41,7 +44,9 @@ export const LeftShard = ({ colour }: ShapeProps) => (
 export const RightShard = ({ colour }: ShapeProps) => (
   <Svg height="100%" width="100%" viewBox="50 22 50 50">
     <ShardButton
-      buttonFunction={() => console.log("Choose this one")}
+      buttonFunction={() => {
+        return;
+      }}
       colour={colour}
       position="right"
     />
@@ -51,7 +56,9 @@ export const RightShard = ({ colour }: ShapeProps) => (
 export const DownShard = ({ colour }: ShapeProps) => (
   <Svg height="100%" width="100%" viewBox="22 50 50 50">
     <ShardButton
-      buttonFunction={() => console.log("Choose this one")}
+      buttonFunction={() => {
+        return;
+      }}
       colour={colour}
       position="down"
     />
@@ -61,7 +68,9 @@ export const DownShard = ({ colour }: ShapeProps) => (
 export const TopPointer = ({ colour }: ShapeProps) => (
   <Svg height="100%" width="100%" viewBox="23 -5 50 50">
     <PointerButton
-      buttonFunction={() => console.log("Choose this one")}
+      buttonFunction={() => {
+        return;
+      }}
       colour={colour}
       position="top"
     />
@@ -71,7 +80,9 @@ export const TopPointer = ({ colour }: ShapeProps) => (
 export const LeftPointer = ({ colour }: ShapeProps) => (
   <Svg height="100%" width="100%" viewBox="-5 22 50 50">
     <PointerButton
-      buttonFunction={() => console.log("Choose this one")}
+      buttonFunction={() => {
+        return;
+      }}
       colour={colour}
       position="left"
     />
@@ -81,7 +92,9 @@ export const LeftPointer = ({ colour }: ShapeProps) => (
 export const RightPointer = ({ colour }: ShapeProps) => (
   <Svg height="100%" width="100%" viewBox="55 22 50 50">
     <PointerButton
-      buttonFunction={() => console.log("Choose this one")}
+      buttonFunction={() => {
+        return;
+      }}
       colour={colour}
       position="right"
     />
@@ -91,7 +104,9 @@ export const RightPointer = ({ colour }: ShapeProps) => (
 export const DownPointer = ({ colour }: ShapeProps) => (
   <Svg height="100%" width="100%" viewBox="22 55 50 50">
     <PointerButton
-      buttonFunction={() => console.log("Choose this one")}
+      buttonFunction={() => {
+        return;
+      }}
       colour={colour}
       position="down"
     />
@@ -101,7 +116,9 @@ export const DownPointer = ({ colour }: ShapeProps) => (
 export const TopLetter = ({ colour, letter }: LetterProps) => (
   <Svg height="180%" width="180%" viewBox="0 -30 100 100">
     <LetterButton
-      buttonFunction={() => console.log("Select me")}
+      buttonFunction={() => {
+        return;
+      }}
       colour={colour}
       position="top"
       letter={letter}
@@ -112,7 +129,9 @@ export const TopLetter = ({ colour, letter }: LetterProps) => (
 export const Circle = ({ colour }: ShapeProps) => (
   <Svg height="100%" width="100%" viewBox="0 0 50 20">
     <CircleButton
-      buttonFunction={() => console.log("Select me")}
+      buttonFunction={() => {
+        return;
+      }}
       colour={colour}
       position="top"
     />
@@ -122,7 +141,9 @@ export const Circle = ({ colour }: ShapeProps) => (
 export const TopTriangle = ({ colour }: ShapeProps) => (
   <Svg height="100%" width="100%" viewBox="23 -5 50 50">
     <TriangleButton
-      buttonFunction={() => console.log("Select me")}
+      buttonFunction={() => {
+        return;
+      }}
       colour={colour}
       position="top"
     />
@@ -132,7 +153,9 @@ export const TopTriangle = ({ colour }: ShapeProps) => (
 export const LeftTriangle = ({ colour }: ShapeProps) => (
   <Svg height="100%" width="100%" viewBox="-5 22 50 50">
     <TriangleButton
-      buttonFunction={() => console.log("Choose this one")}
+      buttonFunction={() => {
+        return;
+      }}
       colour={colour}
       position="left"
     />
@@ -142,7 +165,9 @@ export const LeftTriangle = ({ colour }: ShapeProps) => (
 export const RightTriangle = ({ colour }: ShapeProps) => (
   <Svg height="100%" width="100%" viewBox="55 22 50 50">
     <TriangleButton
-      buttonFunction={() => console.log("Choose this one")}
+      buttonFunction={() => {
+        return;
+      }}
       colour={colour}
       position="right"
     />
@@ -152,7 +177,9 @@ export const RightTriangle = ({ colour }: ShapeProps) => (
 export const DownTriangle = ({ colour }: ShapeProps) => (
   <Svg height="100%" width="100%" viewBox="22 55 50 50">
     <TriangleButton
-      buttonFunction={() => console.log("Choose this one")}
+      buttonFunction={() => {
+        return;
+      }}
       colour={colour}
       position="down"
     />
@@ -160,9 +187,11 @@ export const DownTriangle = ({ colour }: ShapeProps) => (
 );
 
 export const Square = ({ colour }: ShapeProps) => (
-  <Svg height="180%" width="180%" viewBox="22 -11 100 100">
+  <Svg height="250%" width="250%" viewBox="0 -33 100 100">
     <SquareButton
-      buttonFunction={() => console.log("Select me")}
+      buttonFunction={() => {
+        return;
+      }}
       colour={colour}
       position="top"
     />

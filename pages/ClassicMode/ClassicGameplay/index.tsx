@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { StyleSheet, Text, View, SafeAreaView, Dimensions } from "react-native";
 import { Svg, Circle } from "react-native-svg";
 import {
@@ -11,6 +11,7 @@ import { aStarSearch } from "../../../tools/BotBrain";
 import Controller from "../../../components/Controller/Controller";
 import BGWithImage from "../../../components/BGWithImage";
 import { Colors } from "../../../constants/Colors";
+import { UserContext } from "../../../tools/UserContext";
 
 const height = Dimensions.get("window").height;
 const mazeSideLength = height * 0.45;
@@ -33,6 +34,8 @@ const leftStart = [5, 85];
 const rightStart = [95, 85];
 
 const ClassicGameplayScreen = ({ navigation, route }) => {
+  const userContext = useContext(UserContext);
+
   let gameDetails = route.params;
   const [playerX, setplayerX] = useState(playerStart[0]);
   const [playerY, setplayerY] = useState(playerStart[1]);
@@ -278,7 +281,7 @@ const ClassicGameplayScreen = ({ navigation, route }) => {
   }, [roundOver]);
 
   return (
-    <BGWithImage image={"goggles"}>
+    <BGWithImage image={userContext.classicBackground}>
       <View style={styles.mazeContainer}>
         {mazeGrid.map((item: any) => (
           <View

@@ -1,129 +1,102 @@
-import React from "react";
-import { View, StyleSheet, Text } from "react-native";
+import React, { useContext, useReducer, useEffect, useState } from "react";
+import { UserContext, userReducer } from "../../../tools/UserContext";
+import { View, StyleSheet, Text, TouchableHighlight } from "react-native";
 import { Colors } from "../../../constants/Colors";
-import _ from "lodash";
-
-import {
-  TopShard,
-  TopPointer,
-  Circle,
-  TopLetter,
-  TopTriangle,
-  Square,
-  LeftShard,
-  RightShard,
-  DownShard,
-  LeftPointer,
-  RightPointer,
-  DownPointer,
-  DownTriangle,
-  RightTriangle,
-  LeftTriangle,
-} from "./Buttons";
+import Selection from "./Selection";
+import { split, capitalize } from "lodash";
+import * as firebase from "firebase";
 
 interface ButtonOptionProps {
   level: number;
-  variant: string | unknown;
-}
-
-interface SelectionProps {
   variant: string;
+  closeFunction: () => void;
 }
 
-const ButtonOption = ({ level, variant }: ButtonOptionProps) => {
-  const Selection = ({ variant }: SelectionProps) => {
-    //console.log("variant", variant);
-    let parts = _.split(variant, "-");
-    let colour = parts[1];
-    let button;
-    switch (parts[2]) {
-      case "circle":
-        button = <Circle colour={Colors[`${colour}`]} />;
-        break;
-      case "square":
-        button = <Square colour={Colors[`${colour}`]} />;
-        break;
-      case "triangle":
-        switch (parts[0]) {
-          case "top":
-            button = <TopTriangle colour={Colors[`${colour}`]} />;
-            break;
-          case "right":
-            button = <RightTriangle colour={Colors[`${colour}`]} />;
-            break;
-          case "down":
-            button = <DownTriangle colour={Colors[`${colour}`]} />;
-            break;
-          case "left":
-            button = <LeftTriangle colour={Colors[`${colour}`]} />;
-            break;
-          default:
-            button = <TopTriangle colour={Colors[`${colour}`]} />;
-            break;
-        }
-        break;
-      case "shard":
-        switch (parts[0]) {
-          case "top":
-            button = <TopShard colour={Colors[`${colour}`]} />;
-            break;
-          case "right":
-            button = <RightShard colour={Colors[`${colour}`]} />;
-            break;
-          case "down":
-            button = <DownShard colour={Colors[`${colour}`]} />;
-            break;
-          case "left":
-            button = <LeftShard colour={Colors[`${colour}`]} />;
-            break;
-          default:
-            button = <TopShard colour={Colors[`${colour}`]} />;
-            break;
-        }
-        break;
-      case "letter":
-      case "top":
-        button = (
-          <TopLetter
-            colour={Colors[`${colour}`]}
-            letter={_.capitalize(parts[3])}
-          />
-        );
-        break;
-      case "pointer":
-        switch (parts[0]) {
-          case "top":
-            button = <TopPointer colour={Colors[`${colour}`]} />;
-            break;
-          case "right":
-            button = <RightPointer colour={Colors[`${colour}`]} />;
-            break;
-          case "down":
-            button = <DownPointer colour={Colors[`${colour}`]} />;
-            break;
-          case "left":
-            button = <LeftPointer colour={Colors[`${colour}`]} />;
-            break;
-          default:
-            button = <TopPointer colour={Colors[`${colour}`]} />;
-            break;
-        }
-        break;
-      default:
-        button = <Circle colour={Colors.fluroPink} />;
-        break;
+const ButtonOption = ({ level, variant, closeFunction }: ButtonOptionProps) => {
+  const userContext = useContext(UserContext);
+  const [state, dispatch] = useReducer(userReducer, userContext);
+  const userLevel = userContext.level;
+  const dbUser = firebase.database().ref("users/" + userContext.username);
+  const position = capitalize(split(variant, "-")[0]);
+  const variantElements = split(variant, "-");
+  const [borderColour, setBorderColour] = useState("grey");
+
+  function changeSetting(variant: string) {
+    if (split(variant, "-").length > 2) {
+      dispatch({ type: `change${position}`, payload: variant });
+      dbUser.update({
+        [`controller${position}Button`]: variant,
+      });
+    } else {
+      dispatch({ type: "changeOutline", payload: variant });
+      dbUser.update({
+        controllerOutlineColour: variant,
+      });
     }
 
-    return button;
-  };
+    setBorderColour(Colors.yellow);
+    closeFunction();
+  }
+
+  useEffect(() => {
+    if (capitalize(variantElements[0]) === position) {
+      let contextElements = split(
+        userContext[`controller${position}Button`],
+        "-"
+      );
+
+      if (
+        variantElements[1] === contextElements[1] &&
+        variantElements[2] === contextElements[2]
+      ) {
+        setBorderColour(Colors.yellow);
+      } else {
+        setBorderColour(userLevel >= level ? Colors.fluroBlue : "grey");
+      }
+    } else {
+      setBorderColour(userLevel >= level ? Colors.fluroBlue : "grey");
+    }
+  }, []);
 
   return (
-    <View style={styles.optionContainer}>
-      <View style={styles.labelContainer}>
-        <Text style={styles.levelLabel}>{level}</Text>
-      </View>
-      <View style={styles.buttonContainer}>
-        <Selection variant={variant} />
+    <View style={{ position: "relative" }}>
+      <TouchableHighlight
+        onPress={
+          userLevel >= level
+            ? () => {
+                //setBorderColour(Colors.yellow);
+                changeSetting(variant);
+              }
+            : undefined
+        }
+        style={{
+          zIndex: 4,
+          position: "absolute",
+        }}
+      >
+        <View
+          style={[
+            styles.optionContainer,
+            {
+              borderColor: borderColour,
+            },
+          ]}
+        />
+      </TouchableHighlight>
+      <View
+        style={[
+          styles.optionContainer,
+          {
+            position: "relative",
+          },
+        ]}
+      >
+        <View style={styles.labelContainer}>
+          <Text style={styles.levelLabel}>{level}</Text>
+        </View>
+        <View style={styles.buttonContainer}>
+          <Selection variant={variant} />
+        </View>
       </View>
     </View>
   );
@@ -135,6 +108,7 @@ const styles = StyleSheet.create({
     height: "100%",
     alignItems: "center",
     justifyContent: "center",
+    zIndex: -4,
   },
   labelContainer: {
     alignItems: "flex-start",
@@ -148,7 +122,6 @@ const styles = StyleSheet.create({
     marginLeft: 5,
   },
   optionContainer: {
-    borderColor: Colors.fluroBlue,
     height: 80,
     width: 80,
     borderWidth: 2,

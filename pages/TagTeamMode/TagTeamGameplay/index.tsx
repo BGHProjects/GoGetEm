@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { StyleSheet, Text, View, SafeAreaView, Dimensions } from "react-native";
 import { Svg, Circle } from "react-native-svg";
 import {
@@ -15,6 +15,7 @@ import {
 import Controller from "../../../components/Controller/Controller";
 import { Colors } from "../../../constants/Colors";
 import BGWithImage from "../../../components/BGWithImage";
+import { UserContext } from "../../../tools/UserContext";
 
 const height = Dimensions.get("window").height;
 const mazeSideLength = height * 0.45;
@@ -33,6 +34,7 @@ let team2Score: any;
 let playerSize = 3;
 
 const TagTeamGameplay = ({ navigation, route }) => {
+  const userContext = useContext(UserContext);
   let gameDetails = route.params;
   const [playerX, setPlayerX] = useState(15);
   const [playerY, setPlayerY] = useState(
@@ -521,7 +523,7 @@ const TagTeamGameplay = ({ navigation, route }) => {
   }, [roundOver]);
 
   return (
-    <BGWithImage image="fire">
+    <BGWithImage image={userContext.tagTeamBackground}>
       <>
         <View style={styles.mazeContainer}>
           {mazeGrid.map((item: any) => (
