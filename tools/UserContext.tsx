@@ -73,6 +73,18 @@ export const userDetails: User = {
 export const userReducer = (state, action) => {
   if (state !== undefined) {
     switch (action.type) {
+      case "changeClassicBG":
+        state.classicBackground = action.payload;
+        break;
+      case "changeChasedownBG":
+        state.chasedownBackground = action.payload;
+        break;
+      case "changeHuntBG":
+        state.huntBackground = action.payload;
+        break;
+      case "changeTagTeamBG":
+        state.tagTeamBackground = action.payload;
+        break;
       case "changeTop":
         state.controllerTopButton = action.payload;
         return state;

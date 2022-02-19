@@ -64,7 +64,6 @@ const ButtonOption = ({ level, variant, closeFunction }: ButtonOptionProps) => {
         onPress={
           userLevel >= level
             ? () => {
-                //setBorderColour(Colors.yellow);
                 changeSetting(variant);
               }
             : undefined

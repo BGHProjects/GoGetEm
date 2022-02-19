@@ -1,11 +1,9 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { View, StyleSheet, ScrollView } from "react-native";
 
 import BGOption from "./BGOption";
 import { UserContext } from "../../../tools/UserContext";
 import { capitalize } from "lodash";
-
-interface BackgroundOptionsProps {}
 
 const BackgroundOptions = () => {
   const userContext = useContext(UserContext);

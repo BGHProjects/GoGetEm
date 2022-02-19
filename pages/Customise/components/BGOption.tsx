@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { View, StyleSheet, ImageBackground } from "react-native";
 import { Colors } from "../../../constants/Colors";
 import { Backgrounds } from "../../../constants/Backgrounds";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { AutoSizeText, ResizeTextMode } from "react-native-auto-size-text";
+import { capitalize } from "lodash";
 
 import BGOptionModal from "./BGOptionModal";
+import { UserContext } from "../../../tools/UserContext";
 
 interface BGOptionProps {
   modeLabel: string;
@@ -15,6 +17,32 @@ interface BGOptionProps {
 
 const BGOption = ({ modeLabel, selectionLabel, selection }: BGOptionProps) => {
   const [showModal, setShowModal] = useState(false);
+  const [BGLabel, setBGLabel] = useState(selectionLabel);
+  const [BG, setBG] = useState(selection);
+  const userContext = useContext(UserContext);
+
+  useEffect(() => {
+    switch (modeLabel) {
+      case "Classic":
+        setBGLabel(capitalize(userContext.classicBackground));
+        setBG(userContext.classicBackground);
+        break;
+      case "Chasedown":
+        setBGLabel(capitalize(userContext.chasedownBackground));
+        setBG(userContext.chasedownBackground);
+        break;
+      case "Hunt":
+        setBGLabel(capitalize(userContext.huntBackground));
+        setBG(userContext.huntBackground);
+        break;
+      case "TagTeam":
+        setBGLabel(capitalize(userContext.tagTeamBackground));
+        setBG(userContext.tagTeamBackground);
+        break;
+      default:
+        break;
+    }
+  }, [showModal]);
 
   return (
     <>
@@ -35,19 +63,24 @@ const BGOption = ({ modeLabel, selectionLabel, selection }: BGOptionProps) => {
               mode={ResizeTextMode.max_lines}
               style={styles.selectionLabel}
             >
-              {selectionLabel}
+              {BGLabel}
             </AutoSizeText>
           </View>
           <View style={styles.imageContainer}>
             <ImageBackground
-              source={Backgrounds[selection]}
+              source={Backgrounds[BG]}
               style={styles.bgImage}
               resizeMode="cover"
             />
           </View>
         </View>
       </TouchableOpacity>
-      {showModal && <BGOptionModal closeFunction={() => setShowModal(false)} />}
+      {showModal && (
+        <BGOptionModal
+          closeFunction={() => setShowModal(false)}
+          modeLabel={modeLabel}
+        />
+      )}
     </>
   );
 };

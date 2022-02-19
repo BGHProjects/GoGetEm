@@ -1,53 +1,73 @@
-import React, { useState, useEffect } from "react";
-import { View, StyleSheet, ImageBackground } from "react-native";
+import React, { useState, useEffect, useContext, useReducer } from "react";
+import {
+  View,
+  StyleSheet,
+  ImageBackground,
+  TouchableOpacity,
+} from "react-native";
 import { Colors } from "../../../constants/Colors";
 import Carousel from "react-native-snap-carousel";
 
 import ModalButton from "../../../components/ModalButton";
 import { Backgrounds } from "../../../constants/Backgrounds";
 import { AutoSizeText, ResizeTextMode } from "react-native-auto-size-text";
-import { forEach, toPairs, split } from "lodash";
+import {
+  forEach,
+  toPairs,
+  split,
+  findKey,
+  values,
+  lowerCase,
+  parseInt,
+} from "lodash";
 import Unlockables from "../../../constants/Unlockables";
+import * as firebase from "firebase";
+import { UserContext, userReducer } from "../../../tools/UserContext";
 
 interface BGOptionModalProps {
+  modeLabel: string;
   closeFunction: Function;
 }
 
-const bgOptions = Object.keys(Backgrounds);
-
-const renderOption = (item?: any) => {
-  return (
-    <View style={styles.imageOptionContainer}>
-      <ImageBackground
-        source={Backgrounds[item.item]}
-        resizeMode="cover"
-        style={styles.bgImage}
-      />
-      <View style={styles.levelContainer}>
-        <AutoSizeText
-          fontSize={16}
-          numberOfLines={1}
-          mode={ResizeTextMode.max_lines}
-          style={styles.levelLabel}
-        >
-          100
-        </AutoSizeText>
-      </View>
-    </View>
-  );
-};
-
-const BGOptionModal = ({ closeFunction }: BGOptionModalProps) => {
+const BGOptionModal = ({ modeLabel, closeFunction }: BGOptionModalProps) => {
   const [buttonOptions, setButtonOptions] = useState([]);
+  const userContext = useContext(UserContext);
+  const [state, dispatch] = useReducer(userReducer, userContext);
+  const userLevel = userContext.level;
+  const dbUser = firebase.database().ref("users/" + userContext.username);
+  const contextElements = split(
+    userContext[`${lowerCase(modeLabel)}Background`],
+    "-"
+  );
+
   let options = [];
 
   function validateItem(item, index) {
+    let borderColour;
     forEach(item, (element) => {
       let type = split(element, "-")[0];
+      let variant = split(element, "-")[1];
       if (type === "background") {
-        options.push({ [index]: element });
+        if (variant === contextElements[0]) {
+          borderColour = Colors.yellow;
+        } else {
+          borderColour = userLevel >= index ? Colors.fluroBlue : "grey";
+        }
+
+        options.push({ [index]: [element, borderColour] });
       }
     });
+  }
+
+  function changeSetting(variant: string) {
+    dispatch({
+      type: `change${modeLabel}BG`,
+      payload: variant,
+    });
+    dbUser.update({
+      [`${lowerCase(modeLabel)}Background`]: variant,
+    });
+    closeFunction();
   }
 
   useEffect(() => {
@@ -57,21 +77,55 @@ const BGOptionModal = ({ closeFunction }: BGOptionModalProps) => {
       validateItem(item, index);
     });
     setButtonOptions(options);
-    console.log("options", options);
   }, []);
+
+  const renderOption = ({ item }) => {
+    let bgString = split(values(item)[0][0], "-")[1];
+    let bgBorderColour = values(item)[0][1];
+    let level = parseInt(findKey(item));
+
+    return (
+      <TouchableOpacity
+        onPress={
+          userLevel >= level
+            ? () => {
+                changeSetting(bgString);
+              }
+            : undefined
+        }
+      >
+        <View
+          style={[styles.imageOptionContainer, { borderColor: bgBorderColour }]}
+        >
+          <ImageBackground
+            source={Backgrounds[bgString]}
+            resizeMode="cover"
+            style={styles.bgImage}
+          />
+          <View style={styles.levelContainer}>
+            <AutoSizeText
+              fontSize={16}
+              numberOfLines={1}
+              mode={ResizeTextMode.max_lines}
+              style={styles.levelLabel}
+            >
+              {level}
+            </AutoSizeText>
+          </View>
+        </View>
+      </TouchableOpacity>
+    );
+  };
 
   return (
     <View style={styles.fullContainer}>
       <View style={styles.modalContainer}>
         <View style={styles.scrollContainer}>
           <Carousel
-            data={options}
+            data={buttonOptions}
             renderItem={renderOption}
             sliderWidth={245}
             itemWidth={160}
-            // onSnapToItem={(value) => {
-            //   setSelectedColour(colourValues[value]);
-            // }}
             layout={"default"}
             inactiveSlideOpacity={0.5}
             activeAnimationType={"spring"}
@@ -108,7 +162,6 @@ const styles = StyleSheet.create({
   imageOptionContainer: {
     borderRadius: 5,
     borderWidth: 2,
-    borderColor: Colors.fluroBlue,
     height: "90%",
     width: "100%",
     alignItems: "center",
