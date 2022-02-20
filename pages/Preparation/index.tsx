@@ -54,82 +54,8 @@ const firebaseConfig = {
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
-// // function viewDatabase() {
-// //   const db = firebase.database();
-// //   let uniqueName = Device.modelName + " " + Device.deviceName;
-// //   console.log("uniqueName ", uniqueName);
-
-// // Write to the database
-// //   db.ref("users/" + uniqueName).set({
-// //     username: uniqueName,
-// //   });
-
-// // Read from the database
-// //let dbRef = db.ref();
-// //   dbRef
-// //     .child("users")
-// //     .child(uniqueName)
-// //     .get()
-// //     .then((snapshot) => {
-// //       if (snapshot.exists()) {
-// //         console.log("\nsnapshot.val().username ", snapshot.val().username);
-// //       } else {
-// //         console.log("User doesn't exist");
-// //       }
-// //     })
-// //     .catch((error) => {
-// //       console.error(error);
-// //     });
-// //   dbRef
-// //     .child("users")
-// //     .child("Some Other String")
-// //     .get()
-// //     .then((snapshot) => {
-// //       if (snapshot.exists()) {
-// //         console.log("\nsnapshot.val().username ", snapshot.val().username);
-// //       } else {
-// //         console.log("User doesn't exist");
-// //       }
-// //     })
-// //     .catch((error) => {
-// //       console.error(error);
-// //     });
-
-// // Update a value in the database
-// //   db.ref("users/" + uniqueName).update({
-// //     connected: true,
-// //     defaultColour: "red",
-// //     controllerOutlineColour: "red",
-// //     controllerLeftButtonStyle: "default",
-// //     controllerLeftButtonColour: "default",
-// //     controllerRightButtonStyle: "default",
-// //     controllerRightButtonColour: "default",
-// //     controllerTopButtonStyle: "default",
-// //     controllerTopButtonColour: "default",
-// //     controllerBottomButtonStyle: "default",
-// //     controllerBottomButtonColour: "default",
-// //     totalExp: 0,
-// //     totalClassicWins: 0,
-// //     totalClassicGames: 0,
-// //     totalChasedownWins: 0,
-// //     totalChasedownGames: 0,
-// //     totalHuntWins: 0,
-// //     totalHuntGames: 0,
-// //     totalTagTeamWins: 0,
-// //     totalTagTeamGames: 0,
-// //     totalDiff1Wins: 0,
-// //     totalDiff1Games: 0,
-// //     totalDiff2Wins: 0,
-// //     totalDiff2Games: 0,
-// //     totalDiff3Wins: 0,
-// //     totalDiff3Games: 0,
-// //     totalDiff4Wins: 0,
-// //     totalDiff4Games: 0,
-// //   });
-// // }
-
 /**
- *  Firebase necessities
+ *  Firebase necessities end
  */
 
 const Preparation = ({ navigation }) => {
@@ -196,7 +122,7 @@ const Preparation = ({ navigation }) => {
       controllerRightButton: "right-white-circle",
       controllerTopButton: "top-white-circle",
       controllerDownButton: "down-white-circle",
-      level: 30,
+      level: 0,
       totalExp: 0,
       totalGames: 0,
       totalWins: 0,
@@ -220,6 +146,7 @@ const Preparation = ({ navigation }) => {
       chasedownBackground: "mountains",
       huntBackground: "snow",
       tagTeamBackground: "forest",
+      unlockedItems: [],
     });
 
     dispatch({ type: "assignName", payload: userName });

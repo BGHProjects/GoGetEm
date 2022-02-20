@@ -33,6 +33,7 @@ interface User {
   chasedownBackground: string;
   huntBackground: string;
   tagTeamBackground: string;
+  unlockedItems: string[];
 }
 
 export const userDetails: User = {
@@ -68,6 +69,7 @@ export const userDetails: User = {
   chasedownBackground: "mountains",
   huntBackground: "snow",
   tagTeamBackground: "forest",
+  unlockedItems: [],
 };
 
 export const userReducer = (state, action) => {
@@ -199,6 +201,7 @@ export const userReducer = (state, action) => {
         state.chasedownBackground = action.payload.chasedownBackground;
         state.huntBackground = action.payload.huntBackground;
         state.tagTeamBackground = action.payload.tagTeamBackground;
+        state.unlockedItems = action.payload.unlockedItems;
         return state;
       default:
         console.log(`default state called`);

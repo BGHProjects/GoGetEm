@@ -14,6 +14,7 @@ import Preparation from "../pages/Preparation/";
 import Statistics from "../pages/Statistics";
 import ConfigScreen from "../pages/Config";
 import Customise from "../pages/Customise";
+import Credits from "../pages/Credits";
 
 const AppNavigation = () => {
   const Stack = createStackNavigator();
@@ -89,6 +90,11 @@ const AppNavigation = () => {
       <Stack.Screen
         name="Customise"
         component={Customise}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Credits"
+        component={Credits}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>

@@ -31,7 +31,7 @@ const MainMenu = ({ navigation }) => {
         <MenuButton
           text="Credits"
           shadowColour={Colors.red}
-          operation={() => console.log("Implement me!")}
+          operation={() => onPressButton("Credits")}
         />
       </>
     </BGWithImage>

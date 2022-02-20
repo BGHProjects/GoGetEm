@@ -17,8 +17,8 @@ import {
   split,
   findKey,
   values,
-  lowerCase,
   parseInt,
+  lowerFirst,
 } from "lodash";
 import Unlockables from "../../../constants/Unlockables";
 import * as firebase from "firebase";
@@ -36,7 +36,7 @@ const BGOptionModal = ({ modeLabel, closeFunction }: BGOptionModalProps) => {
   const userLevel = userContext.level;
   const dbUser = firebase.database().ref("users/" + userContext.username);
   const contextElements = split(
-    userContext[`${lowerCase(modeLabel)}Background`],
+    userContext[`${lowerFirst(modeLabel)}Background`],
     "-"
   );
 
@@ -44,6 +44,7 @@ const BGOptionModal = ({ modeLabel, closeFunction }: BGOptionModalProps) => {
 
   function validateItem(item, index) {
     let borderColour;
+
     forEach(item, (element) => {
       let type = split(element, "-")[0];
       let variant = split(element, "-")[1];
@@ -65,12 +66,22 @@ const BGOptionModal = ({ modeLabel, closeFunction }: BGOptionModalProps) => {
       payload: variant,
     });
     dbUser.update({
-      [`${lowerCase(modeLabel)}Background`]: variant,
+      [`${lowerFirst(modeLabel)}Background`]: variant,
     });
     closeFunction();
   }
 
   useEffect(() => {
+    const initials = {
+      0: ["background-forest", Colors.fluroBlue],
+      1: ["background-mountains", Colors.fluroBlue],
+      2: ["background-snow", Colors.fluroBlue],
+    };
+
+    forEach(initials, (e, i) => {
+      validateItem(e, i);
+    });
+
     forEach(toPairs(Unlockables), (element, i) => {
       let item = element[1];
       let index = element[0];
@@ -102,16 +113,18 @@ const BGOptionModal = ({ modeLabel, closeFunction }: BGOptionModalProps) => {
             resizeMode="cover"
             style={styles.bgImage}
           />
-          <View style={styles.levelContainer}>
-            <AutoSizeText
-              fontSize={16}
-              numberOfLines={1}
-              mode={ResizeTextMode.max_lines}
-              style={styles.levelLabel}
-            >
-              {level}
-            </AutoSizeText>
-          </View>
+          {level.toString().length > 1 && (
+            <View style={styles.levelContainer}>
+              <AutoSizeText
+                fontSize={16}
+                numberOfLines={1}
+                mode={ResizeTextMode.max_lines}
+                style={styles.levelLabel}
+              >
+                {level}
+              </AutoSizeText>
+            </View>
+          )}
         </View>
       </TouchableOpacity>
     );

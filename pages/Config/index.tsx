@@ -133,7 +133,7 @@ const ConfigScreen = ({ navigation, route }) => {
   };
 
   return (
-    <BGWithImage image="mainMenu">
+    <View style={{ flex: 1, backgroundColor: Colors.primaryBackground }}>
       <ScrollView style={{ paddingTop: 50 }}>
         <SelectionHeader label="Colour" />
 
@@ -210,7 +210,7 @@ const ConfigScreen = ({ navigation, route }) => {
           />
         </View>
       </ScrollView>
-    </BGWithImage>
+    </View>
   );
 };
 
