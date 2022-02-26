@@ -7,7 +7,7 @@ import { BackgroundWorks } from "../../constants/Attributions";
 import * as WebBrowser from "expo-web-browser";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
-import InGameTitle from "./components/inGameTitle";
+import InGameTitle from "./components/InGameTitle";
 import WorkName from "./components/WorkName";
 import AuthorName from "./components/AuthorName";
 
@@ -24,6 +24,7 @@ const Credits = () => {
         {BackgroundWorks.map((item) => (
           <TouchableOpacity
             onPress={() => WebBrowser.openBrowserAsync(item.link)}
+            key={JSON.stringify(item)}
           >
             <View style={styles.optionContainer}>
               <InGameTitle label={item.inGameName} />
