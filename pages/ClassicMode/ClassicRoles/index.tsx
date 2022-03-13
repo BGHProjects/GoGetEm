@@ -1,19 +1,16 @@
-import React, { FC, useEffect, useState, useContext, useReducer } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  SafeAreaView,
-  TouchableOpacity,
-  Dimensions,
-} from "react-native";
-import { Svg, Line } from "react-native-svg";
+import React, { useEffect, useState, useContext, useReducer } from "react";
+import { StyleSheet, Text, View, SafeAreaView, Dimensions } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { UserContext, userReducer } from "../../../tools/UserContext";
 import * as firebase from "firebase";
+import MenuButton from "../../../components/MenuButton";
+import { Colors } from "../../../constants/Colors";
+import PlayerRepresentation from "./components/PlayerRepresentation";
+import Arrow from "./components/Arrow";
+import { keys } from "lodash";
 
 const width = Dimensions.get("window").width;
-const height = Dimensions.get("window").height;
+const contentSize = 200;
 
 const ClassicRolesScreen = ({ navigation, route }) => {
   const userContext = useContext(UserContext);
@@ -22,8 +19,8 @@ const ClassicRolesScreen = ({ navigation, route }) => {
   const configDetails = route.params;
   let scoreDetails;
   const [leftColour, setLeftColour] = useState(configDetails.player2Colour);
-  const [rightColour, setRightColour] = useState(configDetails.player3Colour);
   const [leftScore, setLeftScore] = useState(configDetails.player2Score);
+  const [rightColour, setRightColour] = useState(configDetails.player3Colour);
   const [rightScore, setRightScore] = useState(configDetails.player3Score);
 
   if (configDetails.flag === "config") {
@@ -38,15 +35,15 @@ const ClassicRolesScreen = ({ navigation, route }) => {
 
   useEffect(() => {
     if (configDetails.currentRound % 2 < 1) {
-      setLeftColour(configDetails.player3Colour);
-      setRightColour(configDetails.player2Colour);
-      setLeftScore(configDetails.player3Score);
-      setRightScore(configDetails.player2Score);
-    } else {
       setLeftColour(configDetails.player2Colour);
-      setRightColour(configDetails.player3Colour);
       setLeftScore(configDetails.player2Score);
+      setRightColour(configDetails.player3Colour);
       setRightScore(configDetails.player3Score);
+    } else {
+      setLeftColour(configDetails.player3Colour);
+      setLeftScore(configDetails.player3Score);
+      setRightColour(configDetails.player2Colour);
+      setRightScore(configDetails.player2Score);
     }
   }, [configDetails]);
 
@@ -199,68 +196,103 @@ const ClassicRolesScreen = ({ navigation, route }) => {
     }
   }, [configDetails]);
 
+  // Animation delays
+
+  const animationDelay = 200;
+  const animationDuration = 200;
+  const pulsateDuration = 750;
+
+  const animationDelays = {
+    leftArrow: animationDelay,
+    leftPlayer: animationDelay * 2,
+    middleArrow: animationDelay * 3,
+    rightPlayer: animationDelay * 4,
+    rightArrow: animationDelay * 5,
+  };
+
   return (
     <SafeAreaView style={styles.container}>
-      <View
-        style={{
-          ...styles.playerRepresentation,
-          backgroundColor: `${configDetails.colour}`,
-        }}
-      >
-        {totalDetails.flag === "gameplay" && (
-          <Text style={styles.scoreText}>{totalDetails.player1Score}</Text>
-        )}
-      </View>
-
-      <Ionicons
-        name="arrow-down"
-        size={40}
-        color={"white"}
-        style={styles.rightToTopArrow}
-      />
-
-      <Ionicons
-        name="arrow-down"
-        size={40}
-        color={"white"}
-        style={styles.topToLeftArrow}
-      />
-
-      <View style={styles.leftPlayerMiddleArrowRightPlayer}>
-        <View
-          style={{
-            ...styles.playerRepresentation,
-            backgroundColor: `${rightColour}`,
-          }}
-        >
-          {totalDetails.flag === "gameplay" && (
-            <Text style={styles.scoreText}>{rightScore}</Text>
-          )}
+      <View style={styles.contentContainer}>
+        {/*  Top Row Container */}
+        <View style={styles.contentRowContainer}>
+          <PlayerRepresentation
+            colour={configDetails.colour}
+            showFlag={totalDetails.flag === "gameplay" ? true : false}
+            score={totalDetails.player1Score}
+            delay={0}
+            pulsateDelay={animationDelays["rightArrow"]} // Right Arrow is the last animation
+            whichAnimation="top"
+            pulsateDuration={pulsateDuration}
+            animationDuration={animationDuration}
+          />
         </View>
-        <Ionicons
-          name="arrow-down"
-          size={40}
-          color={"white"}
-          style={styles.leftToRightArrow}
-        />
+        {/*  Middle Row Container */}
         <View
-          style={{
-            ...styles.playerRepresentation,
-            backgroundColor: `${leftColour}`,
-          }}
+          style={[
+            styles.contentRowContainer,
+            {
+              flexDirection: "row",
+              justifyContent: "space-evenly",
+            },
+          ]}
         >
-          {totalDetails.flag === "gameplay" && (
-            <Text style={styles.scoreText}>{leftScore}</Text>
-          )}
+          <Arrow
+            rotation={30}
+            delay={animationDelays["leftArrow"]}
+            animated
+            pulsateDuration={pulsateDuration}
+            pulsateDelay={animationDelays["rightArrow"]} // Right Arrow is the last animation
+            animationDuration={animationDuration}
+          />
+          <Arrow
+            rotation={150}
+            delay={animationDelays["rightArrow"]}
+            animationDuration={animationDuration}
+          />
+        </View>
+        {/* Bottom Row Container */}
+        <View
+          style={[
+            styles.contentRowContainer,
+            {
+              flexDirection: "row",
+              justifyContent: "space-between",
+            },
+          ]}
+        >
+          <PlayerRepresentation
+            colour={leftColour}
+            showFlag={totalDetails.flag === "gameplay" ? true : false}
+            score={leftScore}
+            delay={animationDelays["leftPlayer"]}
+            whichAnimation="left"
+            pulsateDuration={pulsateDuration}
+            pulsateDelay={animationDelays["rightArrow"]} // Right Arrow is the last animation
+            animationDuration={animationDuration}
+          />
+
+          <Arrow
+            rotation={270}
+            delay={animationDelays["middleArrow"]}
+            animationDuration={animationDuration}
+          />
+
+          <PlayerRepresentation
+            colour={rightColour}
+            showFlag={totalDetails.flag === "gameplay" ? true : false}
+            score={rightScore}
+            delay={animationDelays["rightPlayer"]}
+            animationDuration={animationDuration}
+          />
         </View>
       </View>
 
       {!totalDetails.gameOver ? (
-        <View style={styles.beginButton}>
-          <TouchableOpacity onPress={() => onPressSubmit()}>
-            <Text style={styles.beginButtonLabel}>{`Start\nRound`}</Text>
-          </TouchableOpacity>
-        </View>
+        <MenuButton
+          text="Start Round"
+          shadowColour="red"
+          operation={() => onPressSubmit()}
+        />
       ) : (
         <View style={styles.noBeginButton}></View>
       )}
@@ -269,18 +301,6 @@ const ClassicRolesScreen = ({ navigation, route }) => {
 };
 
 const styles = StyleSheet.create({
-  titleLabel: {
-    fontSize: 40,
-    color: "white",
-    marginTop: height / 12,
-  },
-  beginButton: {
-    backgroundColor: "red",
-    width: width / 1.5,
-    borderRadius: 10,
-    alignItems: "center",
-    marginTop: 100,
-  },
   noBeginButton: {
     backgroundColor: "black",
     width: width / 1.5,
@@ -289,15 +309,9 @@ const styles = StyleSheet.create({
     marginTop: 100,
     paddingVertical: 10,
   },
-  beginButtonLabel: {
-    color: "white",
-    fontSize: 25,
-    paddingVertical: 10,
-    textAlign: "center",
-  },
   container: {
     flex: 1,
-    backgroundColor: "black",
+    backgroundColor: Colors.primaryBackground,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -305,7 +319,6 @@ const styles = StyleSheet.create({
     height: 50,
     width: 50,
     borderRadius: 90,
-    marginBottom: 50,
     justifyContent: "center",
   },
   scoreText: {
@@ -314,20 +327,14 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   topToLeftArrow: {
-    position: "absolute",
-    left: 130,
-    top: 180,
-    transform: [{ rotate: "35deg" }],
+    transform: [{ rotate: "30deg" }],
+    alignSelf: "center",
   },
   rightToTopArrow: {
-    position: "absolute",
-    left: 190,
-    top: 180,
-    transform: [{ rotate: "145deg" }],
+    transform: [{ rotate: "150deg" }],
+    alignSelf: "center",
   },
   leftToRightArrow: {
-    position: "absolute",
-    left: 140,
     transform: [{ rotate: "270deg" }],
   },
   leftPlayerMiddleArrowRightPlayer: {
@@ -335,6 +342,18 @@ const styles = StyleSheet.create({
     justifyContent: "space-evenly",
     width: width * 0.9,
     alignItems: "center",
+  },
+  contentContainer: {
+    width: contentSize,
+    height: contentSize,
+    alignSelf: "center",
+    marginBottom: 80,
+  },
+  contentRowContainer: {
+    width: "100%",
+    height: "33.3%",
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
 
