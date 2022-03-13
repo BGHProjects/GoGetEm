@@ -1,13 +1,11 @@
 import React, { useEffect, useState, useContext, useReducer } from "react";
 import { StyleSheet, Text, View, SafeAreaView, Dimensions } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
 import { UserContext, userReducer } from "../../../tools/UserContext";
 import * as firebase from "firebase";
 import MenuButton from "../../../components/MenuButton";
 import { Colors } from "../../../constants/Colors";
 import PlayerRepresentation from "./components/PlayerRepresentation";
 import Arrow from "./components/Arrow";
-import { keys } from "lodash";
 
 const width = Dimensions.get("window").width;
 const contentSize = 200;

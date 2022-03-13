@@ -1,5 +1,4 @@
-import React, { useEffect, useState, useContext, useReducer } from "react";
-import { StyleSheet, Text, View, SafeAreaView, Dimensions } from "react-native";
+import React, { useEffect } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import Animated, {
   useSharedValue,
