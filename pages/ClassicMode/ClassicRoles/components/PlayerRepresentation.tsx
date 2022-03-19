@@ -1,3 +1,4 @@
+import { useIsFocused } from "@react-navigation/native";
 import React, { useEffect } from "react";
 import { StyleSheet, Text } from "react-native";
 import Animated, {
@@ -6,6 +7,7 @@ import Animated, {
   withTiming,
   withRepeat,
   withDelay,
+  cancelAnimation,
 } from "react-native-reanimated";
 
 interface PlayerRepresentationProps {

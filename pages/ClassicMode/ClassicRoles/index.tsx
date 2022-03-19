@@ -6,6 +6,7 @@ import MenuButton from "../../../components/MenuButton";
 import { Colors } from "../../../constants/Colors";
 import PlayerRepresentation from "./components/PlayerRepresentation";
 import Arrow from "./components/Arrow";
+import GameInfo from "./components/GameInfo";
 
 const width = Dimensions.get("window").width;
 const contentSize = 200;
@@ -210,6 +211,13 @@ const ClassicRolesScreen = ({ navigation, route }) => {
 
   return (
     <SafeAreaView style={styles.container}>
+      {!totalDetails.gameOver && (
+        <GameInfo
+          difficulty={totalDetails.difficulty}
+          rounds={totalDetails.rounds}
+          currentRound={totalDetails.currentRound}
+        />
+      )}
       <View style={styles.contentContainer}>
         {/*  Top Row Container */}
         <View style={styles.contentRowContainer}>
@@ -285,28 +293,18 @@ const ClassicRolesScreen = ({ navigation, route }) => {
         </View>
       </View>
 
-      {!totalDetails.gameOver ? (
+      {!totalDetails.gameOver && (
         <MenuButton
-          text="Start Round"
+          text={totalDetails.currentRound === 1 ? "Begin" : "Start Round"}
           shadowColour="red"
           operation={() => onPressSubmit()}
         />
-      ) : (
-        <View style={styles.noBeginButton}></View>
       )}
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  noBeginButton: {
-    backgroundColor: "black",
-    width: width / 1.5,
-    borderRadius: 10,
-    alignItems: "center",
-    marginTop: 100,
-    paddingVertical: 10,
-  },
   container: {
     flex: 1,
     backgroundColor: Colors.primaryBackground,

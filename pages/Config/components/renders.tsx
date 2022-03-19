@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
   renderDifficultyLabel: {
     alignSelf: "center",
     color: "white",
-    fontSize: 36,
+    fontSize: 30,
     textAlign: "center",
     fontFamily: "Main-Bold",
   },
