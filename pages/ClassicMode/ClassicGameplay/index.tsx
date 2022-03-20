@@ -275,8 +275,10 @@ const ClassicGameplayScreen = ({ navigation, route }) => {
       gameDetails.currentRound++;
       if (gameDetails.currentRound > gameDetails.rounds) {
         gameDetails.gameOver = true;
+        navigation.navigate("End Game", gameDetails);
+      } else {
+        navigation.navigate("Classic Roles", gameDetails);
       }
-      navigation.navigate("Classic Roles", gameDetails);
     }
   }, [roundOver]);
 

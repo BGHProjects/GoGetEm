@@ -30,8 +30,12 @@ const ConfigScreen = ({ navigation, route }) => {
   const [selectedRound, setSelectedRound] = useState<any>(
     roundNumbers[Math.floor(roundNumbers.length / 2)]
   );
-  const [difficulty, setDifficulty] = useState<any>(difficulties[0]);
-  const [timeLimit, setTimeLimit] = useState<any>(timeActuals[0]);
+  const [difficulty, setDifficulty] = useState<any>(
+    difficulties[Math.floor(roundNumbers.length / 2)]
+  );
+  const [timeLimit, setTimeLimit] = useState<any>(
+    timeActuals[Math.floor(roundNumbers.length / 2)]
+  );
 
   return (
     <View style={{ flex: 1, backgroundColor: Colors.primaryBackground }}>

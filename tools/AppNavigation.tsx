@@ -15,6 +15,8 @@ import Statistics from "../pages/Statistics";
 import ConfigScreen from "../pages/Config";
 import Customise from "../pages/Customise";
 import Credits from "../pages/Credits";
+import EndGame from "../pages/EndGame";
+import ExpChange from "../pages/ExpChange";
 
 const AppNavigation = () => {
   const Stack = createStackNavigator();
@@ -95,6 +97,16 @@ const AppNavigation = () => {
       <Stack.Screen
         name="Credits"
         component={Credits}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="End Game"
+        component={EndGame}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="ExpChange"
+        component={ExpChange}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>

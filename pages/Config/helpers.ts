@@ -22,6 +22,7 @@ export function onPressSubmit({
   switch (whichMode) {
     case "Classic":
       configDetails = {
+        mode: "Classic",
         flag: "config",
         colour: selectedColour,
         rounds: selectedRound,
@@ -33,6 +34,7 @@ export function onPressSubmit({
       break;
     case "Chasedown":
       configDetails = {
+        mode: "Chasedown",
         flag: "config",
         colour: selectedColour,
         rounds: selectedRound,
@@ -45,6 +47,7 @@ export function onPressSubmit({
       break;
     case "Hunt":
       configDetails = {
+        mode: "Hunt",
         flag: "config",
         colour: selectedColour,
         rounds: selectedRound,
@@ -56,6 +59,7 @@ export function onPressSubmit({
       break;
     case "TagTeam":
       configDetails = {
+        mode: "TagTeam",
         flag: "config",
         colour: selectedColour,
         rounds: selectedRound,
