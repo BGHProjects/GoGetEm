@@ -17,6 +17,7 @@ import Customise from "../pages/Customise";
 import Credits from "../pages/Credits";
 import EndGame from "../pages/EndGame";
 import ExpChange from "../pages/ExpChange";
+import Unlocks from "../pages/Unlocks";
 
 const AppNavigation = () => {
   const Stack = createStackNavigator();
@@ -107,6 +108,11 @@ const AppNavigation = () => {
       <Stack.Screen
         name="ExpChange"
         component={ExpChange}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Unlocks"
+        component={Unlocks}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>

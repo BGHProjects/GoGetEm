@@ -19,63 +19,53 @@ export function onPressSubmit({
 }: onPressSubmitProps) {
   let configDetails;
 
-  switch (whichMode) {
-    case "Classic":
-      configDetails = {
-        mode: "Classic",
-        flag: "config",
-        colour: selectedColour,
-        rounds: selectedRound,
-        difficulty: difficulty,
-        player2Colour: otherColours[0],
-        player3Colour: otherColours[1],
-      };
-      navigation.navigate("Classic Roles", configDetails);
-      break;
-    case "Chasedown":
-      configDetails = {
-        mode: "Chasedown",
-        flag: "config",
-        colour: selectedColour,
-        rounds: selectedRound,
-        timeLimit: timeLimit,
-        difficulty: difficulty,
-        player2Colour: otherColours[0],
-        player3Colour: otherColours[1],
-      };
-      navigation.navigate("Chasedown Roles", configDetails);
-      break;
-    case "Hunt":
-      configDetails = {
-        mode: "Hunt",
-        flag: "config",
-        colour: selectedColour,
-        rounds: selectedRound,
-        timeLimit: timeLimit,
-        difficulty: difficulty,
-        player2Colour: otherColours[0],
-      };
-      navigation.navigate("Hunt Roles", configDetails);
-      break;
-    case "TagTeam":
-      configDetails = {
-        mode: "TagTeam",
-        flag: "config",
-        colour: selectedColour,
-        rounds: selectedRound,
-        difficulty: difficulty,
-        player2Colour: otherColours[0],
-        player3Colour: otherColours[1],
-        player4Colour: otherColours[2],
-        team1: [selectedColour, otherColours[0]],
-        team1Target: otherColours[0],
-        team2: [otherColours[1], otherColours[2]],
-        team2Target: otherColours[1],
-      };
-      navigation.navigate("TagTeam Roles", configDetails);
-    default:
-      break;
-  }
+  let configOptions: Record<string, any> = {
+    Classic: {
+      mode: "Classic",
+      flag: "config",
+      colour: selectedColour,
+      rounds: selectedRound,
+      difficulty: difficulty,
+      player2Colour: otherColours[0],
+      player3Colour: otherColours[1],
+    },
+    Chasedown: {
+      mode: "Chasedown",
+      flag: "config",
+      colour: selectedColour,
+      rounds: selectedRound,
+      timeLimit: timeLimit,
+      difficulty: difficulty,
+      player2Colour: otherColours[0],
+      player3Colour: otherColours[1],
+    },
+    Hunt: {
+      mode: "Hunt",
+      flag: "config",
+      colour: selectedColour,
+      rounds: selectedRound,
+      timeLimit: timeLimit,
+      difficulty: difficulty,
+      player2Colour: otherColours[0],
+    },
+    TagTeam: {
+      mode: "TagTeam",
+      flag: "config",
+      colour: selectedColour,
+      rounds: selectedRound,
+      difficulty: difficulty,
+      player2Colour: otherColours[0],
+      player3Colour: otherColours[1],
+      player4Colour: otherColours[2],
+      team1: [selectedColour, otherColours[0]],
+      team1Target: otherColours[0],
+      team2: [otherColours[1], otherColours[2]],
+      team2Target: otherColours[1],
+    },
+  };
+
+  configDetails = configOptions[whichMode];
+  navigation.navigate(`${whichMode} Roles`, configDetails);
 }
 
 interface GetOtherColoursProps {

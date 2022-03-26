@@ -1,12 +1,6 @@
-import React, {
-  useEffect,
-  useState,
-  useContext,
-  useReducer,
-  ReactElement,
-} from "react";
-import { StyleSheet, Text, View, SafeAreaView, Dimensions } from "react-native";
-import { UserContext, userReducer } from "../../tools/UserContext";
+import React, { useContext } from "react";
+import { StyleSheet, Text, View, SafeAreaView } from "react-native";
+import { UserContext } from "../../tools/UserContext";
 import MenuButton from "../../components/MenuButton";
 import { Colors } from "../../constants/Colors";
 import { determineClassic, classicWinnerColour } from "./helpers";
@@ -34,6 +28,14 @@ const EndGame = ({ navigation, route }) => {
       gameDetails.player3Colour
     ),
   };
+
+  const [currentExp, nextLevelExp] = handlePostGame(
+    userContext.totalExp,
+    gameDetails
+  );
+
+  console.log("currentExp", currentExp);
+  console.log("nextLevelExp", nextLevelExp);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -66,7 +68,9 @@ const EndGame = ({ navigation, route }) => {
       <MenuButton
         text="Continue"
         shadowColour="red"
-        operation={() => navigation.navigate("ExpChange", [gameDetails, 70])} // 70 used for testing
+        operation={() =>
+          navigation.navigate("ExpChange", [currentExp, nextLevelExp])
+        }
       />
     </SafeAreaView>
   );

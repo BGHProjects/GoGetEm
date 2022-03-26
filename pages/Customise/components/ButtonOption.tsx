@@ -2,7 +2,7 @@ import React, { useContext, useReducer, useEffect, useState } from "react";
 import { UserContext, userReducer } from "../../../tools/UserContext";
 import { View, StyleSheet, Text, TouchableHighlight } from "react-native";
 import { Colors } from "../../../constants/Colors";
-import Selection from "./Selection";
+import Selection from "../../../components/Selection";
 import { split, capitalize } from "lodash";
 import * as firebase from "firebase";
 
@@ -82,14 +82,7 @@ const ButtonOption = ({ level, variant, closeFunction }: ButtonOptionProps) => {
           ]}
         />
       </TouchableHighlight>
-      <View
-        style={[
-          styles.optionContainer,
-          {
-            position: "relative",
-          },
-        ]}
-      >
+      <View style={styles.optionContainer}>
         <View style={styles.labelContainer}>
           <Text style={styles.levelLabel}>{level}</Text>
         </View>

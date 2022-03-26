@@ -11,11 +11,11 @@ export const useUpdateUser = (option: string, increment?: number) => {
     increaseGames: user.update({
       totalGames: userContext.totalGames + 1,
     }),
+    increaseWins: user.update({
+      totalWins: userContext.totalWins + 1,
+    }),
     increaseClassiGames: user.update({
       totalClassicGames: userContext.totalClassicGames + 1,
-    }),
-    increaseWins: user.update({
-      totalClassicWins: userContext.totalClassicWins + 1,
     }),
     increaseClassicWins: user.update({
       totalClassicWins: userContext.totalClassicWins + 1,
@@ -55,7 +55,6 @@ export const useUpdateUser = (option: string, increment?: number) => {
   };
 
   useEffect(() => {
-    console.log("Called ", option);
     updateOptions[option];
     dispatch({ type: option, payload: 1 });
   }, []);

@@ -60,7 +60,6 @@ export const handlePostGame = (currentExp: number, gameDetails: any) => {
   // Handle remaining exp/level calculations
   increment *= gameDetails.rounds;
   newExp = currentExp + increment;
-  //identifyNewLevel(userContext.level + 1, newExp);
 
   // Update exp
   useUpdateUser("increaseExp", increment);

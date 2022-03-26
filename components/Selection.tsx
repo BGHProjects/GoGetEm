@@ -1,5 +1,5 @@
 import React from "react";
-import { Colors } from "../../../constants/Colors";
+import { Colors } from "../constants/Colors";
 import { split, capitalize } from "lodash";
 
 import {
@@ -18,7 +18,7 @@ import {
   DownTriangle,
   RightTriangle,
   LeftTriangle,
-} from "./Buttons";
+} from "../pages/Customise/components/Buttons";
 
 interface SelectionProps {
   variant: string;
