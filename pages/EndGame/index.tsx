@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { StyleSheet, Text, View, SafeAreaView } from "react-native";
 import { UserContext } from "../../tools/UserContext";
 import MenuButton from "../../components/MenuButton";
@@ -9,6 +9,8 @@ import { handlePostGame } from "../ExpChange/helpers/handlePostGame";
 const EndGame = ({ navigation, route }) => {
   const userContext = useContext(UserContext);
   const gameDetails = route.params;
+  const [prevExp, setPrevExp] = useState<number | null>(null);
+  const [newExp, setNewExp] = useState<number | null>(null);
 
   const stringResult: Record<string, string> = {
     Classic: determineClassic(
@@ -29,13 +31,15 @@ const EndGame = ({ navigation, route }) => {
     ),
   };
 
-  const [currentExp, nextLevelExp] = handlePostGame(
-    userContext.totalExp,
-    gameDetails
-  );
+  if (prevExp === null && newExp === null) {
+    const [currentExp, nextLevelExp] = handlePostGame(
+      userContext.totalExp,
+      gameDetails
+    );
 
-  console.log("currentExp", currentExp);
-  console.log("nextLevelExp", nextLevelExp);
+    setPrevExp(currentExp);
+    setNewExp(nextLevelExp);
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -68,9 +72,7 @@ const EndGame = ({ navigation, route }) => {
       <MenuButton
         text="Continue"
         shadowColour="red"
-        operation={() =>
-          navigation.navigate("ExpChange", [currentExp, nextLevelExp])
-        }
+        operation={() => navigation.navigate("ExpChange", [prevExp, newExp])}
       />
     </SafeAreaView>
   );

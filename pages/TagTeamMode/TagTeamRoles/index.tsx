@@ -10,6 +10,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { UserContext, userReducer } from "../../../tools/UserContext";
 import * as firebase from "firebase";
+import { calcExpToNextLevel } from "../../../tools/calcNextLevelExp";
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
@@ -149,7 +150,7 @@ const TagTeamRoles = ({ navigation, route }) => {
        */
 
       const identifyNewLevel = (levelToCheck: number) => {
-        let nextLevelExp = Math.ceil(baseX * levelToCheck ** exponent);
+        const nextLevelExp = calcExpToNextLevel(levelToCheck);
         if (nextLevelExp < newExp) {
           user.update({
             level: userContext.level + 1,

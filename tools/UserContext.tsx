@@ -40,7 +40,7 @@ export const userDetails: User = {
   username: null,
   connected: false,
   defaultColour: "white",
-  controllerOutlineColour: "white",
+  controllerOutlineColour: "outline-white",
   controllerLeftButton: "left-white-circle",
   controllerRightButton: "right-white-circle",
   controllerTopButton: "top-white-circle",
@@ -73,6 +73,7 @@ export const userDetails: User = {
 };
 
 export const userReducer = (state, action) => {
+  console.log("\nThe userReducer was hit ", action);
   if (state !== undefined) {
     switch (action.type) {
       case "changeClassicBG":

@@ -10,6 +10,7 @@ import Animated, {
   withTiming,
   withDelay,
 } from "react-native-reanimated";
+import { calcExpToNextLevel } from "../../tools/calcNextLevelExp";
 
 const ExpChange = ({ navigation, route }) => {
   const userContext = useContext(UserContext);
@@ -28,28 +29,26 @@ const ExpChange = ({ navigation, route }) => {
    */
 
   const identifyNewLevel = (levelToCheck: number, newExp: number) => {
-    let baseX = 100;
-    let exponent = 1.05;
-
-    let nextLevelExp = Math.ceil(baseX * levelToCheck ** exponent);
+    const nextLevelExp = calcExpToNextLevel(levelToCheck);
 
     console.log("newExp", newExp);
     console.log("nextLevelExp", nextLevelExp);
 
     if (nextLevelExp < newExp) {
-      console.log("This was hit");
+      console.log("This was hit, the user has leveled up");
       setLeveledUp(true);
-      useUpdateUser("increaseLevel");
       // identifyNewLevel(levelToCheck + 1, newExp);
       // Need to decide late if this should be called recursively
     }
   };
 
-  const nextLevelExp = Math.ceil(100 * userContext.level * 1.05);
-  const initialBarLength = (details[0] / nextLevelExp) * 100;
-  const testEndBarLength = ((details[1] + 1000) / nextLevelExp) * 100;
-  // const initialBarLength = 20;
-  // const testEndBarLength = 70;
+  const nextLevelExp = calcExpToNextLevel(userContext.level);
+  const initialBarLength =
+    details[0] === 0 ? 0 : (details[0] / nextLevelExp) * 100;
+  const testEndBarLength = (details[1] / nextLevelExp) * 100;
+
+  console.log("initialBarLength", initialBarLength);
+  console.log("testEndBarLength", testEndBarLength);
 
   const barLength = useSharedValue(initialBarLength);
 
@@ -61,12 +60,20 @@ const ExpChange = ({ navigation, route }) => {
 
   useEffect(() => {
     console.log("details", details);
-    //identifyNewLevel(userContext.level, details[1]);
+    identifyNewLevel(userContext.level, details[1]);
     barLength.value = withDelay(
       500,
       withTiming(testEndBarLength, { duration: 1500 })
     );
   }, []);
+
+  useEffect(() => {
+    console.log("Leveledup UseEffect hit");
+    if (leveledUp) {
+      console.log("leveledUp in leveledup UseEffect", leveledUp);
+      // useUpdateUser("increaseLevel");
+    }
+  }, [leveledUp]);
 
   return (
     <SafeAreaView style={styles.container}>

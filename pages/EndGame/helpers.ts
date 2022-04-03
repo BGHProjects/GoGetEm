@@ -8,7 +8,8 @@ export const determineClassic = (
     result = "You Win";
   } else if (
     (p2Score > p3Score && p2Score === p1Score) ||
-    (p3Score > p2Score && p3Score === p1Score)
+    (p3Score > p2Score && p3Score === p1Score) ||
+    (p1Score === p2Score && p1Score === p3Score)
   ) {
     result = "Tie";
   } else {

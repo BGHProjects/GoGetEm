@@ -12,6 +12,8 @@ import LoadingDots from "react-native-loading-dots";
 import { AutoSizeText, ResizeTextMode } from "react-native-auto-size-text";
 import ModalButton from "../../components/ModalButton";
 import { Backgrounds } from "../../constants/Backgrounds";
+import sha256 from "crypto-js/sha256";
+import Base64 from "crypto-js/enc-base64";
 
 /**
  * Plan for the Preparation Screen
@@ -85,7 +87,10 @@ const Preparation = ({ navigation }) => {
 
   const checkDatabaseForUser = () => {
     const db = firebase.database();
-    let uniqueName = Device.modelName + " " + Device.deviceName;
+
+    const uniqueName = Base64.stringify(
+      sha256(Device.modelName + Device.deviceName)
+    );
     db.ref()
       .child("users")
       .child(uniqueName)

@@ -4,10 +4,11 @@ import { HStack, Divider } from "native-base";
 import { UserContext } from "../../../tools/UserContext";
 import StatBasic from "./StatBasic";
 import StatFull from "./StatFull";
+import { calcExpToNextLevel } from "../../../tools/calcNextLevelExp";
 
 const BaseStats = () => {
   const userContext = useContext(UserContext);
-  let nextLevelExp = Math.ceil(100 * userContext.level ** 1.05);
+  const nextLevelExp = calcExpToNextLevel(userContext.level);
   const expUntilNextLevel = nextLevelExp - userContext.totalExp;
 
   return (

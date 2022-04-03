@@ -9,12 +9,19 @@ export const handlePostGame = (currentExp: number, gameDetails: any) => {
   useUpdateUser("increaseGames");
   useUpdateUser("increaseClassicGames");
 
+  console.log("gameDetails.player1Score", gameDetails.player1Score);
+  console.log("gameDetails.player2Score", gameDetails.player2Score);
+  console.log("gameDetails.player3Score", gameDetails.player3Score);
+
   // Determine if player won
   if (
     gameDetails.player1Score > gameDetails.player2Score &&
     gameDetails.player1Score > gameDetails.player3Score
   ) {
+    console.log("This was hit, the user won the game");
     win = true;
+  } else {
+    console.log("The user did not win the game");
   }
 
   // Increase wins if applicable and set increment
@@ -25,6 +32,8 @@ export const handlePostGame = (currentExp: number, gameDetails: any) => {
   } else {
     increment = 3;
   }
+
+  console.log("increment after win determined", increment);
 
   // Increase Difficulty Played/Wins
   switch (gameDetails.difficulty) {
@@ -57,9 +66,16 @@ export const handlePostGame = (currentExp: number, gameDetails: any) => {
       break;
   }
 
+  console.log("increment after difficulty determined", increment);
+
+  console.log("gameDetails.rounds in handlePostGame", gameDetails.rounds);
+
   // Handle remaining exp/level calculations
   increment *= gameDetails.rounds;
   newExp = currentExp + increment;
+
+  console.log("increment at the end of handlePostGame", increment);
+  console.log("newExp in handlePostGame", newExp);
 
   // Update exp
   useUpdateUser("increaseExp", increment);
