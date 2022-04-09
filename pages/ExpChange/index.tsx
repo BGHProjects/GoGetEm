@@ -68,10 +68,8 @@ const ExpChange = ({ navigation, route }) => {
   }, []);
 
   useEffect(() => {
-    console.log("Leveledup UseEffect hit");
     if (leveledUp) {
       console.log("leveledUp in leveledup UseEffect", leveledUp);
-      // useUpdateUser("increaseLevel");
     }
   }, [leveledUp]);
 

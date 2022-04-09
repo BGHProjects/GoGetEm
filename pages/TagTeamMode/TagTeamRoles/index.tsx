@@ -149,18 +149,18 @@ const TagTeamRoles = ({ navigation, route }) => {
        *            break out of loop
        */
 
-      const identifyNewLevel = (levelToCheck: number) => {
-        const nextLevelExp = calcExpToNextLevel(levelToCheck);
-        if (nextLevelExp < newExp) {
-          user.update({
-            level: userContext.level + 1,
-          });
-          dispatch({ type: "increaseLevel", payload: 1 });
-          identifyNewLevel(levelToCheck + 1);
-        }
-      };
+      // const identifyNewLevel = (levelToCheck: number) => {
+      //   const nextLevelExp = calcExpToNextLevel(levelToCheck);
+      //   if (nextLevelExp < newExp) {
+      //     user.update({
+      //       level: userContext.level + 1,
+      //     });
+      //     dispatch({ type: "increaseLevel", payload: 1 });
+      //     identifyNewLevel(levelToCheck + 1);
+      //   }
+      // };
 
-      identifyNewLevel(userContext.level + 1);
+      // identifyNewLevel(userContext.level + 1);
 
       // Update exp
       user.update({

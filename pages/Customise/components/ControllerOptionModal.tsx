@@ -1,5 +1,5 @@
-import React, { useState, useContext, useEffect } from "react";
-import { View, StyleSheet, Text, ScrollView } from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, StyleSheet, ScrollView } from "react-native";
 import { Colors } from "../../../constants/Colors";
 import { forEach, split, toPairs, keys, values } from "lodash";
 
@@ -43,12 +43,7 @@ const ControllerOptionModal = ({
       <View style={styles.modalContainer}>
         <ScrollView
           style={styles.scrollContainer}
-          contentContainerStyle={{
-            alignItems: "center",
-            flexDirection: "row",
-            flexWrap: "wrap",
-            justifyContent: "center",
-          }}
+          contentContainerStyle={styles.scrollContainerContent}
         >
           {buttonOptions.map((item) => (
             <ButtonOption
@@ -96,6 +91,12 @@ const styles = StyleSheet.create({
   scrollContainer: {
     width: "100%",
     height: "80%",
+  },
+  scrollContainerContent: {
+    alignItems: "center",
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "center",
   },
 });
 
