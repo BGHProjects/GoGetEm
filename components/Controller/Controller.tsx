@@ -1,15 +1,9 @@
 import React, { FC, useContext } from "react";
 import { StyleSheet, View, Dimensions } from "react-native";
 import { Svg, Circle } from "react-native-svg";
-import CircleButton from "./CircleButton";
-import SquareButton from "./SquareButton";
-import TriangleButton from "./TriangleButton";
-import ShardButton from "./ShardButton";
-import PointerButton from "./PointerButton";
-import LetterButton from "./LetterButton";
 import { Colors } from "../../constants/Colors";
 import { UserContext } from "../../tools/UserContext";
-import { split, capitalize } from "lodash";
+import { split } from "lodash";
 import ControllerButton from "./ControllerButton";
 
 const height = Dimensions.get("window").height;

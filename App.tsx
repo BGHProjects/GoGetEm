@@ -1,12 +1,10 @@
-import React, { useState, useEffect, useContext, useReducer } from "react";
-import { StyleSheet } from "react-native";
+import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import AppNavigation from "./tools/AppNavigation";
 import { useFonts } from "expo-font";
 import AppLoading from "expo-app-loading";
-import { userDetails, UserContext, userReducer } from "./tools/UserContext";
-import NetInfo from "@react-native-community/netinfo";
 import { NativeBaseProvider } from "native-base";
+import { UserContextProvider } from "./tools/UserContext";
 
 export default function App() {
   let [fontsLoaded] = useFonts({
@@ -15,46 +13,17 @@ export default function App() {
     "Main-Bold": require("./assets/fonts/Quicksand-SemiBold.ttf"),
   });
 
-  // Necessary to check and update internet connection
-  const [connected, setConnected] = useState<boolean | null>(null);
-  const userContext = useContext(UserContext);
-  const [state, dispatch] = useReducer(userReducer, userContext);
-
-  const checkConnection = NetInfo.fetch().then((state) => {
-    setConnected(state.isConnected);
-  });
-
-  useEffect(() => {
-    checkConnection;
-  }, []);
-
-  useEffect(() => {
-    console.log("connected ", connected);
-    if (connected !== null) {
-      dispatch({ type: "connectionChange", payload: !userContext.connected });
-    }
-  }, [connected]);
-
   if (!fontsLoaded) {
     return <AppLoading />;
   } else {
     return (
       <NavigationContainer>
-        <UserContext.Provider value={userDetails}>
+        <UserContextProvider>
           <NativeBaseProvider>
             <AppNavigation />
           </NativeBaseProvider>
-        </UserContext.Provider>
+        </UserContextProvider>
       </NavigationContainer>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "red",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});

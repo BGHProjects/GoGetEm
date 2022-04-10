@@ -1,5 +1,5 @@
-import React, { useContext, useReducer, useEffect, useState } from "react";
-import { UserContext, userReducer } from "../../../tools/UserContext";
+import React, { useContext, useEffect, useState } from "react";
+import { UserContext } from "../../../tools/UserContext";
 import { View, StyleSheet, Text, TouchableHighlight } from "react-native";
 import { Colors } from "../../../constants/Colors";
 import Selection from "../../../components/Selection";
@@ -14,7 +14,6 @@ interface ButtonOptionProps {
 
 const ButtonOption = ({ level, variant, closeFunction }: ButtonOptionProps) => {
   const userContext = useContext(UserContext);
-  const [state, dispatch] = useReducer(userReducer, userContext);
   const userLevel = userContext.level;
   const dbUser = firebase.database().ref("users/" + userContext.username);
   const position = capitalize(split(variant, "-")[0]);
@@ -23,12 +22,12 @@ const ButtonOption = ({ level, variant, closeFunction }: ButtonOptionProps) => {
 
   function changeSetting(variant: string) {
     if (split(variant, "-").length > 2) {
-      dispatch({ type: `change${position}`, payload: variant });
+      userContext[`setController${capitalize(position)}Button`](variant);
       dbUser.update({
         [`controller${position}Button`]: variant,
       });
     } else {
-      dispatch({ type: "changeOutline", payload: variant });
+      userContext.setControllerOutlineColour(variant);
       dbUser.update({
         controllerOutlineColour: variant,
       });
@@ -40,7 +39,7 @@ const ButtonOption = ({ level, variant, closeFunction }: ButtonOptionProps) => {
 
   useEffect(() => {
     if (capitalize(variantElements[0]) === position) {
-      let contextElements = split(
+      const contextElements = split(
         userContext[`controller${position}Button`],
         "-"
       );

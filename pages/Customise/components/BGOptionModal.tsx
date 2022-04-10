@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, useReducer } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   View,
   StyleSheet,
@@ -22,7 +22,7 @@ import {
 } from "lodash";
 import Unlockables from "../../../constants/Unlockables";
 import * as firebase from "firebase";
-import { UserContext, userReducer } from "../../../tools/UserContext";
+import { UserContext } from "../../../tools/UserContext";
 
 interface BGOptionModalProps {
   modeLabel: string;
@@ -32,7 +32,6 @@ interface BGOptionModalProps {
 const BGOptionModal = ({ modeLabel, closeFunction }: BGOptionModalProps) => {
   const [buttonOptions, setButtonOptions] = useState([]);
   const userContext = useContext(UserContext);
-  const [state, dispatch] = useReducer(userReducer, userContext);
   const userLevel = userContext.level;
   const dbUser = firebase.database().ref("users/" + userContext.username);
   const contextElements = split(
@@ -61,10 +60,7 @@ const BGOptionModal = ({ modeLabel, closeFunction }: BGOptionModalProps) => {
   }
 
   function changeSetting(variant: string) {
-    dispatch({
-      type: `change${modeLabel}BG`,
-      payload: variant,
-    });
+    userContext[`set${modeLabel}Background`](variant);
     dbUser.update({
       [`${lowerFirst(modeLabel)}Background`]: variant,
     });

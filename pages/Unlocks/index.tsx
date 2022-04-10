@@ -16,7 +16,6 @@ import { Backgrounds } from "../../constants/Backgrounds";
 
 const Unlocks = ({ navigation, route }) => {
   const userContext = useContext(UserContext);
-
   const unlockedContent = Unlockables[userContext.level];
 
   return (

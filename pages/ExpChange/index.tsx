@@ -3,7 +3,6 @@ import { StyleSheet, Text, View, SafeAreaView } from "react-native";
 import { UserContext } from "../../tools/UserContext";
 import MenuButton from "../../components/MenuButton";
 import { Colors } from "../../constants/Colors";
-import { useUpdateUser } from "../../tools/hooks/useUpdateUser";
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -11,47 +10,45 @@ import Animated, {
   withDelay,
 } from "react-native-reanimated";
 import { calcExpToNextLevel } from "../../tools/calcNextLevelExp";
+import * as firebase from "firebase";
+import { progressBarDuration } from "../../constants/Animation";
 
 const ExpChange = ({ navigation, route }) => {
   const userContext = useContext(UserContext);
+  const user = firebase.database().ref("users/" + userContext.username);
   const details = route.params;
   const [leveledUp, setLeveledUp] = useState(false);
-
-  // Handle how many times the user levelled up
-  /**
-   * Flow of function
-   *    Calculate total exp required for level after user's current level
-   *        If user's new exp is greater than this total:
-   *            increase user's level
-   *            Repeat step 1, with an incremented level
-   *        Else:
-   *            break out of loop
-   */
-
-  const identifyNewLevel = (levelToCheck: number, newExp: number) => {
-    const nextLevelExp = calcExpToNextLevel(levelToCheck);
-
-    console.log("newExp", newExp);
-    console.log("nextLevelExp", nextLevelExp);
-
-    if (nextLevelExp < newExp) {
-      console.log("This was hit, the user has leveled up");
-      setLeveledUp(true);
-      // identifyNewLevel(levelToCheck + 1, newExp);
-      // Need to decide late if this should be called recursively
-    }
-  };
-
   const nextLevelExp = calcExpToNextLevel(userContext.level);
+  const [levelLabel, setLevelLabel] = useState(userContext.level);
+
+  /**
+   * This value is used to normalize the exp
+   * so that the progression is based on the current level and the next level
+   * and not just the user's total exp until the exp required for the next level
+   */
+  const prevLevelExp =
+    userContext.level > 0 ? calcExpToNextLevel(userContext.level - 1) : 100;
+
+  // Adjusts calculations based on if the user is level 0
+  function accountForLevel0(value: number) {
+    if (userContext.level > 0) return value - prevLevelExp;
+    return value;
+  }
+
+  // If the user is starting from 0, make the initial 0
   const initialBarLength =
-    details[0] === 0 ? 0 : (details[0] / nextLevelExp) * 100;
-  const testEndBarLength = (details[1] / nextLevelExp) * 100;
+    details[0] === 0
+      ? 0
+      : (accountForLevel0(details[0]) / accountForLevel0(nextLevelExp)) * 100;
 
-  console.log("initialBarLength", initialBarLength);
-  console.log("testEndBarLength", testEndBarLength);
+  // If the newExp is more than the nextLevelExp, the bar will be filled 100%
+  const endBarLength =
+    nextLevelExp > details[1]
+      ? (accountForLevel0(details[1]) / accountForLevel0(nextLevelExp)) * 100
+      : 100;
 
+  // Used for animations
   const barLength = useSharedValue(initialBarLength);
-
   const showProgress = useAnimatedStyle(() => {
     return {
       width: `${barLength.value}%`,
@@ -59,23 +56,27 @@ const ExpChange = ({ navigation, route }) => {
   }, []);
 
   useEffect(() => {
-    console.log("details", details);
-    identifyNewLevel(userContext.level, details[1]);
+    if (nextLevelExp < details[1]) setLeveledUp(true);
     barLength.value = withDelay(
       500,
-      withTiming(testEndBarLength, { duration: 1500 })
+      withTiming(endBarLength, { duration: progressBarDuration })
     );
   }, []);
 
   useEffect(() => {
     if (leveledUp) {
-      console.log("leveledUp in leveledup UseEffect", leveledUp);
+      userContext.setLevel((old) => old + 1);
+      user.update({ level: userContext.level + 1 });
+      // Delays change to line up with animation
+      setTimeout(() => {
+        setLevelLabel((old) => old + 1);
+      }, progressBarDuration + 500);
     }
   }, [leveledUp]);
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.levelLabel}>Level {userContext.level}</Text>
+      <Text style={styles.levelLabel}>Level {levelLabel}</Text>
       <View style={styles.barContainer}>
         <Animated.View style={[styles.progressBar, showProgress]} />
       </View>

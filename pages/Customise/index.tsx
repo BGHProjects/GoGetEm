@@ -10,8 +10,6 @@ import ControllerOption from "./components/ControllerOption";
 import BackgroundOptions from "./components/BackgroundOptions";
 
 const Customise = ({ navigation }) => {
-  const userContext = useContext(UserContext);
-
   const renderScene = SceneMap({
     first: ControllerOption,
     second: BackgroundOptions,

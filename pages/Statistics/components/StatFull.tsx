@@ -1,10 +1,9 @@
 import React from "react";
-import { View, Dimensions } from "react-native";
-import { Colors } from "../../../constants/Colors";
+import { View } from "react-native";
 import StatTitle from "./StatTitle";
 import StatValue from "./StatValue";
 import StatFraction from "./StatFraction";
-import * as Progress from "react-native-progress";
+import StatProgressBar from "./StatProgressBar";
 
 interface StatFullProps {
   titleLabel: string;
@@ -17,7 +16,6 @@ const StatFull = ({ titleLabel, winValue, totalValue }: StatFullProps) => {
     Number(winValue) !== 0 && Number(totalValue) !== 0
       ? ((Number(winValue) / Number(totalValue)) * 100).toFixed(2) + "%"
       : "0%";
-  const width = Dimensions.get("window").width;
 
   return (
     <View style={{ marginBottom: 40 }}>
@@ -26,17 +24,9 @@ const StatFull = ({ titleLabel, winValue, totalValue }: StatFullProps) => {
         <StatValue label={valueLabel} />
         <StatFraction winValue={winValue} totalValue={totalValue} />
       </View>
-      <Progress.Bar
-        width={width * 0.8}
-        progress={
-          Number(winValue) !== 0 && Number(totalValue) !== 0
-            ? Number(Number(winValue) / Number(totalValue))
-            : 0
-        }
-        style={{ marginTop: 20 }}
-        color={Colors.green}
-        unfilledColor={Colors.red}
-        borderWidth={0}
+      <StatProgressBar
+        progressValue={Number(winValue)}
+        completeValue={Number(totalValue)}
       />
     </View>
   );

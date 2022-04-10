@@ -4,13 +4,11 @@ import MenuButton from "../../components/MenuButton";
 import { Colors } from "../../constants/Colors";
 import { determineClassic, classicWinnerColour } from "./helpers";
 import { handlePostGame } from "../ExpChange/helpers/handlePostGame";
-import { useUpdateUser } from "../../tools/hooks/useUpdateUser";
-import { UserContext, userReducer } from "../../tools/UserContext";
+import { UserContext } from "../../tools/UserContext";
 import * as firebase from "firebase";
 
 const EndGame = ({ navigation, route }) => {
   const userContext = useContext(UserContext);
-  const [state, dispatch] = useReducer(userReducer, userContext);
   const user = firebase.database().ref("users/" + userContext.username);
   const gameDetails = route.params;
   const [prevExp, setPrevExp] = useState<number | null>(null);
@@ -35,73 +33,66 @@ const EndGame = ({ navigation, route }) => {
     ),
   };
 
+  // Ensures that this happens only initially
   if (prevExp === null && newExp === null) {
-    const [currentExp, nextLevelExp, updates, increment] = handlePostGame(
+    const { currentExp, newExp, updates, increment } = handlePostGame(
       userContext.totalExp,
       gameDetails
     );
 
-    console.log("\nupdates", updates);
-
-    const updateOptions: Record<string, any> = {
-      increaseGames: user.update({
-        totalGames: userContext.totalGames + 1,
-      }),
-      increaseWins: user.update({
-        totalWins: userContext.totalWins + 1,
-      }),
-      increaseClassiGames: user.update({
+    // Maps the 'updates' entry to the firebase database call
+    const firebaseUpdates: Record<string, any> = {
+      TotalGames: user.update({ totalGames: userContext.totalGames + 1 }),
+      TotalClassicGames: user.update({
         totalClassicGames: userContext.totalClassicGames + 1,
       }),
-      increaseClassicWins: user.update({
+      TotalWins: user.update({ totalWins: userContext.totalWins + 1 }),
+      TotalClassicWins: user.update({
         totalClassicWins: userContext.totalClassicWins + 1,
       }),
-      increaseDiff1Games: user.update({
+      TotalDiff1Games: user.update({
         totalDiff1Games: userContext.totalDiff1Games + 1,
       }),
-      increaseDiff1Wins: user.update({
+      TotalDiff1Wins: user.update({
         totalDiff1Wins: userContext.totalDiff1Wins + 1,
       }),
-      increaseDiff2Games: user.update({
+      TotalDiff2Games: user.update({
         totalDiff2Games: userContext.totalDiff2Games + 1,
       }),
-      increaseDiff2Wins: user.update({
+      TotalDiff2Wins: user.update({
         totalDiff2Wins: userContext.totalDiff2Wins + 1,
       }),
-      increaseDiff3Games: user.update({
+      TotalDiff3Games: user.update({
         totalDiff3Games: userContext.totalDiff3Games + 1,
       }),
-      increaseDiff3Wins: user.update({
+      TotalDiff3Wins: user.update({
         totalDiff3Wins: userContext.totalDiff3Wins + 1,
       }),
-      increaseDiff4Games: user.update({
+      TotalDiff4Games: user.update({
         totalDiff4Games: userContext.totalDiff4Games + 1,
       }),
-      increaseDiff4Wins: user.update({
+      TotalDiff4Wins: user.update({
         totalDiff4Wins: userContext.totalDiff4Wins + 1,
-      }),
-      increaseLevel: user.update({
-        level: userContext.level + 1,
-      }),
-      increaseExp: user.update({
-        totalExp: increment
-          ? userContext.totalExp + increment
-          : userContext.totalExp + 0,
       }),
     };
 
     // Makes all the backend calls
     updates.map((update) => {
-      if (update == "increaseExp") {
-        dispatch({ type: update, payload: increment });
+      if (update == "TotalExp") {
+        // Updates Firebase
+        user.update({ totalExp: userContext.totalExp + increment });
+        // Updates local state
+        userContext.setTotalExp((oldExp) => oldExp + increment);
       } else {
-        dispatch({ type: update, payload: 1 });
-        updateOptions[update].then((res) => console.log("res", res));
+        // Updates Firebase
+        firebaseUpdates[update];
+        // Updates local state
+        userContext[`set${update}`]((old) => old + 1);
       }
     });
 
     setPrevExp(currentExp);
-    setNewExp(nextLevelExp);
+    setNewExp(newExp);
   }
 
   return (

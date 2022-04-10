@@ -5,11 +5,11 @@ import ControllerOptionModal from "./ControllerOptionModal";
 import Selection from "../../../constants/Selections";
 
 const ControllerOption = () => {
-  const [showModal, setshowModal] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const [selection, setSelection] = useState<Selection>(Selection.None);
 
   function makeSelection(selection: Selection) {
-    setshowModal(true);
+    setShowModal(true);
     setSelection(selection);
   }
 
@@ -24,7 +24,7 @@ const ControllerOption = () => {
       />
       {showModal && (
         <ControllerOptionModal
-          closeFunction={() => setshowModal(false)}
+          closeFunction={() => setShowModal(false)}
           variant={selection}
         />
       )}

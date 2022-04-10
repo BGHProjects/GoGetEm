@@ -1,12 +1,11 @@
 import React, { useContext, useEffect, useReducer, useState } from "react";
 import { StyleSheet, Text, SafeAreaView, View } from "react-native";
-import { UserContext, userReducer } from "../../tools/UserContext";
 import { Colors } from "../../constants/Colors";
 import * as firebase from "firebase";
 import * as Device from "expo-device";
 import NetInfo from "@react-native-community/netinfo";
 import { Asset } from "expo-asset";
-
+import { UserContext } from "../../tools/UserContext";
 import TitleText from "../../components/TitleText";
 import LoadingDots from "react-native-loading-dots";
 import { AutoSizeText, ResizeTextMode } from "react-native-auto-size-text";
@@ -62,7 +61,6 @@ firebase.initializeApp(firebaseConfig);
 
 const Preparation = ({ navigation }) => {
   const userContext = useContext(UserContext);
-  const [state, dispatch] = useReducer(userReducer, userContext);
   const [connection, setConnection] = useState<boolean | null>(null);
   const [showModal, setShowModal] = useState(false);
 
@@ -72,7 +70,7 @@ const Preparation = ({ navigation }) => {
 
   const handleNoConnection = () => {
     setShowModal(false);
-    dispatch({ type: "connectionChange", payload: false });
+    userContext.setConnected(false);
     navigation.navigate("Main Menu");
   };
 
@@ -111,7 +109,7 @@ const Preparation = ({ navigation }) => {
 
   const setStateFromDatabase = (userDetails: object) => {
     console.log(`setStateFromDatabase was called`);
-    dispatch({ type: "populateFromDatabase", payload: userDetails });
+    userContext.populateFromDatabase(userDetails);
     navigation.navigate("Main Menu");
   };
 
@@ -154,7 +152,7 @@ const Preparation = ({ navigation }) => {
       unlockedItems: [],
     });
 
-    dispatch({ type: "assignName", payload: userName });
+    userContext.setUsername(userName);
     navigation.navigate("Main Menu");
   };
 
