@@ -1,25 +1,23 @@
-export const determineClassic = (
+import { Result } from "../../constants/types";
+import { threePlayerResult } from "../../tools/determineResult";
+
+export const determineThreePlayer = (
   p1Score: number,
   p2Score: number,
   p3Score: number
 ) => {
-  let result;
-  if (p1Score > p2Score && p1Score > p3Score) {
-    result = "You Win";
-  } else if (
-    (p2Score > p3Score && p2Score === p1Score) ||
-    (p3Score > p2Score && p3Score === p1Score) ||
-    (p1Score === p2Score && p1Score === p3Score)
-  ) {
-    result = "Tie";
-  } else {
-    result = "You Lose";
-  }
+  const result = threePlayerResult(p1Score, p2Score, p3Score);
 
-  return result;
+  const resultOption: Record<Result, string> = {
+    [Result.Win]: "You Win",
+    [Result.Tie]: "Tie",
+    [Result.Lose]: "Lose",
+  };
+
+  return resultOption[result];
 };
 
-export const classicWinnerColour = (
+export const threePlayerWinnerColour = (
   p1Score: number,
   p2Score: number,
   p3Score: number,

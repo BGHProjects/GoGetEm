@@ -1,3 +1,14 @@
+import { handlePostGameDifficulty } from "./handlePostGameDifficulty";
+import { threePlayerResult } from "../../../tools/determineResult";
+import { Result } from "../../../constants/types";
+import { loseIncrement, winIncrement } from "../../../constants/Exp";
+
+/**
+ * Decides what updates to the user's experience and statistics are required following the aftermath of the game
+ * @param currentExp The user's current exp
+ * @param gameDetails The results of the game that was just played
+ * @returns currentExp, the newExp, the list of statistical changes, and the increment to the user's exp
+ */
 export const handlePostGame = (currentExp: number, gameDetails: any) => {
   let increment = 0;
   let newExp = 0;
@@ -6,56 +17,44 @@ export const handlePostGame = (currentExp: number, gameDetails: any) => {
 
   // Update games played
   updates.push("TotalGames");
-  updates.push("TotalClassicGames");
+  updates.push(`Total${gameDetails.mode}Games`);
+
+  const postGameResultOptions: Record<string, Result> = {
+    Classic: threePlayerResult(
+      gameDetails.player1Score,
+      gameDetails.player2Score,
+      gameDetails.player3Score
+    ),
+    Chasedown: threePlayerResult(
+      gameDetails.player1Score,
+      gameDetails.player2Score,
+      gameDetails.player3Score
+    ),
+  };
 
   // Determine if player won
-  if (
-    gameDetails.player1Score > gameDetails.player2Score &&
-    gameDetails.player1Score > gameDetails.player3Score
-  ) {
+  if (postGameResultOptions[gameDetails.mode] === Result.Win) {
     win = true;
-  } else {
   }
 
   // Increase wins if applicable and set increment
   if (win) {
-    increment = 10;
+    increment = winIncrement[gameDetails.mode];
     updates.push("TotalWins");
-    updates.push("TotalClassicWins");
+    updates.push(`Total${gameDetails.mode}Wins`);
   } else {
-    increment = 3;
+    increment = loseIncrement[gameDetails.mode];
   }
 
   // Increase Difficulty Played/Wins
-  switch (gameDetails.difficulty) {
-    case "Meh":
-      updates.push("TotalDiff1Games");
-      if (win) {
-        updates.push("TotalDiff1Wins");
-      }
-      break;
-    case "Oh OK":
-      updates.push("TotalDiff2Games");
-      if (win) {
-        updates.push("TotalDiff2Wins");
-      }
-      increment *= 2;
-      break;
-    case "Hang On":
-      updates.push("TotalDiff3Games");
-      if (win) {
-        updates.push("TotalDiff3Wins");
-      }
-      increment *= 3;
-      break;
-    case "What The":
-      updates.push("TotalDiff4Games");
-      if (win) {
-        updates.push("TotalDiff4Wins");
-      }
-      increment *= 4;
-      break;
-  }
+  const { updates: diffUpdates, increment: diffIncrement } =
+    handlePostGameDifficulty(gameDetails.difficulty, win, increment);
+
+  diffUpdates.map((update: string) => {
+    updates.push(update);
+  });
+
+  increment = diffIncrement;
 
   // Handle remaining exp/level calculations
   increment *= gameDetails.rounds;

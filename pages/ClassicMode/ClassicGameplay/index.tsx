@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { StyleSheet, Text, View, SafeAreaView, Dimensions } from "react-native";
+import { StyleSheet, View, Dimensions } from "react-native";
 import { Svg, Circle } from "react-native-svg";
 import {
   generateCells,
@@ -12,6 +12,7 @@ import Controller from "../../../components/Controller/Controller";
 import BGWithImage from "../../../components/BGWithImage";
 import { Colors } from "../../../constants/Colors";
 import { UserContext } from "../../../tools/UserContext";
+import { getMazeCell } from "../../../tools/BotBrain";
 
 const height = Dimensions.get("window").height;
 const mazeSideLength = height * 0.45;
@@ -25,9 +26,9 @@ let searchGrid1: any = [];
 let searchGrid2: any = [];
 let searchPath1: any = [];
 let searchPath2: any = [];
-let player1Score: any;
-let player2Score: any;
-let player3Score: any;
+let player1Score: number;
+let player2Score: number;
+let player3Score: number;
 let playerSize = 4;
 const playerStart = [55, 15];
 const leftStart = [5, 85];
@@ -37,9 +38,9 @@ const ClassicGameplayScreen = ({ navigation, route }) => {
   const userContext = useContext(UserContext);
 
   let gameDetails = route.params;
+  // Currently, both AIs start at the same Y position
   const [playerX, setplayerX] = useState(playerStart[0]);
   const [playerY, setplayerY] = useState(playerStart[1]);
-  // Currently, both AIs start at the same Y position
   const [player2X, setplayer2X] = useState(
     gameDetails.currentRound % 2 < 1 ? leftStart[0] : rightStart[0]
   );
@@ -74,7 +75,7 @@ const ClassicGameplayScreen = ({ navigation, route }) => {
   }, []);
 
   const movePlayerUp = () => {
-    let mazeCell = getMazeCell(playerX, playerY);
+    let mazeCell = getMazeCell(playerX, playerY, mazeGrid);
 
     if (playerY > 5 && mazeCell.top === 0 && !roundOver) {
       setplayerY(playerY - 10);
@@ -82,7 +83,7 @@ const ClassicGameplayScreen = ({ navigation, route }) => {
   };
 
   const movePlayerRight = () => {
-    let mazeCell = getMazeCell(playerX, playerY);
+    let mazeCell = getMazeCell(playerX, playerY, mazeGrid);
 
     if (playerX < 95 && mazeCell.right === 0 && !roundOver) {
       setplayerX(playerX + 10);
@@ -90,7 +91,7 @@ const ClassicGameplayScreen = ({ navigation, route }) => {
   };
 
   const movePlayerLeft = () => {
-    let mazeCell = getMazeCell(playerX, playerY);
+    let mazeCell = getMazeCell(playerX, playerY, mazeGrid);
 
     if (playerX > 5 && mazeCell.left === 0 && !roundOver) {
       setplayerX(playerX - 10);
@@ -98,26 +99,12 @@ const ClassicGameplayScreen = ({ navigation, route }) => {
   };
 
   const movePlayerDown = () => {
-    let mazeCell = getMazeCell(playerX, playerY);
+    let mazeCell = getMazeCell(playerX, playerY, mazeGrid);
 
     if (playerY < 95 && mazeCell.bottom === 0 && !roundOver) {
       setplayerY(playerY + 10);
     }
   };
-
-  function getMazeCell(X: any, Y: any) {
-    let digit1 = (X - 5).toString();
-    let digit2 = (Y - 5).toString();
-    let digits;
-
-    if (digit2 === "0") {
-      digits = digit1[0];
-    } else {
-      digits = digit2[0] + digit1[0];
-    }
-
-    return mazeGrid[digits];
-  }
 
   function followPath(player: any, searchPath: any) {
     let index = 0;
@@ -193,7 +180,7 @@ const ClassicGameplayScreen = ({ navigation, route }) => {
   }, []);
 
   useEffect(() => {
-    let player1Cell = getMazeCell(playerX, playerY);
+    let player1Cell = getMazeCell(playerX, playerY, mazeGrid);
     /*
       This ensures that if the player backtracks on the search path
       those entries are removed instead of explored by the bot
@@ -219,7 +206,7 @@ const ClassicGameplayScreen = ({ navigation, route }) => {
 
   useEffect(() => {
     if (player2Started) {
-      let player2Cell = getMazeCell(player2X, player2Y);
+      let player2Cell = getMazeCell(player2X, player2Y, mazeGrid);
       /*
       This ensures that if player2 backtracks on the search path
       those entries are removed instead of explored by the bot

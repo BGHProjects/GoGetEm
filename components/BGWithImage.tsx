@@ -1,65 +1,18 @@
 import React from "react";
 import { StyleSheet, View, SafeAreaView, ImageBackground } from "react-native";
-
 import { Colors } from "../constants/Colors";
 import { Backgrounds } from "../constants/Backgrounds";
 
 interface BGWithImageProps {
   image: string;
-  children: JSX.Element;
+  children: JSX.Element | JSX.Element[];
 }
 
 const BGWithImage = ({ image, children }: BGWithImageProps) => {
-  let imageUsed;
-
-  switch (image) {
-    case "mainMenu":
-      imageUsed = Backgrounds.mainMenu;
-      break;
-    case "gameModes":
-      imageUsed = Backgrounds.gameModes;
-      break;
-    case "aurora":
-      imageUsed = Backgrounds.aurora;
-      break;
-    case "fire":
-      imageUsed = Backgrounds.fire;
-      break;
-    case "forest":
-      imageUsed = Backgrounds.forest;
-      break;
-    case "mountains":
-      imageUsed = Backgrounds.mountains;
-      break;
-    case "snow":
-      imageUsed = Backgrounds.snow;
-      break;
-    case "goggles":
-      imageUsed = Backgrounds.goggles;
-      break;
-    case "gold":
-      imageUsed = Backgrounds.gold;
-      break;
-    case "liquid":
-      imageUsed = Backgrounds.liquid;
-      break;
-    case "neonCity":
-      imageUsed = Backgrounds.neonCity;
-      break;
-    case "neonFuture":
-      imageUsed = Backgrounds.neonFuture;
-      break;
-    case "space":
-      imageUsed = Backgrounds.space;
-      break;
-    default:
-      break;
-  }
-
   return (
     <SafeAreaView style={styles.container}>
       <ImageBackground
-        source={imageUsed}
+        source={Backgrounds[image]}
         resizeMode="cover"
         style={styles.container}
       >

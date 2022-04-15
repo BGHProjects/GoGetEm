@@ -390,8 +390,10 @@ const ChasedownGameplayScreen = ({ navigation, route }) => {
       gameDetails.currentRound++;
       if (gameDetails.currentRound > gameDetails.rounds) {
         gameDetails.gameOver = true;
+        navigation.navigate("End Game", gameDetails);
+      } else {
+        navigation.navigate("Chasedown Roles", gameDetails);
       }
-      navigation.navigate("Chasedown Roles", gameDetails);
     }
   }, [roundOver]);
 

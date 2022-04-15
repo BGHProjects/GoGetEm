@@ -1,35 +1,28 @@
 import React, { useContext } from "react";
 import { View, StyleSheet, ScrollView } from "react-native";
-
+import { Mode } from "../../../constants/types";
 import BGOption from "./BGOption";
 import { UserContext } from "../../../tools/UserContext";
-import { capitalize } from "lodash";
+import { upperFirst } from "lodash";
 
 const BackgroundOptions = () => {
   const userContext = useContext(UserContext);
+  const modes = Object.values(Mode);
+
   return (
     <View style={styles.container}>
       <ScrollView>
-        <BGOption
-          modeLabel="Classic"
-          selectionLabel={capitalize(userContext.classicBackground)}
-          selection={userContext.classicBackground}
-        />
-        <BGOption
-          modeLabel="Chasedown"
-          selectionLabel={capitalize(userContext.chasedownBackground)}
-          selection={userContext.chasedownBackground}
-        />
-        <BGOption
-          modeLabel="Hunt"
-          selectionLabel={capitalize(userContext.huntBackground)}
-          selection={userContext.huntBackground}
-        />
-        <BGOption
-          modeLabel="TagTeam"
-          selectionLabel={capitalize(userContext.tagTeamBackground)}
-          selection={userContext.tagTeamBackground}
-        />
+        {modes.map((mode: Mode) => {
+          return (
+            <BGOption
+              modeLabel={upperFirst(Mode[upperFirst(mode)])}
+              selectionLabel={upperFirst(
+                userContext[`${Mode[upperFirst(mode)]}Background`]
+              )}
+              selection={userContext[`${Mode[upperFirst(mode)]}Background`]}
+            />
+          );
+        })}
       </ScrollView>
     </View>
   );

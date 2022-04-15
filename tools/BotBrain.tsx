@@ -117,7 +117,7 @@ export const aStarSearch = (
   }
 };
 
-function getMazeCell(X: any, Y: any, mazeGrid: any) {
+export function getMazeCell(X: any, Y: any, mazeGrid: any) {
   let digit1 = (X - 5).toString();
   let digit2 = (Y - 5).toString();
   let digits;

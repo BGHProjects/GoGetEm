@@ -1,8 +1,8 @@
-import React, { useContext, useState, useReducer } from "react";
+import React, { useContext, useState } from "react";
 import { StyleSheet, Text, View, SafeAreaView } from "react-native";
 import MenuButton from "../../components/MenuButton";
 import { Colors } from "../../constants/Colors";
-import { determineClassic, classicWinnerColour } from "./helpers";
+import { determineThreePlayer, threePlayerWinnerColour } from "./helpers";
 import { handlePostGame } from "../ExpChange/helpers/handlePostGame";
 import { UserContext } from "../../tools/UserContext";
 import * as firebase from "firebase";
@@ -15,7 +15,12 @@ const EndGame = ({ navigation, route }) => {
   const [newExp, setNewExp] = useState<number | null>(null);
 
   const stringResult: Record<string, string> = {
-    Classic: determineClassic(
+    Classic: determineThreePlayer(
+      gameDetails.player1Score,
+      gameDetails.player2Score,
+      gameDetails.player3Score
+    ),
+    Chasedown: determineThreePlayer(
       gameDetails.player1Score,
       gameDetails.player2Score,
       gameDetails.player3Score
@@ -23,7 +28,15 @@ const EndGame = ({ navigation, route }) => {
   };
 
   const scoreResult: Record<string, string[][]> = {
-    Classic: classicWinnerColour(
+    Classic: threePlayerWinnerColour(
+      gameDetails.player1Score,
+      gameDetails.player2Score,
+      gameDetails.player3Score,
+      gameDetails.colour,
+      gameDetails.player2Colour,
+      gameDetails.player3Colour
+    ),
+    Chasedown: threePlayerWinnerColour(
       gameDetails.player1Score,
       gameDetails.player2Score,
       gameDetails.player3Score,
@@ -43,12 +56,18 @@ const EndGame = ({ navigation, route }) => {
     // Maps the 'updates' entry to the firebase database call
     const firebaseUpdates: Record<string, any> = {
       TotalGames: user.update({ totalGames: userContext.totalGames + 1 }),
+      TotalWins: user.update({ totalWins: userContext.totalWins + 1 }),
       TotalClassicGames: user.update({
         totalClassicGames: userContext.totalClassicGames + 1,
       }),
-      TotalWins: user.update({ totalWins: userContext.totalWins + 1 }),
       TotalClassicWins: user.update({
         totalClassicWins: userContext.totalClassicWins + 1,
+      }),
+      TotalChasedownGames: user.update({
+        totalChasedownGames: userContext.totalChasedownGames + 1,
+      }),
+      TotalChasedownWins: user.update({
+        totalChasedownWins: userContext.totalChasedownWins + 1,
       }),
       TotalDiff1Games: user.update({
         totalDiff1Games: userContext.totalDiff1Games + 1,

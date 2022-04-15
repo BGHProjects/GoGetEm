@@ -56,7 +56,7 @@ const ExpChange = ({ navigation, route }) => {
   }, []);
 
   useEffect(() => {
-    if (nextLevelExp < details[1]) setLeveledUp(true);
+    if (nextLevelExp <= details[1]) setLeveledUp(true);
     barLength.value = withDelay(
       500,
       withTiming(endBarLength, { duration: progressBarDuration })
