@@ -15,6 +15,7 @@ const BackgroundOptions = () => {
         {modes.map((mode: Mode) => {
           return (
             <BGOption
+              key={mode}
               modeLabel={upperFirst(Mode[upperFirst(mode)])}
               selectionLabel={upperFirst(
                 userContext[`${Mode[upperFirst(mode)]}Background`]

@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import { StyleSheet, View, SafeAreaView, Dimensions } from "react-native";
 import MenuButton from "../../../components/MenuButton";
 import { Colors } from "../../../constants/Colors";
-import PlayerRepresentation from "./components/PlayerRepresentation";
-import Arrow from "./components/Arrow";
-import GameInfo from "./components/GameInfo";
+import PlayerRepresentation from "../../../components/RolesScreen/PlayerRepresentation";
+import Arrow from "../../../components/RolesScreen/Arrow";
+import GameInfo from "../../../components/RolesScreen/GameInfo";
 
 const width = Dimensions.get("window").width;
 const contentSize = 200;
@@ -63,13 +63,11 @@ const ClassicRolesScreen = ({ navigation, route }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      {!totalDetails.gameOver && (
-        <GameInfo
-          difficulty={totalDetails.difficulty}
-          rounds={totalDetails.rounds}
-          currentRound={totalDetails.currentRound}
-        />
-      )}
+      <GameInfo
+        difficulty={totalDetails.difficulty}
+        rounds={totalDetails.rounds}
+        currentRound={totalDetails.currentRound}
+      />
       <View style={styles.contentContainer}>
         {/*  Top Row Container */}
         <View style={styles.contentRowContainer}>
@@ -97,9 +95,6 @@ const ClassicRolesScreen = ({ navigation, route }) => {
           <Arrow
             rotation={30}
             delay={animationDelays["leftArrow"]}
-            animated
-            pulsateDuration={pulsateDuration}
-            pulsateDelay={animationDelays["rightArrow"]} // Right Arrow is the last animation
             animationDuration={animationDuration}
           />
           <Arrow
@@ -123,9 +118,6 @@ const ClassicRolesScreen = ({ navigation, route }) => {
             showFlag={totalDetails.flag === "gameplay" ? true : false}
             score={leftScore}
             delay={animationDelays["leftPlayer"]}
-            whichAnimation="left"
-            pulsateDuration={pulsateDuration}
-            pulsateDelay={animationDelays["rightArrow"]} // Right Arrow is the last animation
             animationDuration={animationDuration}
           />
 
@@ -145,13 +137,11 @@ const ClassicRolesScreen = ({ navigation, route }) => {
         </View>
       </View>
 
-      {!totalDetails.gameOver && (
-        <MenuButton
-          text={totalDetails.currentRound === 1 ? "Begin" : "Start Round"}
-          shadowColour="red"
-          operation={() => onPressSubmit()}
-        />
-      )}
+      <MenuButton
+        text={totalDetails.currentRound === 1 ? "Begin" : "Start Round"}
+        shadowColour="red"
+        operation={() => onPressSubmit()}
+      />
     </SafeAreaView>
   );
 };

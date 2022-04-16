@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { StyleSheet, Text, View, SafeAreaView, Dimensions } from "react-native";
+import { StyleSheet, Text, View, Dimensions } from "react-native";
 import { Svg, Circle } from "react-native-svg";
 import {
   generateCells,
@@ -21,7 +21,7 @@ let mazeGrid: any = [];
 const wallWidth = 1;
 const gridSquareLength = 10;
 const stack: any = [];
-let gridColor = "white";
+const gridColor = "white";
 let searchGrid1: any = [];
 let searchPath1: any = [];
 let player1Score: any;
@@ -169,8 +169,10 @@ const HuntGameplay = ({ navigation, route }) => {
       gameDetails.currentRound++;
       if (gameDetails.currentRound > gameDetails.rounds) {
         gameDetails.gameOver = true;
+        navigation.navigate("End Game", gameDetails);
+      } else {
+        navigation.navigate("Hunt Roles", gameDetails);
       }
-      navigation.navigate("Hunt Roles", gameDetails);
     }
   }, [roundOver]);
 
@@ -282,11 +284,6 @@ const HuntGameplay = ({ navigation, route }) => {
 };
 
 const styles = StyleSheet.create({
-  titleLabel: {
-    fontSize: 40,
-    color: "white",
-    marginTop: height / 12,
-  },
   mazeContainer: {
     marginTop: height / 32,
     width: mazeSideLength,

@@ -7,29 +7,33 @@ import Animated, {
   withRepeat,
   withDelay,
 } from "react-native-reanimated";
+import { useIsFocused } from "@react-navigation/native";
 
 interface PlayerRepresentationProps {
   colour: string;
   showFlag: boolean;
-  score: number;
+  score?: number | null;
   whichAnimation?: string;
   delay: number;
   pulsateDelay?: number;
   pulsateDuration?: number;
   animationDuration: number;
+  scoreTextRotation?: number;
 }
 
 const PlayerRepresentation = ({
   colour,
   showFlag,
-  score,
+  score = null,
   whichAnimation,
   delay,
   pulsateDelay = 0,
   pulsateDuration = 0,
   animationDuration,
+  scoreTextRotation = 0,
 }: PlayerRepresentationProps) => {
   const fade = useSharedValue(0); // Handles how the component initially fades in
+  const isFocused = useIsFocused();
 
   const fadeIn = useAnimatedStyle(() => {
     return {
@@ -38,6 +42,7 @@ const PlayerRepresentation = ({
   }, []);
 
   const animationOptions: Record<string, any> = {
+    // Used for Classic
     top: withDelay(
       pulsateDelay,
       withRepeat(withTiming(0, { duration: pulsateDuration }), -1, true)
@@ -46,18 +51,27 @@ const PlayerRepresentation = ({
       pulsateDelay + pulsateDuration,
       withRepeat(withTiming(0, { duration: pulsateDuration }), -1, true)
     ),
+    // Used for Chasedown
+    target: withDelay(
+      pulsateDelay + 500,
+      withRepeat(withTiming(0, { duration: pulsateDuration }), -1, true)
+    ),
   };
 
   // Runs both of the animations
   useEffect(() => {
-    fade.value = withDelay(
-      delay,
-      withTiming(1, { duration: animationDuration })
-    );
-    if (whichAnimation !== undefined) {
-      fade.value = animationOptions[whichAnimation];
+    if (isFocused) {
+      fade.value = withDelay(
+        delay,
+        withTiming(1, { duration: animationDuration })
+      );
+      if (whichAnimation !== undefined) {
+        fade.value = animationOptions[whichAnimation];
+      }
+    } else {
+      fade.value = 0;
     }
-  }, []);
+  }, [isFocused]);
 
   return (
     <Animated.View
@@ -67,7 +81,16 @@ const PlayerRepresentation = ({
         fadeIn,
       ]}
     >
-      {showFlag && <Text style={styles.scoreText}>{score}</Text>}
+      {showFlag && score !== null && (
+        <Text
+          style={[
+            styles.scoreText,
+            { transform: [{ rotate: `${scoreTextRotation}deg` }] },
+          ]}
+        >
+          {score}
+        </Text>
+      )}
     </Animated.View>
   );
 };

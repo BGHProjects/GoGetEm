@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { StyleSheet, Text, View, SafeAreaView, Dimensions } from "react-native";
+import { StyleSheet, Text, View, Dimensions } from "react-native";
 import { Svg, Circle } from "react-native-svg";
 import {
   generateCells,
@@ -464,19 +464,19 @@ const ChasedownGameplayScreen = ({ navigation, route }) => {
               cy={player3Y}
               r={playerSize.toString()}
               fill={`${gameDetails.player3Colour}`}
-            ></Circle>
+            />
             <Circle
               cx={player2X}
               cy={player2Y}
               r={playerSize.toString()}
               fill={`${gameDetails.player2Colour}`}
-            ></Circle>
+            />
             <Circle
               cx={playerX}
               cy={playerY}
               r={playerSize.toString()}
               fill={`${gameDetails.colour}`}
-            ></Circle>
+            />
           </Svg>
         </View>
         <Controller
@@ -491,11 +491,6 @@ const ChasedownGameplayScreen = ({ navigation, route }) => {
 };
 
 const styles = StyleSheet.create({
-  titleLabel: {
-    fontSize: 40,
-    color: "white",
-    marginTop: height / 12,
-  },
   mazeContainer: {
     marginTop: height / 32,
     width: mazeSideLength,

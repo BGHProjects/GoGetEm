@@ -1,5 +1,18 @@
 import { Result } from "../../constants/types";
-import { threePlayerResult } from "../../tools/determineResult";
+import {
+  threePlayerResult,
+  twoPlayerResult,
+} from "../../tools/determineResult";
+
+const resultOption: Record<Result, string> = {
+  [Result.Win]: "You Win",
+  [Result.Tie]: "Tie",
+  [Result.Lose]: "You Lose",
+};
+
+// Sorts scores so that the highest is the first in the array
+const sortScores = (scores: Array<any>) =>
+  scores.sort((a, b) => a[0] - b[0]).reverse();
 
 export const determineThreePlayer = (
   p1Score: number,
@@ -7,13 +20,11 @@ export const determineThreePlayer = (
   p3Score: number
 ) => {
   const result = threePlayerResult(p1Score, p2Score, p3Score);
+  return resultOption[result];
+};
 
-  const resultOption: Record<Result, string> = {
-    [Result.Win]: "You Win",
-    [Result.Tie]: "Tie",
-    [Result.Lose]: "Lose",
-  };
-
+export const determineTwoPlayer = (p1Score: number, p2Score: number) => {
+  const result = twoPlayerResult(p1Score, p2Score);
   return resultOption[result];
 };
 
@@ -30,7 +41,19 @@ export const threePlayerWinnerColour = (
     [p2Score, p2Colour],
     [p3Score, p3Colour],
   ];
-  scores.sort((a, b) => a[0] - b[0]).reverse();
 
-  return scores;
+  return sortScores(scores);
+};
+
+export const twoPlayerWinnerColour = (
+  p1Score: number,
+  p2Score: number,
+  p1Colour: string,
+  p2Colour: string
+) => {
+  const scores = [
+    [p1Score, p1Colour],
+    [p2Score, p2Colour],
+  ];
+  return sortScores(scores);
 };

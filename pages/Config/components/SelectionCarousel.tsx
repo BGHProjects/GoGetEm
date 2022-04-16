@@ -36,7 +36,7 @@ const SelectionCarousel = ({
           layout={"default"}
           inactiveSlideOpacity={0.5}
           activeAnimationType={"spring"}
-          firstItem={Math.floor(values.length / 2)}
+          firstItem={0}
           enableMomentum={false}
         />
         <Divider mt="10" w="80%" alignSelf="center" />

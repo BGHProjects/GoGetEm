@@ -2,7 +2,12 @@ import React, { useContext, useState } from "react";
 import { StyleSheet, Text, View, SafeAreaView } from "react-native";
 import MenuButton from "../../components/MenuButton";
 import { Colors } from "../../constants/Colors";
-import { determineThreePlayer, threePlayerWinnerColour } from "./helpers";
+import {
+  determineThreePlayer,
+  threePlayerWinnerColour,
+  determineTwoPlayer,
+  twoPlayerWinnerColour,
+} from "./helpers";
 import { handlePostGame } from "../ExpChange/helpers/handlePostGame";
 import { UserContext } from "../../tools/UserContext";
 import * as firebase from "firebase";
@@ -25,6 +30,10 @@ const EndGame = ({ navigation, route }) => {
       gameDetails.player2Score,
       gameDetails.player3Score
     ),
+    Hunt: determineTwoPlayer(
+      gameDetails.player1Score,
+      gameDetails.player2Score
+    ),
   };
 
   const scoreResult: Record<string, string[][]> = {
@@ -43,6 +52,12 @@ const EndGame = ({ navigation, route }) => {
       gameDetails.colour,
       gameDetails.player2Colour,
       gameDetails.player3Colour
+    ),
+    Hunt: twoPlayerWinnerColour(
+      gameDetails.player1Score,
+      gameDetails.player2Score,
+      gameDetails.colour,
+      gameDetails.player2Colour
     ),
   };
 
@@ -68,6 +83,12 @@ const EndGame = ({ navigation, route }) => {
       }),
       TotalChasedownWins: user.update({
         totalChasedownWins: userContext.totalChasedownWins + 1,
+      }),
+      TotalHuntGames: user.update({
+        totalHuntGames: userContext.totalHuntGames + 1,
+      }),
+      TotalHuntWins: user.update({
+        totalHuntWins: userContext.totalHuntWins + 1,
       }),
       TotalDiff1Games: user.update({
         totalDiff1Games: userContext.totalDiff1Games + 1,

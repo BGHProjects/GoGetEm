@@ -7,6 +7,7 @@ import Animated, {
   withDelay,
   withRepeat,
 } from "react-native-reanimated";
+import { useIsFocused } from "@react-navigation/native";
 
 interface ArrowProps {
   rotation: number;
@@ -26,6 +27,7 @@ const Arrow = ({
   animationDuration,
 }: ArrowProps) => {
   const fade = useSharedValue(0);
+  const isFocused = useIsFocused();
 
   const reanimatedStyle = useAnimatedStyle(() => {
     return {
@@ -34,17 +36,21 @@ const Arrow = ({
   }, []);
 
   useEffect(() => {
-    fade.value = withDelay(
-      delay,
-      withTiming(1, { duration: animationDuration })
-    );
-    if (animated) {
+    if (isFocused) {
       fade.value = withDelay(
-        pulsateDelay + pulsateDuration / 2,
-        withRepeat(withTiming(0, { duration: pulsateDuration }), -1, true)
+        delay,
+        withTiming(1, { duration: animationDuration })
       );
+      if (animated) {
+        fade.value = withDelay(
+          pulsateDelay + pulsateDuration / 2,
+          withRepeat(withTiming(0, { duration: pulsateDuration }), -1, true)
+        );
+      }
+    } else {
+      fade.value = 0;
     }
-  }, []);
+  }, [isFocused]);
 
   return (
     <Animated.View style={reanimatedStyle}>
