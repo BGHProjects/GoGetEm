@@ -20,7 +20,6 @@ import {
 import TitleText from "../../components/TitleText";
 
 const width = Dimensions.get("window").width;
-const height = Dimensions.get("window").height;
 
 const ConfigScreen = ({ navigation, route }) => {
   const whichMode = route.params;

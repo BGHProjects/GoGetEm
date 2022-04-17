@@ -2,7 +2,7 @@ import { Colors } from "../../constants/Colors";
 
 export const colourValues = [
   Colors.red,
-  Colors.yellow,
+  Colors.gold,
   Colors.blue,
   Colors.green,
   Colors.orange,

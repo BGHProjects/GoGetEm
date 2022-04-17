@@ -1,13 +1,20 @@
 import React from "react";
-import { StyleSheet, Text, View, SafeAreaView, Dimensions } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
+import { convertTime } from "./helpers";
 
 interface GameInfoProps {
   rounds: string;
   difficulty: string;
   currentRound: number;
+  timeLimit?: number;
 }
 
-const GameInfo = ({ rounds, difficulty, currentRound }: GameInfoProps) => {
+const GameInfo = ({
+  rounds,
+  difficulty,
+  currentRound,
+  timeLimit,
+}: GameInfoProps) => {
   return (
     <View style={styles.container}>
       <View style={styles.labelColumn}>
@@ -15,12 +22,16 @@ const GameInfo = ({ rounds, difficulty, currentRound }: GameInfoProps) => {
           {currentRound === 1 ? "Rounds" : "Round"}
         </Text>
         <Text style={styles.detailsLabel}>Difficulty</Text>
+        {timeLimit && <Text style={styles.detailsLabel}>Time Limit</Text>}
       </View>
       <View style={styles.valueColumn}>
         <Text style={styles.detailsLabel}>
           {currentRound === 1 ? rounds : currentRound + "/" + rounds}
         </Text>
         <Text style={styles.detailsLabel}>{difficulty}</Text>
+        {timeLimit && (
+          <Text style={styles.detailsLabel}>{convertTime(timeLimit)}</Text>
+        )}
       </View>
     </View>
   );

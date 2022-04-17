@@ -45,15 +45,28 @@ export const threePlayerWinnerColour = (
   return sortScores(scores);
 };
 
+// Also handles TagTeam
 export const twoPlayerWinnerColour = (
   p1Score: number,
   p2Score: number,
-  p1Colour: string,
-  p2Colour: string
+  p1Colour?: string,
+  p2Colour?: string,
+  team1?: string[],
+  team2?: string[]
 ) => {
-  const scores = [
-    [p1Score, p1Colour],
-    [p2Score, p2Colour],
-  ];
+  let scores;
+
+  if (team1 && team2) {
+    scores = [
+      [p1Score, [team1]],
+      [p2Score, [team2]],
+    ];
+  } else {
+    scores = [
+      [p1Score, p1Colour],
+      [p2Score, p2Colour],
+    ];
+  }
+
   return sortScores(scores);
 };

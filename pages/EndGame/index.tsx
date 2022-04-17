@@ -34,6 +34,7 @@ const EndGame = ({ navigation, route }) => {
       gameDetails.player1Score,
       gameDetails.player2Score
     ),
+    TagTeam: determineTwoPlayer(gameDetails.team1Score, gameDetails.team2Score),
   };
 
   const scoreResult: Record<string, string[][]> = {
@@ -58,6 +59,12 @@ const EndGame = ({ navigation, route }) => {
       gameDetails.player2Score,
       gameDetails.colour,
       gameDetails.player2Colour
+    ),
+    TagTeam: twoPlayerWinnerColour(
+      gameDetails.team1Score,
+      gameDetails.team2Score,
+      gameDetails.team1,
+      gameDetails.team2
     ),
   };
 
@@ -89,6 +96,12 @@ const EndGame = ({ navigation, route }) => {
       }),
       TotalHuntWins: user.update({
         totalHuntWins: userContext.totalHuntWins + 1,
+      }),
+      TotalTagTeamGames: user.update({
+        totalTagTeamGames: userContext.totalTagTeamGames + 1,
+      }),
+      TotalTagTeamWins: user.update({
+        totalTagTeamWins: userContext.totalTagTeamWins + 1,
       }),
       TotalDiff1Games: user.update({
         totalDiff1Games: userContext.totalDiff1Games + 1,
@@ -145,21 +158,52 @@ const EndGame = ({ navigation, route }) => {
             styles.optionContainer,
             {
               borderColor:
-                player[1] === gameDetails.colour
+                player[1] === gameDetails.colour ||
+                player[1][0] === gameDetails.colour
                   ? Colors.yellow
                   : Colors.fluroBlue,
             },
           ]}
         >
-          <View
-            style={[
-              styles.playerRepresentation,
-              {
-                backgroundColor: player[1],
-              },
-            ]}
-          />
-          <Text style={styles.scoreLabel}>{player[0]}</Text>
+          {/**
+           * If its an array, display both members of the team
+           */}
+          {Array.isArray(player[1]) ? (
+            <>
+              <View style={styles.playerRow}>
+                <View
+                  style={[
+                    styles.playerRepresentation,
+                    {
+                      backgroundColor: player[1][0],
+                    },
+                  ]}
+                />
+                <View
+                  style={[
+                    styles.playerRepresentation,
+                    {
+                      backgroundColor: player[1][1],
+                    },
+                  ]}
+                />
+              </View>
+
+              <Text style={styles.scoreLabel}>{player[0]}</Text>
+            </>
+          ) : (
+            <>
+              <View
+                style={[
+                  styles.playerRepresentation,
+                  {
+                    backgroundColor: player[1],
+                  },
+                ]}
+              />
+              <Text style={styles.scoreLabel}>{player[0]}</Text>
+            </>
+          )}
         </View>
       ))}
 
@@ -173,6 +217,11 @@ const EndGame = ({ navigation, route }) => {
 };
 
 const styles = StyleSheet.create({
+  playerRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: 90,
+  },
   container: {
     flex: 1,
     backgroundColor: Colors.primaryBackground,

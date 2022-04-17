@@ -44,6 +44,7 @@ const HuntRoles = ({ navigation, route }) => {
         difficulty={totalDetails.difficulty}
         rounds={totalDetails.rounds}
         currentRound={totalDetails.currentRound}
+        timeLimit={totalDetails.timeLimit}
       />
       <View style={styles.contentContainer}>
         <View
@@ -65,7 +66,7 @@ const HuntRoles = ({ navigation, route }) => {
             colour={totalDetails.colour}
             showFlag={totalDetails.flag === "gameplay" ? true : false}
             score={totalDetails.player1Score}
-            scoreTextRotation={-45}
+            rotation={-45}
             delay={animationDelays["chasers"]}
             pulsateDelay={animationDelays["target"]} // Target is the last animation
             pulsateDuration={pulsateDuration}
@@ -104,7 +105,7 @@ const HuntRoles = ({ navigation, route }) => {
             colour={totalDetails.player2Colour}
             showFlag={totalDetails.flag === "gameplay" ? true : false}
             score={totalDetails.player2Score}
-            scoreTextRotation={-45}
+            rotation={-45}
             delay={animationDelays["chasers"]}
             animationDuration={animationDuration}
           />

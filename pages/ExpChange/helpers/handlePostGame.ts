@@ -1,7 +1,11 @@
 import { handlePostGameDifficulty } from "./handlePostGameDifficulty";
-import { threePlayerResult } from "../../../tools/determineResult";
+import {
+  threePlayerResult,
+  twoPlayerResult,
+} from "../../../tools/determineResult";
 import { Result } from "../../../constants/types";
 import { loseIncrement, winIncrement } from "../../../constants/Exp";
+import { handleTimeLimit } from "./handleTimeLimit";
 
 /**
  * Decides what updates to the user's experience and statistics are required following the aftermath of the game
@@ -30,6 +34,8 @@ export const handlePostGame = (currentExp: number, gameDetails: any) => {
       gameDetails.player2Score,
       gameDetails.player3Score
     ),
+    Hunt: twoPlayerResult(gameDetails.player1Score, gameDetails.player2Score),
+    TagTeam: twoPlayerResult(gameDetails.team1Score, gameDetails.team2Score),
   };
 
   // Determine if player won
@@ -58,6 +64,8 @@ export const handlePostGame = (currentExp: number, gameDetails: any) => {
 
   // Handle remaining exp/level calculations
   increment *= gameDetails.rounds;
+  if (gameDetails.timeLimit)
+    increment = handleTimeLimit(increment, gameDetails.timeLimit);
   newExp = currentExp + increment;
 
   // Update exp

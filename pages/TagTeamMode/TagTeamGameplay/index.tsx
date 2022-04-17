@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { StyleSheet, Text, View, SafeAreaView, Dimensions } from "react-native";
+import { StyleSheet, View, Dimensions } from "react-native";
 import { Svg, Circle } from "react-native-svg";
 import {
   generateCells,
@@ -31,7 +31,7 @@ let searchGrid2: any = [];
 let searchPath2: any = [];
 let team1Score: any;
 let team2Score: any;
-let playerSize = 3;
+let playerSize = 4;
 
 const TagTeamGameplay = ({ navigation, route }) => {
   const userContext = useContext(UserContext);
@@ -517,8 +517,10 @@ const TagTeamGameplay = ({ navigation, route }) => {
 
       if (gameDetails.currentRound > gameDetails.rounds) {
         gameDetails.gameOver = true;
+        navigation.navigate("End Game", gameDetails);
+      } else {
+        navigation.navigate("TagTeam Roles", gameDetails);
       }
-      navigation.navigate("TagTeam Roles", gameDetails);
     }
   }, [roundOver]);
 
@@ -546,52 +548,6 @@ const TagTeamGameplay = ({ navigation, route }) => {
           ))}
 
           <Svg height="100%" width="100%" viewBox="0 0 100 100">
-            {(gameDetails.currentRound === 3 ||
-              gameDetails.currentRound === 4 ||
-              gameDetails.currentRound === 7) && (
-              <Circle
-                cx={playerX}
-                cy={playerY}
-                r={(playerSize + 1).toString()}
-                fill={"white"}
-              />
-            )}
-
-            {(gameDetails.currentRound === 1 ||
-              gameDetails.currentRound === 2 ||
-              gameDetails.currentRound === 5 ||
-              gameDetails.currentRound === 6) && (
-              <Circle
-                cx={player2X}
-                cy={player2Y}
-                r={(playerSize + 1).toString()}
-                fill={"white"}
-              />
-            )}
-
-            {(gameDetails.currentRound === 1 ||
-              gameDetails.currentRound === 4 ||
-              gameDetails.currentRound === 5) && (
-              <Circle
-                cx={player3X}
-                cy={player3Y}
-                r={(playerSize + 1).toString()}
-                fill={"white"}
-              />
-            )}
-
-            {(gameDetails.currentRound === 2 ||
-              gameDetails.currentRound === 3 ||
-              gameDetails.currentRound === 6 ||
-              gameDetails.currentRound === 7) && (
-              <Circle
-                cx={player4X}
-                cy={player4Y}
-                r={(playerSize + 1).toString()}
-                fill={"white"}
-              />
-            )}
-
             <Circle
               cx={playerX}
               cy={playerY}

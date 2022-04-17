@@ -8,17 +8,19 @@ import Animated, {
   withDelay,
 } from "react-native-reanimated";
 import { useIsFocused } from "@react-navigation/native";
+import { AutoSizeText, ResizeTextMode } from "react-native-auto-size-text";
+import { Colors } from "../../constants/Colors";
 
 interface PlayerRepresentationProps {
   colour: string;
-  showFlag: boolean;
+  showFlag?: boolean;
   score?: number | null;
   whichAnimation?: string;
   delay: number;
   pulsateDelay?: number;
   pulsateDuration?: number;
   animationDuration: number;
-  scoreTextRotation?: number;
+  rotation?: number;
 }
 
 const PlayerRepresentation = ({
@@ -30,7 +32,7 @@ const PlayerRepresentation = ({
   pulsateDelay = 0,
   pulsateDuration = 0,
   animationDuration,
-  scoreTextRotation = 0,
+  rotation = 0,
 }: PlayerRepresentationProps) => {
   const fade = useSharedValue(0); // Handles how the component initially fades in
   const isFocused = useIsFocused();
@@ -77,19 +79,20 @@ const PlayerRepresentation = ({
     <Animated.View
       style={[
         { backgroundColor: `${colour}` },
+        { transform: [{ rotate: `${rotation}deg` }] },
         styles.playerRepresentation,
         fadeIn,
       ]}
     >
       {showFlag && score !== null && (
-        <Text
-          style={[
-            styles.scoreText,
-            { transform: [{ rotate: `${scoreTextRotation}deg` }] },
-          ]}
+        <AutoSizeText
+          fontSize={30}
+          numberOfLines={1}
+          mode={ResizeTextMode.max_lines}
+          style={styles.scoreText}
         >
           {score}
-        </Text>
+        </AutoSizeText>
       )}
     </Animated.View>
   );
@@ -101,11 +104,17 @@ const styles = StyleSheet.create({
     width: 50,
     borderRadius: 90,
     justifyContent: "center",
+    alignItems: "center",
   },
   scoreText: {
+    fontFamily: "Main-Bold",
     fontSize: 30,
-    color: "black",
+    color: Colors.white,
     alignSelf: "center",
+    marginTop: -5,
+    textShadowColor: "black",
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 2,
   },
 });
 

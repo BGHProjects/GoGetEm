@@ -1,23 +1,14 @@
-import React, { useEffect, useContext, useReducer } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  SafeAreaView,
-  TouchableOpacity,
-  Dimensions,
-} from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import { UserContext, userReducer } from "../../../tools/UserContext";
-import * as firebase from "firebase";
-import { calcExpToNextLevel } from "../../../tools/calcNextLevelExp";
+import React from "react";
+import { StyleSheet, View, SafeAreaView } from "react-native";
+import { Colors } from "../../../constants/Colors";
+import GameInfo from "../../../components/RolesScreen/GameInfo";
+import MenuButton from "../../../components/MenuButton";
+import PlayerRepresentation from "../../../components/RolesScreen/PlayerRepresentation";
+import Arrow from "../../../components/RolesScreen/Arrow";
 
-const width = Dimensions.get("window").width;
-const height = Dimensions.get("window").height;
+const contentSize = 200;
 
 const TagTeamRoles = ({ navigation, route }) => {
-  const userContext = useContext(UserContext);
-  const [state, dispatch] = useReducer(userReducer, userContext);
   const configDetails = route.params;
   let scoreDetails;
 
@@ -36,312 +27,144 @@ const TagTeamRoles = ({ navigation, route }) => {
     navigation.navigate("TagTeam Gameplay", totalDetails);
   };
 
-  useEffect(() => {
-    if (totalDetails.gameOver) {
-      let increment = 0;
-      let baseX = 100;
-      let exponent = 1.05;
-      let currentExp = userContext.totalExp;
-      let newExp = 0;
-      let user = firebase.database().ref("users/" + userContext.username);
-      let win = false;
+  // Animation delays
+  const animationDelay = 500;
+  const animationDuration = 500;
+  const pulsateDuration = 750;
 
-      // Update games played
-      user.update({
-        totalGames: userContext.totalGames + 1,
-      });
-      dispatch({ type: "increaseGames", payload: 1 });
-      user.update({
-        totalTagTeamGames: userContext.totalTagTeamGames + 1,
-      });
-      dispatch({ type: "increaseTagTeamGames", payload: 1 });
-
-      // Determine if player won
-      if (configDetails.team1Score > configDetails.team2Score) {
-        win = true;
-      }
-
-      // Increase wins if applicable and set increment
-      if (win) {
-        increment = 10;
-        user.update({
-          totalWins: userContext.totalWins + 1,
-        });
-        dispatch({ type: "increaseWins", payload: 1 });
-
-        user.update({
-          totalTagTeamWins: userContext.totalTagTeamWins + 1,
-        });
-        dispatch({ type: "increaseTagTeamWins", payload: 1 });
-      } else {
-        increment = 3;
-      }
-
-      // Increase Difficulty Played/Wins
-      switch (configDetails.difficulty) {
-        case "Meh":
-          user.update({
-            totalDiff1Games: userContext.totalDiff1Games + 1,
-          });
-          dispatch({ type: "increaseDiff1Games", payload: 1 });
-          if (win) {
-            user.update({
-              totalDiff1Wins: userContext.totalDiff1Wins + 1,
-            });
-            dispatch({ type: "increaseDiff1Wins", payload: 1 });
-          }
-          break;
-        case "Oh OK":
-          increment *= 2;
-          user.update({
-            totalDiff2Games: userContext.totalDiff2Games + 1,
-          });
-          dispatch({ type: "increaseDiff2Games", payload: 1 });
-          if (win) {
-            user.update({
-              totalDiff2Wins: userContext.totalDiff2Wins + 1,
-            });
-            dispatch({ type: "increaseDiff2Wins", payload: 1 });
-          }
-          break;
-        case "Hang On":
-          increment *= 3;
-          user.update({
-            totalDiff3Games: userContext.totalDiff3Games + 1,
-          });
-          dispatch({ type: "increaseDiff3Games", payload: 1 });
-          if (win) {
-            user.update({
-              totalDiff3Wins: userContext.totalDiff3Wins + 1,
-            });
-            dispatch({ type: "increaseDiff3Wins", payload: 1 });
-          }
-          break;
-        case "What The":
-          increment *= 4;
-          user.update({
-            totalDiff4Games: userContext.totalDiff4Games + 1,
-          });
-          dispatch({ type: "increaseDiff4Games", payload: 1 });
-          if (win) {
-            user.update({
-              totalDiff4Wins: userContext.totalDiff4Wins + 1,
-            });
-            dispatch({ type: "increaseDiff4Wins", payload: 1 });
-          }
-          break;
-        default:
-          break;
-      }
-
-      // Handle remaining exp/level calculations
-      increment *= configDetails.rounds;
-      newExp = currentExp + increment;
-
-      // Handle how many times the user levelled up
-      /**
-       * Flow of function
-       *    Calculate total exp required for level after user's current level
-       *        If user's new exp is greater than this total:
-       *            increase user's level
-       *            Repeat step 1, with an incremented level
-       *        Else:
-       *            break out of loop
-       */
-
-      // const identifyNewLevel = (levelToCheck: number) => {
-      //   const nextLevelExp = calcExpToNextLevel(levelToCheck);
-      //   if (nextLevelExp < newExp) {
-      //     user.update({
-      //       level: userContext.level + 1,
-      //     });
-      //     dispatch({ type: "increaseLevel", payload: 1 });
-      //     identifyNewLevel(levelToCheck + 1);
-      //   }
-      // };
-
-      // identifyNewLevel(userContext.level + 1);
-
-      // Update exp
-      user.update({
-        totalExp: userContext.totalExp + increment,
-      });
-      dispatch({ type: "increaseExp", payload: increment });
-
-      setTimeout(() => {
-        navigation.navigate("Game Modes");
-      }, 3000);
-    }
-  }, [configDetails]);
+  const animationDelays = {
+    chasers: animationDelay,
+    arrows: animationDelay * 2,
+    targets: animationDelay * 3,
+    scores: animationDelay * 4,
+  };
 
   return (
     <SafeAreaView style={styles.container}>
-      {/**Score indicators */}
-      {totalDetails.flag === "gameplay" && (
-        <View
-          style={{
-            flexDirection: "row",
-            alignSelf: "center",
-            justifyContent: "space-evenly",
-            width: "80%",
-          }}
-        >
-          <View
-            style={{
-              ...styles.playerRepresentation,
-              backgroundColor: `white`,
-            }}
-          >
-            <Text style={styles.scoreText}>{configDetails.team1Score}</Text>
-          </View>
-          {/**This is a cheap hack to make sure the scores align with the teams */}
-          <Ionicons name="arrow-forward" size={40} color={"black"} />
-          <View
-            style={{
-              ...styles.playerRepresentation,
-              backgroundColor: `white`,
-            }}
-          >
-            <Text style={styles.scoreText}>{configDetails.team2Score}</Text>
-          </View>
+      <GameInfo
+        difficulty={totalDetails.difficulty}
+        rounds={totalDetails.rounds}
+        currentRound={totalDetails.currentRound}
+      />
+      <View style={styles.contentContainer}>
+        {/**Score indicators */}
+        <View style={styles.indicatorRow}>
+          <PlayerRepresentation
+            colour={"transparent"}
+            showFlag
+            score={totalDetails.team1Score}
+            delay={animationDelays["scores"]}
+            animationDuration={animationDuration}
+          />
+          <PlayerRepresentation
+            colour={"transparent"}
+            showFlag
+            score={totalDetails.team2Score}
+            delay={animationDelays["scores"]}
+            animationDuration={animationDuration}
+          />
         </View>
-      )}
 
-      {/**First row of indicators */}
-      <View
-        style={{
-          flexDirection: "row",
-          alignSelf: "center",
-          justifyContent: "space-evenly",
-          width: "80%",
-        }}
-      >
-        <View
-          style={{
-            ...styles.playerRepresentation,
-            backgroundColor: `${
+        {/**First row of indicators */}
+
+        <View style={styles.indicatorRow}>
+          <PlayerRepresentation
+            colour={`${
               configDetails.team1Target === configDetails.player2Colour
                 ? configDetails.colour
                 : configDetails.player2Colour
-            }`,
-            height: 50,
-            width: 50,
-          }}
-        />
-        <Ionicons name="arrow-forward" size={40} color={"white"} />
+            }`}
+            delay={animationDelays["chasers"]}
+            animationDuration={animationDuration}
+            pulsateDelay={animationDelays["scores"]}
+            pulsateDuration={pulsateDuration}
+            whichAnimation={
+              configDetails.team1Target === configDetails.player2Colour
+                ? "target"
+                : undefined
+            }
+          />
+          <Arrow
+            rotation={270}
+            delay={animationDelays["arrows"]}
+            animationDuration={animationDuration}
+          />
 
-        <View
-          style={{
-            ...styles.playerRepresentation,
-            backgroundColor: `${
+          <PlayerRepresentation
+            colour={`${
               configDetails.team2Target === configDetails.player3Colour
                 ? configDetails.player3Colour
                 : configDetails.player4Colour
-            }`,
-            borderWidth: 5,
-            borderColor: "white",
-            height: 60,
-            width: 60,
-          }}
-        />
-      </View>
+            }`}
+            delay={animationDelays["targets"]}
+            animationDuration={animationDuration}
+          />
+        </View>
 
-      {/**Second row of indicators */}
-      <View
-        style={{
-          flexDirection: "row",
-          alignSelf: "center",
-          justifyContent: "space-evenly",
-          width: "80%",
-        }}
-      >
-        <View
-          style={{
-            ...styles.playerRepresentation,
-            backgroundColor: `${
+        {/**Second row of indicators */}
+        <View style={styles.indicatorRow}>
+          <PlayerRepresentation
+            colour={`${
               configDetails.team1Target === configDetails.player2Colour
                 ? configDetails.player2Colour
                 : configDetails.colour
-            }`,
-            borderWidth: 5,
-            borderColor: "white",
-            height: 60,
-            width: 60,
-          }}
-        />
-        <Ionicons name="arrow-back" size={40} color={"white"} />
-        <View
-          style={{
-            ...styles.playerRepresentation,
-            backgroundColor: `${
+            }`}
+            delay={animationDelays["targets"]}
+            animationDuration={animationDuration}
+            pulsateDelay={animationDelays["scores"]}
+            pulsateDuration={pulsateDuration}
+            whichAnimation={
+              configDetails.team1Target === configDetails.colour
+                ? "target"
+                : undefined
+            }
+          />
+          <Arrow
+            rotation={90}
+            delay={animationDelays["arrows"]}
+            animationDuration={animationDuration}
+          />
+          <PlayerRepresentation
+            colour={`${
               configDetails.team2Target === configDetails.player3Colour
                 ? configDetails.player4Colour
                 : configDetails.player3Colour
-            }`,
-            height: 50,
-            width: 50,
-          }}
-        />
+            }`}
+            delay={animationDelays["chasers"]}
+            animationDuration={animationDuration}
+          />
+        </View>
       </View>
 
-      {!totalDetails.gameOver ? (
-        <View style={styles.beginButton}>
-          <TouchableOpacity onPress={() => onPressSubmit()}>
-            <Text style={styles.beginButtonLabel}>{`Start\nRound`}</Text>
-          </TouchableOpacity>
-        </View>
-      ) : (
-        <View style={styles.noBeginButton} />
-      )}
+      <MenuButton
+        text={totalDetails.currentRound === 1 ? "Begin" : "Start Round"}
+        shadowColour="red"
+        operation={() => onPressSubmit()}
+      />
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  titleLabel: {
-    fontSize: 40,
-    color: "white",
-    marginTop: height / 12,
-  },
-  beginButton: {
-    backgroundColor: "red",
-    width: width / 1.5,
-    borderRadius: 10,
+  contentContainer: {
+    height: contentSize,
+    width: contentSize,
     alignItems: "center",
-    marginTop: 100,
-  },
-  noBeginButton: {
-    backgroundColor: "black",
-    width: width / 1.5,
-    borderRadius: 10,
-    alignItems: "center",
-    marginTop: 100,
-    paddingVertical: 10,
-  },
-  beginButtonLabel: {
-    color: "white",
-    fontSize: 25,
-    paddingVertical: 10,
-    textAlign: "center",
+    justifyContent: "space-between",
+    marginBottom: 60,
   },
   container: {
     flex: 1,
-    backgroundColor: "black",
+    backgroundColor: Colors.primaryBackground,
     alignItems: "center",
     justifyContent: "center",
   },
-  playerRepresentation: {
-    height: 50,
-    width: 50,
-    borderRadius: 90,
-    marginBottom: 30,
-    justifyContent: "center",
+  indicatorRow: {
+    flexDirection: "row",
     alignSelf: "center",
-  },
-  scoreText: {
-    fontSize: 30,
-    color: "black",
-    alignSelf: "center",
+    justifyContent: "space-between",
+    width: "100%",
+    height: contentSize / 3 + contentSize / 9,
   },
 });
 

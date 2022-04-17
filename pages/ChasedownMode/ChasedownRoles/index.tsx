@@ -86,6 +86,7 @@ const ChasedownRolesScreen = ({ navigation, route }) => {
         difficulty={totalDetails.difficulty}
         rounds={totalDetails.rounds}
         currentRound={totalDetails.currentRound}
+        timeLimit={totalDetails.timeLimit}
       />
       <View style={styles.contentContainer}>
         <View
@@ -105,7 +106,7 @@ const ChasedownRolesScreen = ({ navigation, route }) => {
             colour={topColour}
             showFlag={totalDetails.flag === "gameplay" ? true : false}
             score={topScore}
-            scoreTextRotation={totalDetails.currentRound % 2 === 0 ? -135 : -45}
+            rotation={totalDetails.currentRound % 2 === 0 ? -135 : -45}
             delay={animationDelays["chasers"]}
             pulsateDelay={animationDelays["target"]} // Target is the last animation
             pulsateDuration={pulsateDuration}
@@ -127,7 +128,7 @@ const ChasedownRolesScreen = ({ navigation, route }) => {
             colour={middleColour}
             showFlag={totalDetails.flag === "gameplay" ? true : false}
             score={middleScore}
-            scoreTextRotation={totalDetails.currentRound % 2 === 0 ? -135 : -45}
+            rotation={totalDetails.currentRound % 2 === 0 ? -135 : -45}
             delay={animationDelays["target"]}
             pulsateDelay={animationDelays["target"]} // Target is the last animation
             pulsateDuration={pulsateDuration}
@@ -147,7 +148,7 @@ const ChasedownRolesScreen = ({ navigation, route }) => {
             colour={bottomColour}
             showFlag={totalDetails.flag === "gameplay" ? true : false}
             score={bottomScore}
-            scoreTextRotation={totalDetails.currentRound % 2 === 0 ? -135 : -45}
+            rotation={totalDetails.currentRound % 2 === 0 ? -135 : -45}
             delay={animationDelays["chasers"]}
             pulsateDelay={animationDelays["target"]} // Target is the last animation
             pulsateDuration={pulsateDuration}
