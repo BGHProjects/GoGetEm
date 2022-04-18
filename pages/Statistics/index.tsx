@@ -34,15 +34,7 @@ const Statistics = ({ navigation }) => {
         source={Backgrounds.mainMenu}
         style={styles.topDiv}
       >
-        <View
-          style={{
-            width: "100%",
-            height: "100%",
-            backgroundColor: Colors.primaryBackground,
-            opacity: 0.5,
-            position: "absolute",
-          }}
-        />
+        <View style={styles.pageContentContainer} />
         <View style={{ marginTop: 150 }}>
           <AutoSizeText
             fontSize={20}
@@ -110,6 +102,13 @@ const styles = StyleSheet.create({
     borderRadius: 40,
     marginTop: -50,
     justifyContent: "center",
+  },
+  pageContentContainer: {
+    width: "100%",
+    height: "100%",
+    backgroundColor: Colors.primaryBackground,
+    opacity: 0.5,
+    position: "absolute",
   },
 });
 

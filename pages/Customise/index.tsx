@@ -1,7 +1,6 @@
-import React, { useState, useContext } from "react";
-import { View, StyleSheet } from "react-native";
+import React, { useState } from "react";
+import { View } from "react-native";
 import { Colors } from "../../constants/Colors";
-import { UserContext } from "../../tools/UserContext";
 import { TabView, SceneMap } from "react-native-tab-view";
 
 import RenderTabBar from "../Statistics/components/RenderTabBar";

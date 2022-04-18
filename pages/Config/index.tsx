@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View, Dimensions, ScrollView } from "react-native";
+import { View, Dimensions, ScrollView } from "react-native";
 import { Colors } from "../../constants/Colors";
 import MenuButton from "../../components/MenuButton";
 import { onPressSubmit, getOtherColours } from "./helpers";

@@ -10,11 +10,11 @@ import {
 } from "./helpers";
 import { handlePostGame } from "../ExpChange/helpers/handlePostGame";
 import { UserContext } from "../../tools/UserContext";
-import * as firebase from "firebase";
+import { Data } from "../../constants/types";
+import { updateStorageValue } from "../../tools/updateStorageValue";
 
 const EndGame = ({ navigation, route }) => {
   const userContext = useContext(UserContext);
-  const user = firebase.database().ref("users/" + userContext.username);
   const gameDetails = route.params;
   const [prevExp, setPrevExp] = useState<number | null>(null);
   const [newExp, setNewExp] = useState<number | null>(null);
@@ -75,72 +75,14 @@ const EndGame = ({ navigation, route }) => {
       gameDetails
     );
 
-    // Maps the 'updates' entry to the firebase database call
-    const firebaseUpdates: Record<string, any> = {
-      TotalGames: user.update({ totalGames: userContext.totalGames + 1 }),
-      TotalWins: user.update({ totalWins: userContext.totalWins + 1 }),
-      TotalClassicGames: user.update({
-        totalClassicGames: userContext.totalClassicGames + 1,
-      }),
-      TotalClassicWins: user.update({
-        totalClassicWins: userContext.totalClassicWins + 1,
-      }),
-      TotalChasedownGames: user.update({
-        totalChasedownGames: userContext.totalChasedownGames + 1,
-      }),
-      TotalChasedownWins: user.update({
-        totalChasedownWins: userContext.totalChasedownWins + 1,
-      }),
-      TotalHuntGames: user.update({
-        totalHuntGames: userContext.totalHuntGames + 1,
-      }),
-      TotalHuntWins: user.update({
-        totalHuntWins: userContext.totalHuntWins + 1,
-      }),
-      TotalTagTeamGames: user.update({
-        totalTagTeamGames: userContext.totalTagTeamGames + 1,
-      }),
-      TotalTagTeamWins: user.update({
-        totalTagTeamWins: userContext.totalTagTeamWins + 1,
-      }),
-      TotalDiff1Games: user.update({
-        totalDiff1Games: userContext.totalDiff1Games + 1,
-      }),
-      TotalDiff1Wins: user.update({
-        totalDiff1Wins: userContext.totalDiff1Wins + 1,
-      }),
-      TotalDiff2Games: user.update({
-        totalDiff2Games: userContext.totalDiff2Games + 1,
-      }),
-      TotalDiff2Wins: user.update({
-        totalDiff2Wins: userContext.totalDiff2Wins + 1,
-      }),
-      TotalDiff3Games: user.update({
-        totalDiff3Games: userContext.totalDiff3Games + 1,
-      }),
-      TotalDiff3Wins: user.update({
-        totalDiff3Wins: userContext.totalDiff3Wins + 1,
-      }),
-      TotalDiff4Games: user.update({
-        totalDiff4Games: userContext.totalDiff4Games + 1,
-      }),
-      TotalDiff4Wins: user.update({
-        totalDiff4Wins: userContext.totalDiff4Wins + 1,
-      }),
-    };
-
     // Makes all the backend calls
-    updates.map((update) => {
+    updates.map(async (update) => {
       if (update == "TotalExp") {
-        // Updates Firebase
-        user.update({ totalExp: userContext.totalExp + increment });
-        // Updates local state
         userContext.setTotalExp((oldExp) => oldExp + increment);
+        updateStorageValue(Data.TotalExp, increment);
       } else {
-        // Updates Firebase
-        firebaseUpdates[update];
-        // Updates local state
         userContext[`set${update}`]((old) => old + 1);
+        updateStorageValue(Data[update], 1);
       }
     });
 

@@ -4,7 +4,8 @@ import { View, StyleSheet, Text, TouchableHighlight } from "react-native";
 import { Colors } from "../../../constants/Colors";
 import Selection from "../../../components/Selection";
 import { split, capitalize } from "lodash";
-import * as firebase from "firebase";
+import { Data } from "../../../constants/types";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface ButtonOptionProps {
   level: number;
@@ -15,22 +16,18 @@ interface ButtonOptionProps {
 const ButtonOption = ({ level, variant, closeFunction }: ButtonOptionProps) => {
   const userContext = useContext(UserContext);
   const userLevel = userContext.level;
-  const dbUser = firebase.database().ref("users/" + userContext.username);
   const position = capitalize(split(variant, "-")[0]);
   const variantElements = split(variant, "-");
   const [borderColour, setBorderColour] = useState("grey");
 
-  function changeSetting(variant: string) {
+  async function changeSetting(variant: string) {
     if (split(variant, "-").length > 2) {
       userContext[`setController${capitalize(position)}Button`](variant);
-      dbUser.update({
-        [`controller${position}Button`]: variant,
-      });
+
+      await AsyncStorage.setItem(Data[`Controller${position}Button`], variant);
     } else {
       userContext.setControllerOutlineColour(variant);
-      dbUser.update({
-        controllerOutlineColour: variant,
-      });
+      await AsyncStorage.setItem(Data.ControllerOutlineColour, variant);
     }
 
     setBorderColour(Colors.yellow);
@@ -67,6 +64,7 @@ const ButtonOption = ({ level, variant, closeFunction }: ButtonOptionProps) => {
               }
             : undefined
         }
+        // TODO Make this better
         style={{
           zIndex: 4,
           position: "absolute",

@@ -23,12 +23,14 @@ const AppNavigation = () => {
   const Stack = createStackNavigator();
 
   return (
-    <Stack.Navigator initialRouteName="Preparation" screenOptions={{}}>
+    <Stack.Navigator initialRouteName="Main Menu" screenOptions={{}}>
+      {/* 
+      // TODO Eliminate this dude
       <Stack.Screen
         name="Preparation"
         component={Preparation}
         options={{ headerShown: false }}
-      />
+      /> */}
       <Stack.Screen
         name="Main Menu"
         component={MainMenu}

@@ -47,7 +47,7 @@ const Controller: FC<Props> = ({
         />
 
         {/*
-         * ! Left Button
+         * Left Button
          */}
         <ControllerButton
           whichButton={userContext.controllerLeftButton}

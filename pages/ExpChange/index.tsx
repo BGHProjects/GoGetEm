@@ -10,12 +10,12 @@ import Animated, {
   withDelay,
 } from "react-native-reanimated";
 import { calcExpToNextLevel } from "../../tools/calcNextLevelExp";
-import * as firebase from "firebase";
 import { progressBarDuration } from "../../constants/Animation";
+import { updateStorageValue } from "../../tools/updateStorageValue";
+import { Data } from "../../constants/types";
 
 const ExpChange = ({ navigation, route }) => {
   const userContext = useContext(UserContext);
-  const user = firebase.database().ref("users/" + userContext.username);
   const details = route.params;
   const [leveledUp, setLeveledUp] = useState(false);
   const nextLevelExp = calcExpToNextLevel(userContext.level);
@@ -66,7 +66,8 @@ const ExpChange = ({ navigation, route }) => {
   useEffect(() => {
     if (leveledUp) {
       userContext.setLevel((old) => old + 1);
-      user.update({ level: userContext.level + 1 });
+      updateStorageValue(Data.Level, 1);
+
       // Delays change to line up with animation
       setTimeout(() => {
         setLevelLabel((old) => old + 1);

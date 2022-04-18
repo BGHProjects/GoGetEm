@@ -7,7 +7,6 @@ import {
 } from "react-native";
 import { Colors } from "../../../constants/Colors";
 import Carousel from "react-native-snap-carousel";
-
 import ModalButton from "../../../components/ModalButton";
 import { Backgrounds } from "../../../constants/Backgrounds";
 import { AutoSizeText, ResizeTextMode } from "react-native-auto-size-text";
@@ -21,8 +20,9 @@ import {
   lowerFirst,
 } from "lodash";
 import Unlockables from "../../../constants/Unlockables";
-import * as firebase from "firebase";
 import { UserContext } from "../../../tools/UserContext";
+import { Data } from "../../../constants/types";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface BGOptionModalProps {
   modeLabel: string;
@@ -33,7 +33,6 @@ const BGOptionModal = ({ modeLabel, closeFunction }: BGOptionModalProps) => {
   const [buttonOptions, setButtonOptions] = useState([]);
   const userContext = useContext(UserContext);
   const userLevel = userContext.level;
-  const dbUser = firebase.database().ref("users/" + userContext.username);
   const contextElements = split(
     userContext[`${lowerFirst(modeLabel)}Background`],
     "-"
@@ -59,11 +58,9 @@ const BGOptionModal = ({ modeLabel, closeFunction }: BGOptionModalProps) => {
     });
   }
 
-  function changeSetting(variant: string) {
+  async function changeSetting(variant: string) {
     userContext[`set${modeLabel}Background`](variant);
-    dbUser.update({
-      [`${lowerFirst(modeLabel)}Background`]: variant,
-    });
+    await AsyncStorage.setItem(Data[`${modeLabel}Background`], variant);
     closeFunction();
   }
 
@@ -78,7 +75,7 @@ const BGOptionModal = ({ modeLabel, closeFunction }: BGOptionModalProps) => {
       validateItem(e, i);
     });
 
-    forEach(toPairs(Unlockables), (element, i) => {
+    forEach(toPairs(Unlockables), (element) => {
       let item = element[1];
       let index = element[0];
       validateItem(item, index);
@@ -94,7 +91,9 @@ const BGOptionModal = ({ modeLabel, closeFunction }: BGOptionModalProps) => {
     return (
       <TouchableOpacity
         onPress={
-          userLevel >= level
+          // Handles the initial three backgrounds
+          // TODO Find a better way to do this
+          userLevel >= level || level === 0 || level === 1 || level === 2
             ? () => {
                 changeSetting(bgString);
               }

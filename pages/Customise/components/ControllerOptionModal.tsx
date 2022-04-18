@@ -47,6 +47,7 @@ const ControllerOptionModal = ({
         >
           {buttonOptions.map((item) => (
             <ButtonOption
+              key={item.toString()}
               level={parseInt(keys(item)[0])}
               variant={values(item)[0]}
               closeFunction={() => closeFunction()}
