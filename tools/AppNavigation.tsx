@@ -18,6 +18,7 @@ import Credits from "../pages/Credits";
 import EndGame from "../pages/EndGame";
 import ExpChange from "../pages/ExpChange";
 import Unlocks from "../pages/Unlocks";
+import HowToPlay from "../pages/HowToPlay";
 
 const AppNavigation = () => {
   const Stack = createStackNavigator();
@@ -115,6 +116,11 @@ const AppNavigation = () => {
       <Stack.Screen
         name="Unlocks"
         component={Unlocks}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="HowToPlay"
+        component={HowToPlay}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>
