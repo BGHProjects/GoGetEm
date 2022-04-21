@@ -113,11 +113,6 @@ const MainMenu = ({ navigation }) => {
           shadowColour={Colors.red}
           operation={() => onPressButton("Credits")}
         />
-        <MenuButton
-          text="How To Play"
-          shadowColour={Colors.purple}
-          operation={() => onPressButton("HowToPlay")}
-        />
       </>
     </BGWithImage>
   );

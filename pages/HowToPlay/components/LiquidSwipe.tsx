@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+
 import Slider from "./Slider";
 import Slide from "./Slide";
 
@@ -36,7 +37,7 @@ const slides = [
 ];
 
 const LiquidSwipe = () => {
-  const [index, setIndex] = useState(1);
+  const [index, setIndex] = useState(0);
   const prev = slides[index - 1];
   const next = slides[index + 1];
   return (

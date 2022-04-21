@@ -37,7 +37,7 @@ const GameModesScreen = ({ navigation }) => {
         <MenuButton
           text="How to Play"
           shadowColour={Colors.purple}
-          operation={() => console.log("Implement me!")}
+          operation={() => navigation.navigate("HowToPlay")}
         />
       </>
     </BGWithImage>
