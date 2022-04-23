@@ -49,7 +49,7 @@ const ClassicRolesScreen = ({ navigation, route }) => {
 
   // Animation delays
 
-  const animationDelay = 200;
+  const animationDelay = 300;
   const animationDuration = 200;
   const pulsateDuration = 750;
 

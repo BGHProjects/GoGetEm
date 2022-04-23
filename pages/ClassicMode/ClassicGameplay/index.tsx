@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { StyleSheet, View, Dimensions } from "react-native";
+import { StyleSheet, View, Dimensions, Vibration } from "react-native";
 import { Svg, Circle } from "react-native-svg";
 import {
   generateCells,
@@ -10,12 +10,13 @@ import {
 import { aStarSearch } from "../../../tools/BotBrain";
 import Controller from "../../../components/Controller/Controller";
 import BGWithImage from "../../../components/BGWithImage";
-import { Colors } from "../../../constants/Colors";
 import { UserContext } from "../../../tools/UserContext";
 import { getMazeCell } from "../../../tools/BotBrain";
+import RoundOverAlert from "../../../components/RoundOverAlert/RoundOverAlert";
+import { roundOverDuration } from "../../../constants/Animation";
+import globalStyles from "../../../constants/GlobalStyles";
 
 const height = Dimensions.get("window").height;
-const mazeSideLength = height * 0.45;
 const cellSize = height * 0.045;
 let mazeGrid: any = [];
 const wallWidth = 1;
@@ -53,6 +54,10 @@ const ClassicGameplayScreen = ({ navigation, route }) => {
   const [search2IntervalId, setSearch2IntervalId] = useState<any>(null);
   const [player2Started, setPlayer2Started] = useState<any>(false);
   const [roundOver, setRoundOver] = useState(false);
+  const [roundOverDetails, setRoundOverDetails] = useState({
+    chaser: undefined,
+    caught: undefined,
+  });
 
   let difficulty =
     gameDetails.difficulty === "Meh"
@@ -225,8 +230,16 @@ const ClassicGameplayScreen = ({ navigation, route }) => {
     if (playerX === player3X && playerY === player3Y) {
       if (gameDetails.currentRound % 2 === 0) {
         player3Score++;
+        setRoundOverDetails({
+          chaser: gameDetails.player3Colour,
+          caught: gameDetails.colour,
+        });
       } else {
         player1Score++;
+        setRoundOverDetails({
+          chaser: gameDetails.colour,
+          caught: gameDetails.player3Colour,
+        });
       }
 
       setRoundOver(true);
@@ -235,8 +248,16 @@ const ClassicGameplayScreen = ({ navigation, route }) => {
     if (player3X === player2X && player3Y === player2Y) {
       if (gameDetails.currentRound % 2 < 1) {
         player2Score++;
+        setRoundOverDetails({
+          chaser: gameDetails.player2Colour,
+          caught: gameDetails.player3Colour,
+        });
       } else {
         player3Score++;
+        setRoundOverDetails({
+          chaser: gameDetails.player3Colour,
+          caught: gameDetails.player2Colour,
+        });
       }
       setRoundOver(true);
     }
@@ -244,8 +265,16 @@ const ClassicGameplayScreen = ({ navigation, route }) => {
     if (player2X === playerX && player2Y === playerY) {
       if (gameDetails.currentRound % 2 < 1) {
         player1Score++;
+        setRoundOverDetails({
+          chaser: gameDetails.colour,
+          caught: gameDetails.player2Colour,
+        });
       } else {
         player2Score++;
+        setRoundOverDetails({
+          chaser: gameDetails.player2Colour,
+          caught: gameDetails.colour,
+        });
       }
       setRoundOver(true);
     }
@@ -253,6 +282,7 @@ const ClassicGameplayScreen = ({ navigation, route }) => {
 
   useEffect(() => {
     if (roundOver) {
+      Vibration.vibrate(500);
       clearInterval(search1IntervalId);
       clearInterval(search2IntervalId);
       gameDetails.player1Score = player1Score;
@@ -262,79 +292,77 @@ const ClassicGameplayScreen = ({ navigation, route }) => {
       gameDetails.currentRound++;
       if (gameDetails.currentRound > gameDetails.rounds) {
         gameDetails.gameOver = true;
-        navigation.navigate("End Game", gameDetails);
+        setTimeout(() => {
+          navigation.navigate("End Game", gameDetails);
+        }, roundOverDuration);
       } else {
-        navigation.navigate("Classic Roles", gameDetails);
+        setTimeout(() => {
+          navigation.navigate("Classic Roles", gameDetails);
+        }, roundOverDuration);
       }
     }
   }, [roundOver]);
 
   return (
-    <BGWithImage image={userContext.classicBackground}>
-      <View style={styles.mazeContainer}>
-        {mazeGrid.map((item: any) => (
-          <View
-            key={(`${item.row}` + `${item.col}`).toString()}
-            style={{
-              height: cellSize,
-              width: cellSize,
-              position: "absolute",
-              left: `${item.col}%`,
-              top: `${item.row}%`,
-              borderColor: gridColor,
-              borderTopWidth: item.top,
-              borderRightWidth: item.right,
-              borderBottomWidth: item.bottom,
-              borderLeftWidth: item.left,
-              backgroundColor: item.color,
-            }}
-          />
-        ))}
+    <>
+      <BGWithImage image={userContext.classicBackground}>
+        <View style={[globalStyles().mazeContainer, { marginTop: 50 }]}>
+          {mazeGrid.map((item: any) => (
+            <View
+              key={(`${item.row}` + `${item.col}`).toString()}
+              style={{
+                height: cellSize,
+                width: cellSize,
+                position: "absolute",
+                left: `${item.col}%`,
+                top: `${item.row}%`,
+                borderColor: gridColor,
+                borderTopWidth: item.top,
+                borderRightWidth: item.right,
+                borderBottomWidth: item.bottom,
+                borderLeftWidth: item.left,
+                backgroundColor: item.color,
+              }}
+            />
+          ))}
 
-        <Svg height="100%" width="100%" viewBox="0 0 100 100">
-          <Circle
-            cx={player3X}
-            cy={player3Y}
-            r={playerSize.toString()}
-            fill={`${gameDetails.player3Colour}`}
-          />
-          <Circle
-            cx={player2X}
-            cy={player2Y}
-            r={playerSize.toString()}
-            fill={`${gameDetails.player2Colour}`}
-          />
-          <Circle
-            cx={playerX}
-            cy={playerY}
-            r={playerSize.toString()}
-            fill={`${gameDetails.colour}`}
-          />
-        </Svg>
-      </View>
-      <Controller
-        movePlayerDown={movePlayerDown}
-        movePlayerLeft={movePlayerLeft}
-        movePlayerRight={movePlayerRight}
-        movePlayerUp={movePlayerUp}
-      />
-    </BGWithImage>
+          <Svg height="100%" width="100%" viewBox="0 0 100 100">
+            <Circle
+              cx={player3X}
+              cy={player3Y}
+              r={playerSize.toString()}
+              fill={`${gameDetails.player3Colour}`}
+            />
+            <Circle
+              cx={player2X}
+              cy={player2Y}
+              r={playerSize.toString()}
+              fill={`${gameDetails.player2Colour}`}
+            />
+            <Circle
+              cx={playerX}
+              cy={playerY}
+              r={playerSize.toString()}
+              fill={`${gameDetails.colour}`}
+            />
+          </Svg>
+        </View>
+        <Controller
+          movePlayerDown={movePlayerDown}
+          movePlayerLeft={movePlayerLeft}
+          movePlayerRight={movePlayerRight}
+          movePlayerUp={movePlayerUp}
+        />
+      </BGWithImage>
+      {roundOver && (
+        <RoundOverAlert
+          begin={roundOver}
+          gameOver={gameDetails.currentRound >= gameDetails.rounds}
+          details={roundOverDetails}
+        />
+      )}
+    </>
   );
 };
-
-const styles = StyleSheet.create({
-  titleLabel: {
-    fontSize: 40,
-    color: "white",
-    marginTop: height / 12,
-  },
-  mazeContainer: {
-    marginTop: 50,
-    width: mazeSideLength,
-    height: mazeSideLength,
-    backgroundColor: Colors.transparentBlack,
-    alignSelf: "center",
-  },
-});
 
 export default ClassicGameplayScreen;

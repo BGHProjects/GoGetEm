@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { StyleSheet, Text, View, Dimensions } from "react-native";
+import { StyleSheet, Text, View, Dimensions, Vibration } from "react-native";
 import { Svg, Circle } from "react-native-svg";
 import {
   generateCells,
@@ -10,12 +10,13 @@ import {
 import { aStarSearch } from "../../../tools/BotBrain";
 import { CountdownCircleTimer } from "react-native-countdown-circle-timer";
 import Controller from "../../../components/Controller/Controller";
-import { Colors } from "../../../constants/Colors";
 import BGWithImage from "../../../components/BGWithImage";
 import { UserContext } from "../../../tools/UserContext";
+import RoundOverAlert from "../../../components/RoundOverAlert/RoundOverAlert";
+import { roundOverDuration } from "../../../constants/Animation";
+import globalStyles from "../../../constants/GlobalStyles";
 
 const height = Dimensions.get("window").height;
-const mazeSideLength = height * 0.45;
 const cellSize = height * 0.045;
 let mazeGrid: any = [];
 const wallWidth = 1;
@@ -162,6 +163,7 @@ const HuntGameplay = ({ navigation, route }) => {
 
   useEffect(() => {
     if (roundOver) {
+      Vibration.vibrate(500);
       clearInterval(search1IntervalId);
       gameDetails.player1Score = player1Score;
       gameDetails.player2Score = player2Score;
@@ -169,9 +171,13 @@ const HuntGameplay = ({ navigation, route }) => {
       gameDetails.currentRound++;
       if (gameDetails.currentRound > gameDetails.rounds) {
         gameDetails.gameOver = true;
-        navigation.navigate("End Game", gameDetails);
+        setTimeout(() => {
+          navigation.navigate("End Game", gameDetails);
+        }, roundOverDuration);
       } else {
-        navigation.navigate("Hunt Roles", gameDetails);
+        setTimeout(() => {
+          navigation.navigate("Hunt Roles", gameDetails);
+        }, roundOverDuration);
       }
     }
   }, [roundOver]);
@@ -186,6 +192,7 @@ const HuntGameplay = ({ navigation, route }) => {
       setTargetY(newPos[1]);
 
       if (playerX === targetX && playerY === targetY) {
+        Vibration.vibrate(100);
         player1Score++;
       } else {
         player2Score++;
@@ -204,8 +211,8 @@ const HuntGameplay = ({ navigation, route }) => {
   }, [targetX, targetY]);
 
   return (
-    <BGWithImage image={userContext.huntBackground}>
-      <>
+    <>
+      <BGWithImage image={userContext.huntBackground}>
         <View style={{ marginTop: 20, alignSelf: "center" }}>
           <CountdownCircleTimer
             isPlaying={timerRunning}
@@ -220,7 +227,7 @@ const HuntGameplay = ({ navigation, route }) => {
             onComplete={() => setRoundOver(true)}
           >
             {({ remainingTime }) => (
-              <Text style={{ color: "white", fontSize: 20 }}>
+              <Text style={globalStyles().clockText}>
                 {Math.floor(remainingTime / 60)}:
                 {(remainingTime % 60).toString().length === 1 &&
                 remainingTime % 60 !== 0
@@ -231,7 +238,7 @@ const HuntGameplay = ({ navigation, route }) => {
             )}
           </CountdownCircleTimer>
         </View>
-        <View style={styles.mazeContainer}>
+        <View style={globalStyles().mazeContainer}>
           {mazeGrid.map((item: any) => (
             <View
               key={(`${item.row}` + `${item.col}`).toString()}
@@ -278,19 +285,18 @@ const HuntGameplay = ({ navigation, route }) => {
           movePlayerRight={movePlayerRight}
           movePlayerUp={movePlayerUp}
         />
-      </>
-    </BGWithImage>
+      </BGWithImage>
+      {roundOver && (
+        <RoundOverAlert
+          begin={roundOver}
+          gameOver={gameDetails.currentRound >= gameDetails.rounds}
+        />
+      )}
+    </>
   );
 };
 
 const styles = StyleSheet.create({
-  mazeContainer: {
-    marginTop: height / 32,
-    width: mazeSideLength,
-    height: mazeSideLength,
-    alignSelf: "center",
-    backgroundColor: Colors.transparentBlack,
-  },
   container: {
     flex: 1,
     backgroundColor: "black",

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { StyleSheet, Text, View, Dimensions } from "react-native";
+import { Text, View, Dimensions, Vibration } from "react-native";
 import { Svg, Circle } from "react-native-svg";
 import {
   generateCells,
@@ -14,12 +14,13 @@ import {
 } from "../../../tools/BotBrain";
 import { CountdownCircleTimer } from "react-native-countdown-circle-timer";
 import Controller from "../../../components/Controller/Controller";
-import { Colors } from "../../../constants/Colors";
 import BGWithImage from "../../../components/BGWithImage";
 import { UserContext } from "../../../tools/UserContext";
+import RoundOverAlert from "../../../components/RoundOverAlert/RoundOverAlert";
+import { roundOverDuration } from "../../../constants/Animation";
+import globalStyles from "../../../constants/GlobalStyles";
 
 const height = Dimensions.get("window").height;
-const mazeSideLength = height * 0.45;
 const cellSize = height * 0.045;
 let mazeGrid: any = [];
 const wallWidth = 1;
@@ -119,6 +120,7 @@ const ChasedownGameplayScreen = ({ navigation, route }) => {
   const [roundOver, setRoundOver] = useState(false);
   const [runAwayIntervalId, setRunAwayIntervalId] = useState<any>(null);
   const [timerRunning, setTimerRunning] = useState(false);
+  const [roundOverDetails, setRoundOverDetails] = useState<any>({});
 
   const [player2Pos, setPlayer2Pos] = useState<any>([
     player2X,
@@ -348,31 +350,58 @@ const ChasedownGameplayScreen = ({ navigation, route }) => {
     }
 
     if (playerX === player3X && playerY === player3Y) {
-      if (gameDetails.targetPlayer === 1) {
-        player3Score++;
-        setRoundOver(true);
-      } else if (gameDetails.targetPlayer === 3) {
-        player1Score++;
+      if (gameDetails.targetPlayer === 1 || gameDetails.targetPlayer === 3) {
+        if (gameDetails.targetPlayer === 1) {
+          player3Score++;
+          setRoundOverDetails({
+            chaser: gameDetails.player3Colour,
+            caught: gameDetails.colour,
+          });
+        } else if (gameDetails.targetPlayer === 3) {
+          player1Score++;
+          setRoundOverDetails({
+            chaser: gameDetails.colour,
+            caught: gameDetails.player3Colour,
+          });
+        }
         setRoundOver(true);
       }
     }
 
     if (player3X === player2X && player3Y === player2Y) {
-      if (gameDetails.targetPlayer === 2) {
-        player3Score++;
-        setRoundOver(true);
-      } else if (gameDetails.targetPlayer === 3) {
-        player2Score++;
+      if (gameDetails.targetPlayer === 2 || gameDetails.targetPlayer === 3) {
+        if (gameDetails.targetPlayer === 2) {
+          player3Score++;
+          setRoundOverDetails({
+            chaser: gameDetails.player3Colour,
+            caught: gameDetails.player2Colour,
+          });
+        } else if (gameDetails.targetPlayer === 3) {
+          player2Score++;
+          setRoundOverDetails({
+            chaser: gameDetails.player2Colour,
+            caught: gameDetails.player3Colour,
+          });
+        }
         setRoundOver(true);
       }
     }
 
     if (player2X === playerX && player2Y === playerY) {
-      if (gameDetails.targetPlayer === 2) {
-        player1Score++;
-        setRoundOver(true);
-      } else if (gameDetails.targetPlayer === 1) {
-        player2Score++;
+      if (gameDetails.targetPlayer === 2 || gameDetails.targetPlayer === 1) {
+        if (gameDetails.targetPlayer === 2) {
+          player1Score++;
+          setRoundOverDetails({
+            chaser: gameDetails.colour,
+            caught: gameDetails.player2Colour,
+          });
+        } else if (gameDetails.targetPlayer === 1) {
+          player2Score++;
+          setRoundOverDetails({
+            chaser: gameDetails.player2Colour,
+            caught: gameDetails.colour,
+          });
+        }
         setRoundOver(true);
       }
     }
@@ -380,6 +409,7 @@ const ChasedownGameplayScreen = ({ navigation, route }) => {
 
   useEffect(() => {
     if (roundOver) {
+      Vibration.vibrate(500);
       clearInterval(search1IntervalId);
       clearInterval(search2IntervalId);
       clearInterval(runAwayIntervalId);
@@ -390,9 +420,13 @@ const ChasedownGameplayScreen = ({ navigation, route }) => {
       gameDetails.currentRound++;
       if (gameDetails.currentRound > gameDetails.rounds) {
         gameDetails.gameOver = true;
-        navigation.navigate("End Game", gameDetails);
+        setTimeout(() => {
+          navigation.navigate("End Game", gameDetails);
+        }, roundOverDuration);
       } else {
-        navigation.navigate("Chasedown Roles", gameDetails);
+        setTimeout(() => {
+          navigation.navigate("Chasedown Roles", gameDetails);
+        }, roundOverDuration);
       }
     }
   }, [roundOver]);
@@ -400,17 +434,20 @@ const ChasedownGameplayScreen = ({ navigation, route }) => {
   function timerExpired() {
     if (gameDetails.targetPlayer === 1) {
       player1Score++;
+      setRoundOverDetails({ survivor: gameDetails.colour });
     } else if (gameDetails.targetPlayer === 2) {
       player2Score++;
+      setRoundOverDetails({ survivor: gameDetails.player2Colour });
     } else if (gameDetails.targetPlayer === 3) {
+      setRoundOverDetails({ survivor: gameDetails.player3Colour });
       player3Score++;
     }
     setRoundOver(true);
   }
 
   return (
-    <BGWithImage image={userContext.chasedownBackground}>
-      <>
+    <>
+      <BGWithImage image={userContext.chasedownBackground}>
         <View style={{ marginTop: 20, alignSelf: "center" }}>
           <CountdownCircleTimer
             isPlaying={timerRunning}
@@ -425,9 +462,7 @@ const ChasedownGameplayScreen = ({ navigation, route }) => {
             onComplete={() => timerExpired()}
           >
             {({ remainingTime }) => (
-              <Text
-                style={{ color: "white", fontSize: 20, fontFamily: "Main" }}
-              >
+              <Text style={globalStyles().clockText}>
                 {Math.floor(remainingTime / 60)}:
                 {(remainingTime % 60).toString().length === 1 &&
                 remainingTime % 60 !== 0
@@ -438,7 +473,7 @@ const ChasedownGameplayScreen = ({ navigation, route }) => {
             )}
           </CountdownCircleTimer>
         </View>
-        <View style={styles.mazeContainer}>
+        <View style={globalStyles().mazeContainer}>
           {mazeGrid.map((item: any) => (
             <View
               key={(`${item.row}` + `${item.col}`).toString()}
@@ -485,19 +520,16 @@ const ChasedownGameplayScreen = ({ navigation, route }) => {
           movePlayerRight={movePlayerRight}
           movePlayerUp={movePlayerUp}
         />
-      </>
-    </BGWithImage>
+      </BGWithImage>
+      {roundOver && (
+        <RoundOverAlert
+          begin={roundOver}
+          gameOver={gameDetails.currentRound >= gameDetails.rounds}
+          details={roundOverDetails}
+        />
+      )}
+    </>
   );
 };
-
-const styles = StyleSheet.create({
-  mazeContainer: {
-    marginTop: height / 32,
-    width: mazeSideLength,
-    height: mazeSideLength,
-    backgroundColor: Colors.transparentBlack,
-    alignSelf: "center",
-  },
-});
 
 export default ChasedownGameplayScreen;

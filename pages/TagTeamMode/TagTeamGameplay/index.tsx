@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { StyleSheet, View, Dimensions } from "react-native";
+import { View, Dimensions, Vibration } from "react-native";
 import { Svg, Circle } from "react-native-svg";
 import {
   generateCells,
@@ -16,6 +16,9 @@ import Controller from "../../../components/Controller/Controller";
 import { Colors } from "../../../constants/Colors";
 import BGWithImage from "../../../components/BGWithImage";
 import { UserContext } from "../../../tools/UserContext";
+import RoundOverAlert from "../../../components/RoundOverAlert/RoundOverAlert";
+import { roundOverDuration } from "../../../constants/Animation";
+import globalStyles from "../../../constants/GlobalStyles";
 
 const height = Dimensions.get("window").height;
 const mazeSideLength = height * 0.45;
@@ -77,6 +80,7 @@ const TagTeamGameplay = ({ navigation, route }) => {
   const [runAway2IntervalId, setRunAway2IntervalId] = useState<any>(null);
 
   const [roundOver, setRoundOver] = useState(false);
+  const [roundOverDetails, setRoundOverDetails] = useState<any>({});
 
   /**
    * The below are necessary for the runAway algorithms
@@ -428,6 +432,10 @@ const TagTeamGameplay = ({ navigation, route }) => {
     if (playerX === player3X && playerY === player3Y) {
       // Player is chasing 3
       if (gameDetails.currentRound === 1 || gameDetails.currentRound === 5) {
+        setRoundOverDetails({
+          chaser: gameDetails.colour,
+          caught: gameDetails.player3Colour,
+        });
         team1Score++;
       }
       // 3 is chasing Player
@@ -435,22 +443,38 @@ const TagTeamGameplay = ({ navigation, route }) => {
         gameDetails.currentRound === 3 ||
         gameDetails.currentRound === 7
       ) {
+        setRoundOverDetails({
+          chaser: gameDetails.player3Colour,
+          caught: gameDetails.colour,
+        });
         team2Score++;
       }
       setRoundOver(true);
     } else if (playerX === player4X && playerY === player4Y) {
       // Player is chasing 4
       if (gameDetails.currentRound === 2 || gameDetails.currentRound === 6) {
+        setRoundOverDetails({
+          chaser: gameDetails.colour,
+          caught: gameDetails.player4Colour,
+        });
         team1Score++;
       }
       // 4 is chasing Player
       else if (gameDetails.currentRound === 4) {
+        setRoundOverDetails({
+          chaser: gameDetails.player4Colour,
+          caught: gameDetails.colour,
+        });
         team2Score++;
       }
       setRoundOver(true);
     } else if (player2X === player3X && player2Y === player3Y) {
       // 2 is chasing 3
       if (gameDetails.currentRound === 4) {
+        setRoundOverDetails({
+          chaser: gameDetails.player2Colour,
+          caught: gameDetails.player3Colour,
+        });
         team1Score++;
       }
       // 3 is chasing 2
@@ -458,12 +482,20 @@ const TagTeamGameplay = ({ navigation, route }) => {
         gameDetails.currentRound === 2 ||
         gameDetails.currentRound === 6
       ) {
+        setRoundOverDetails({
+          chaser: gameDetails.player3Colour,
+          caught: gameDetails.player2Colour,
+        });
         team2Score++;
       }
       setRoundOver(true);
     } else if (player2X === player4X && player2Y === player4Y) {
       // 2 is chasing 4
       if (gameDetails.currentRound === 3 || gameDetails.currentRound === 7) {
+        setRoundOverDetails({
+          chaser: gameDetails.player2Colour,
+          caught: gameDetails.player4Colour,
+        });
         team1Score++;
       }
       // 4 is chasing 2
@@ -471,6 +503,10 @@ const TagTeamGameplay = ({ navigation, route }) => {
         gameDetails.currentRound === 1 ||
         gameDetails.currentRound === 5
       ) {
+        setRoundOverDetails({
+          chaser: gameDetails.player4Colour,
+          caught: gameDetails.player2Colour,
+        });
         team2Score++;
       }
       setRoundOver(true);
@@ -492,6 +528,7 @@ const TagTeamGameplay = ({ navigation, route }) => {
 
   useEffect(() => {
     if (roundOver) {
+      Vibration.vibrate(500);
       clearInterval(search1IntervalId);
       clearInterval(search2IntervalId);
       clearInterval(runAway1IntervalId);
@@ -517,17 +554,21 @@ const TagTeamGameplay = ({ navigation, route }) => {
 
       if (gameDetails.currentRound > gameDetails.rounds) {
         gameDetails.gameOver = true;
-        navigation.navigate("End Game", gameDetails);
+        setTimeout(() => {
+          navigation.navigate("End Game", gameDetails);
+        }, roundOverDuration);
       } else {
-        navigation.navigate("TagTeam Roles", gameDetails);
+        setTimeout(() => {
+          navigation.navigate("TagTeam Roles", gameDetails);
+        }, roundOverDuration);
       }
     }
   }, [roundOver]);
 
   return (
-    <BGWithImage image={userContext.tagTeamBackground}>
-      <>
-        <View style={styles.mazeContainer}>
+    <>
+      <BGWithImage image={userContext.tagTeamBackground}>
+        <View style={[globalStyles().mazeContainer, { marginTop: 50 }]}>
           {mazeGrid.map((item: any) => (
             <View
               key={(`${item.row}` + `${item.col}`).toString()}
@@ -580,24 +621,15 @@ const TagTeamGameplay = ({ navigation, route }) => {
           movePlayerRight={movePlayerRight}
           movePlayerUp={movePlayerUp}
         />
-      </>
-    </BGWithImage>
+      </BGWithImage>
+      {roundOver && (
+        <RoundOverAlert
+          begin={roundOver}
+          gameOver={gameDetails.currentRound >= gameDetails.rounds}
+          details={roundOverDetails}
+        />
+      )}
+    </>
   );
 };
-
-const styles = StyleSheet.create({
-  titleLabel: {
-    fontSize: 40,
-    color: "white",
-    marginTop: height / 12,
-  },
-  mazeContainer: {
-    marginTop: 50,
-    width: mazeSideLength,
-    height: mazeSideLength,
-    backgroundColor: Colors.transparentBlack,
-    alignSelf: "center",
-  },
-});
-
 export default TagTeamGameplay;
