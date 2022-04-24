@@ -18,6 +18,7 @@ import {
   timeActuals,
 } from "./values";
 import TitleText from "../../components/TitleText";
+import { upperFirst } from "lodash";
 
 const width = Dimensions.get("window").width;
 

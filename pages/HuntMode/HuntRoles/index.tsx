@@ -24,7 +24,7 @@ const HuntRoles = ({ navigation, route }) => {
   let totalDetails = { ...configDetails, ...scoreDetails };
 
   const onPressSubmit = () => {
-    navigation.navigate("Hunt Gameplay", totalDetails);
+    navigation.navigate("Countdown", totalDetails);
   };
 
   // Animation delays

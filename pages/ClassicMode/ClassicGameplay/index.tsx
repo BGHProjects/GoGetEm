@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useContext } from "react";
-import { StyleSheet, View, Dimensions, Vibration } from "react-native";
+import React, { useState, useEffect, useContext, useRef } from "react";
+import { View, Dimensions, Vibration } from "react-native";
 import { Svg, Circle } from "react-native-svg";
 import {
   generateCells,
@@ -50,14 +50,10 @@ const ClassicGameplayScreen = ({ navigation, route }) => {
     gameDetails.currentRound % 2 < 1 ? rightStart[0] : leftStart[0]
   );
   const [player3Y, setplayer3Y] = useState(85);
-  const [search1IntervalId, setSearch1IntervalId] = useState<any>(null);
-  const [search2IntervalId, setSearch2IntervalId] = useState<any>(null);
   const [player2Started, setPlayer2Started] = useState<any>(false);
   const [roundOver, setRoundOver] = useState(false);
-  const [roundOverDetails, setRoundOverDetails] = useState({
-    chaser: undefined,
-    caught: undefined,
-  });
+  const [roundOverDetails, setRoundOverDetails] = useState<any>();
+  const roundOverRef = useRef<any>();
 
   let difficulty =
     gameDetails.difficulty === "Meh"
@@ -68,7 +64,15 @@ const ClassicGameplayScreen = ({ navigation, route }) => {
       ? 400
       : 300;
 
+  // So the details can't accidentally be set twice in the same game
+  const settingRoundOverDetails = (newDetails: any) => {
+    if (roundOverDetails === undefined) {
+      setRoundOverDetails(newDetails);
+    }
+  };
+
   useEffect(() => {
+    roundOverRef.current = roundOver;
     generateCells(mazeGrid, wallWidth, gridSquareLength);
     makeMaze(mazeGrid, stack);
     trimMaze(mazeGrid);
@@ -111,34 +115,28 @@ const ClassicGameplayScreen = ({ navigation, route }) => {
     }
   };
 
-  function followPath(player: any, searchPath: any) {
+  function followPath(
+    searchPath: any,
+    setX: (arg1: any) => void,
+    setY: (arg1: any) => void
+  ) {
     let index = 0;
+    let timeout: any;
 
-    if (player === "player2") {
-      setPlayer2Started(true);
-      setSearch1IntervalId(
-        setInterval(() => {
-          if (index < searchPath.length) {
-            setplayer2X(searchPath[index][1] + 5),
-              setplayer2Y(searchPath[index][0] + 5);
-            index++;
-          }
-        }, difficulty)
-      );
-      clearInterval(search1IntervalId);
-    } else if (player === "player3") {
-      setSearch2IntervalId(
-        setInterval(() => {
-          if (index < searchPath.length) {
-            setplayer3X(searchPath[index][1] + 5),
-              setplayer3Y(searchPath[index][0] + 5);
-            index++;
-          }
-        }, difficulty)
-      );
+    const follow = () => {
+      if (index < searchPath.length && !roundOverRef.current) {
+        timeout = setTimeout(() => {
+          setX(searchPath[index][1] + 5);
+          setY(searchPath[index][0] + 5);
+          index++;
+          follow();
+        }, difficulty);
+      } else {
+        clearTimeout(timeout);
+      }
+    };
 
-      clearInterval(search2IntervalId);
-    }
+    follow();
   }
 
   useEffect(() => {
@@ -180,8 +178,9 @@ const ClassicGameplayScreen = ({ navigation, route }) => {
     //Search Paths are compiled in reverse
     searchPath1 = searchPath1.reverse();
     searchPath2 = searchPath2.reverse();
-    followPath("player2", searchPath1);
-    followPath("player3", searchPath2);
+    setPlayer2Started(true); // Need to dig deeper to find out why I need this
+    followPath(searchPath1, setplayer2X, setplayer2Y);
+    followPath(searchPath2, setplayer3X, setplayer3Y);
   }, []);
 
   useEffect(() => {
@@ -230,13 +229,13 @@ const ClassicGameplayScreen = ({ navigation, route }) => {
     if (playerX === player3X && playerY === player3Y) {
       if (gameDetails.currentRound % 2 === 0) {
         player3Score++;
-        setRoundOverDetails({
+        settingRoundOverDetails({
           chaser: gameDetails.player3Colour,
           caught: gameDetails.colour,
         });
       } else {
         player1Score++;
-        setRoundOverDetails({
+        settingRoundOverDetails({
           chaser: gameDetails.colour,
           caught: gameDetails.player3Colour,
         });
@@ -248,13 +247,13 @@ const ClassicGameplayScreen = ({ navigation, route }) => {
     if (player3X === player2X && player3Y === player2Y) {
       if (gameDetails.currentRound % 2 < 1) {
         player2Score++;
-        setRoundOverDetails({
+        settingRoundOverDetails({
           chaser: gameDetails.player2Colour,
           caught: gameDetails.player3Colour,
         });
       } else {
         player3Score++;
-        setRoundOverDetails({
+        settingRoundOverDetails({
           chaser: gameDetails.player3Colour,
           caught: gameDetails.player2Colour,
         });
@@ -265,13 +264,13 @@ const ClassicGameplayScreen = ({ navigation, route }) => {
     if (player2X === playerX && player2Y === playerY) {
       if (gameDetails.currentRound % 2 < 1) {
         player1Score++;
-        setRoundOverDetails({
+        settingRoundOverDetails({
           chaser: gameDetails.colour,
           caught: gameDetails.player2Colour,
         });
       } else {
         player2Score++;
-        setRoundOverDetails({
+        settingRoundOverDetails({
           chaser: gameDetails.player2Colour,
           caught: gameDetails.colour,
         });
@@ -282,9 +281,9 @@ const ClassicGameplayScreen = ({ navigation, route }) => {
 
   useEffect(() => {
     if (roundOver) {
+      roundOverRef.current = roundOver;
       Vibration.vibrate(500);
-      clearInterval(search1IntervalId);
-      clearInterval(search2IntervalId);
+
       gameDetails.player1Score = player1Score;
       gameDetails.player2Score = player2Score;
       gameDetails.player3Score = player3Score;
@@ -302,6 +301,11 @@ const ClassicGameplayScreen = ({ navigation, route }) => {
       }
     }
   }, [roundOver]);
+
+  // just for testing
+  useEffect(() => {
+    console.log("roundOverDetails", roundOverDetails);
+  }, [roundOverDetails]);
 
   return (
     <>
@@ -357,7 +361,7 @@ const ClassicGameplayScreen = ({ navigation, route }) => {
       {roundOver && (
         <RoundOverAlert
           begin={roundOver}
-          gameOver={gameDetails.currentRound >= gameDetails.rounds}
+          gameOver={gameDetails.currentRound > gameDetails.rounds}
           details={roundOverDetails}
         />
       )}

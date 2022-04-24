@@ -66,7 +66,7 @@ const ChasedownRolesScreen = ({ navigation, route }) => {
   }, [totalDetails]);
 
   const onPressSubmit = () => {
-    navigation.navigate("Chasedown Gameplay", totalDetails);
+    navigation.navigate("Countdown", totalDetails);
   };
 
   // Animation delays

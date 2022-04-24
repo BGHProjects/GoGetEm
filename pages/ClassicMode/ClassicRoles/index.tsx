@@ -11,6 +11,7 @@ const contentSize = 200;
 
 const ClassicRolesScreen = ({ navigation, route }) => {
   const configDetails = route.params;
+
   let scoreDetails;
   const [leftColour, setLeftColour] = useState(configDetails.player2Colour);
   const [leftScore, setLeftScore] = useState(configDetails.player2Score);
@@ -44,7 +45,7 @@ const ClassicRolesScreen = ({ navigation, route }) => {
   let totalDetails = { ...configDetails, ...scoreDetails };
 
   const onPressSubmit = () => {
-    navigation.navigate("Classic Gameplay", totalDetails);
+    navigation.navigate("Countdown", totalDetails);
   };
 
   // Animation delays

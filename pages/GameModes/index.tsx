@@ -4,10 +4,11 @@ import BGWithImage from "../../components/BGWithImage";
 import MenuButton from "../../components/MenuButton";
 import { Colors } from "../../constants/Colors";
 import TitleText from "../../components/TitleText";
+import { Mode } from "../../constants/types";
 
 const GameModesScreen = ({ navigation }) => {
   const onPressButton = (gameMode: string) => {
-    navigation.navigate("Config", gameMode);
+    navigation.navigate("Config", Mode[gameMode]);
   };
 
   return (

@@ -1,8 +1,8 @@
 export enum Mode {
-  Classic = "classic",
-  Chasedown = "chasedown",
-  Hunt = "hunt",
-  TagTeam = "tagTeam",
+  Classic = "Classic",
+  Chasedown = "Chasedown",
+  Hunt = "Hunt",
+  TagTeam = "TagTeam",
 }
 
 export enum Result {

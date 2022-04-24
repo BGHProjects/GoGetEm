@@ -29,7 +29,12 @@ let player1Score: any;
 let player2Score: any;
 let playerSize = 4;
 
-const HuntGameplay = ({ navigation, route }) => {
+interface HuntGameplayProps {
+  navigation: any;
+  route: any;
+}
+
+const HuntGameplay = ({ navigation, route }: HuntGameplayProps) => {
   const userContext = useContext(UserContext);
 
   let gameDetails = route.params;
@@ -295,13 +300,5 @@ const HuntGameplay = ({ navigation, route }) => {
     </>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "black",
-    alignItems: "center",
-  },
-});
 
 export default HuntGameplay;

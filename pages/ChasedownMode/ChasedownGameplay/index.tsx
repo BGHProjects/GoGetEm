@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import { Text, View, Dimensions, Vibration } from "react-native";
 import { Svg, Circle } from "react-native-svg";
 import {
@@ -41,7 +41,15 @@ const topRightStart = [95, 5];
 const bottomLeftStart = [5, 95];
 const bottomRightStart = [95, 95];
 
-const ChasedownGameplayScreen = ({ navigation, route }) => {
+interface ChasedownGameplayScreenProps {
+  navigation: any;
+  route: any;
+}
+
+const ChasedownGameplayScreen = ({
+  navigation,
+  route,
+}: ChasedownGameplayScreenProps) => {
   const userContext = useContext(UserContext);
 
   let gameDetails = route.params;
@@ -115,12 +123,11 @@ const ChasedownGameplayScreen = ({ navigation, route }) => {
       ? bottomLeftStart[1]
       : topLeftStart[1]
   );
-  const [search1IntervalId, setSearch1IntervalId] = useState<any>(null);
-  const [search2IntervalId, setSearch2IntervalId] = useState<any>(null);
   const [roundOver, setRoundOver] = useState(false);
-  const [runAwayIntervalId, setRunAwayIntervalId] = useState<any>(null);
+  // const [runAwayIntervalId, setRunAwayIntervalId] = useState<any>(null);
   const [timerRunning, setTimerRunning] = useState(false);
-  const [roundOverDetails, setRoundOverDetails] = useState<any>({});
+  const [roundOverDetails, setRoundOverDetails] = useState<any>();
+  const roundOverRef = useRef<any>();
 
   const [player2Pos, setPlayer2Pos] = useState<any>([
     player2X,
@@ -145,7 +152,15 @@ const ChasedownGameplayScreen = ({ navigation, route }) => {
       ? 400
       : 300;
 
+  // So the details can't accidentally be set twice in the same game
+  const settingRoundOverDetails = (newDetails: any) => {
+    if (roundOverDetails === undefined) {
+      setRoundOverDetails(newDetails);
+    }
+  };
+
   useEffect(() => {
+    roundOverRef.current = roundOver;
     generateCells(mazeGrid, wallWidth, gridSquareLength);
     makeMaze(mazeGrid, stack);
     trimMaze(mazeGrid);
@@ -203,64 +218,82 @@ const ChasedownGameplayScreen = ({ navigation, route }) => {
     return mazeGrid[digits];
   }
 
-  function followPath(player: any, searchPath: any) {
+  function followPath(
+    searchPath: any,
+    setX: (arg1: any) => void,
+    setY: (arg1: any) => void
+  ) {
     let index = 0;
+    let timeout: any;
 
-    if (player === "player2") {
-      setSearch1IntervalId(
-        setInterval(() => {
-          if (index < searchPath.length) {
-            setPlayer2X(searchPath[index][1] + 5);
-            setPlayer2Y(searchPath[index][0] + 5);
-            index++;
-          }
-        }, difficulty)
-      );
-      clearInterval(search1IntervalId);
-    } else if (player === "player3") {
-      setSearch2IntervalId(
-        setInterval(() => {
-          if (index < searchPath.length) {
-            setPlayer3X(searchPath[index][1] + 5);
-            setPlayer3Y(searchPath[index][0] + 5);
-            index++;
-          }
-        }, difficulty)
-      );
+    const follow = () => {
+      if (index < searchPath.length && !roundOverRef.current) {
+        timeout = setTimeout(() => {
+          setX(searchPath[index][1] + 5);
+          setY(searchPath[index][0] + 5);
+          index++;
+          follow();
+        }, difficulty);
+      } else {
+        clearTimeout(timeout);
+      }
+    };
 
-      clearInterval(search2IntervalId);
-    }
+    follow();
   }
 
-  function runAway() {
-    setRunAwayIntervalId(
-      setInterval(() => {
-        if (!roundOver) {
-          if (gameDetails.targetPlayer === 2) {
-            setPlayer2Pos((currentPlayer2Pos: any) => {
-              return runAwayAlgorithm(
-                currentPlayer2Pos,
-                searchPath1,
-                searchPath2,
-                mazeGrid
-              );
-            });
-          } else if (gameDetails.targetPlayer === 3) {
-            setPlayer3Pos((currentPlayer3Pos: any) => {
-              return runAwayAlgorithm(
-                currentPlayer3Pos,
-                searchPath1,
-                searchPath2,
-                mazeGrid
-              );
-            });
-          }
-        }
-      }, difficulty)
-    );
+  function runAway(
+    setPlayerPos: (arg1: any) => void,
+    searchPath1: any,
+    searchPath2: any
+  ) {
+    let timeout: any;
 
-    clearInterval(runAwayIntervalId);
+    const run = () => {
+      if (!roundOverRef.current) {
+        timeout = setTimeout(() => {
+          setPlayerPos((oldPos: any) => {
+            return runAwayAlgorithm(oldPos, searchPath1, searchPath2, mazeGrid);
+          });
+          run();
+        }, difficulty);
+      } else {
+        clearTimeout(timeout);
+      }
+    };
+
+    run();
   }
+
+  // function runAway() {
+  //   setRunAwayIntervalId(
+  //     setInterval(() => {
+  //       if (!roundOver) {
+  //         if (gameDetails.targetPlayer === 2) {
+  //           setPlayer2Pos((currentPlayer2Pos: any) => {
+  //             return runAwayAlgorithm(
+  //               currentPlayer2Pos,
+  //               searchPath1,
+  //               searchPath2,
+  //               mazeGrid
+  //             );
+  //           });
+  //         } else if (gameDetails.targetPlayer === 3) {
+  //           setPlayer3Pos((currentPlayer3Pos: any) => {
+  //             return runAwayAlgorithm(
+  //               currentPlayer3Pos,
+  //               searchPath1,
+  //               searchPath2,
+  //               mazeGrid
+  //             );
+  //           });
+  //         }
+  //       }
+  //     }, difficulty)
+  //   );
+
+  //   clearInterval(runAwayIntervalId);
+  // }
 
   useEffect(() => {
     setPlayer2X(player2Pos[0]);
@@ -292,8 +325,8 @@ const ChasedownGameplayScreen = ({ navigation, route }) => {
       );
       searchPath1 = searchPath1.reverse();
       searchPath2 = searchPath2.reverse();
-      followPath("player2", searchPath1);
-      followPath("player3", searchPath2);
+      followPath(searchPath1, setPlayer2X, setPlayer2Y);
+      followPath(searchPath2, setPlayer3X, setPlayer3Y);
     } else if (gameDetails.targetPlayer === 2) {
       aStarSearch(
         searchGrid1,
@@ -313,8 +346,8 @@ const ChasedownGameplayScreen = ({ navigation, route }) => {
       );
       searchPath1 = searchPath1.reverse();
       searchPath2 = searchPath2.reverse();
-      followPath("player3", searchPath2);
-      runAway();
+      followPath(searchPath2, setPlayer3X, setPlayer3Y);
+      runAway(setPlayer2Pos, searchPath1, searchPath2);
     } else if (gameDetails.targetPlayer === 3) {
       aStarSearch(
         searchGrid1,
@@ -334,8 +367,8 @@ const ChasedownGameplayScreen = ({ navigation, route }) => {
       );
       searchPath1 = searchPath1.reverse();
       searchPath2 = searchPath2.reverse();
-      followPath("player2", searchPath2);
-      runAway();
+      followPath(searchPath2, setPlayer2X, setPlayer2Y);
+      runAway(setPlayer3Pos, searchPath1, searchPath2);
     }
   }, []);
 
@@ -353,13 +386,13 @@ const ChasedownGameplayScreen = ({ navigation, route }) => {
       if (gameDetails.targetPlayer === 1 || gameDetails.targetPlayer === 3) {
         if (gameDetails.targetPlayer === 1) {
           player3Score++;
-          setRoundOverDetails({
+          settingRoundOverDetails({
             chaser: gameDetails.player3Colour,
             caught: gameDetails.colour,
           });
         } else if (gameDetails.targetPlayer === 3) {
           player1Score++;
-          setRoundOverDetails({
+          settingRoundOverDetails({
             chaser: gameDetails.colour,
             caught: gameDetails.player3Colour,
           });
@@ -372,13 +405,13 @@ const ChasedownGameplayScreen = ({ navigation, route }) => {
       if (gameDetails.targetPlayer === 2 || gameDetails.targetPlayer === 3) {
         if (gameDetails.targetPlayer === 2) {
           player3Score++;
-          setRoundOverDetails({
+          settingRoundOverDetails({
             chaser: gameDetails.player3Colour,
             caught: gameDetails.player2Colour,
           });
         } else if (gameDetails.targetPlayer === 3) {
           player2Score++;
-          setRoundOverDetails({
+          settingRoundOverDetails({
             chaser: gameDetails.player2Colour,
             caught: gameDetails.player3Colour,
           });
@@ -391,13 +424,13 @@ const ChasedownGameplayScreen = ({ navigation, route }) => {
       if (gameDetails.targetPlayer === 2 || gameDetails.targetPlayer === 1) {
         if (gameDetails.targetPlayer === 2) {
           player1Score++;
-          setRoundOverDetails({
+          settingRoundOverDetails({
             chaser: gameDetails.colour,
             caught: gameDetails.player2Colour,
           });
         } else if (gameDetails.targetPlayer === 1) {
           player2Score++;
-          setRoundOverDetails({
+          settingRoundOverDetails({
             chaser: gameDetails.player2Colour,
             caught: gameDetails.colour,
           });
@@ -409,10 +442,9 @@ const ChasedownGameplayScreen = ({ navigation, route }) => {
 
   useEffect(() => {
     if (roundOver) {
+      roundOverRef.current = roundOver;
       Vibration.vibrate(500);
-      clearInterval(search1IntervalId);
-      clearInterval(search2IntervalId);
-      clearInterval(runAwayIntervalId);
+      // clearInterval(runAwayIntervalId);
       gameDetails.player1Score = player1Score;
       gameDetails.player2Score = player2Score;
       gameDetails.player3Score = player3Score;
@@ -524,7 +556,7 @@ const ChasedownGameplayScreen = ({ navigation, route }) => {
       {roundOver && (
         <RoundOverAlert
           begin={roundOver}
-          gameOver={gameDetails.currentRound >= gameDetails.rounds}
+          gameOver={gameDetails.currentRound > gameDetails.rounds}
           details={roundOverDetails}
         />
       )}

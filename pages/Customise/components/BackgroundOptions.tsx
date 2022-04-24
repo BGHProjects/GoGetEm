@@ -3,7 +3,7 @@ import { View, StyleSheet, ScrollView } from "react-native";
 import { Mode } from "../../../constants/types";
 import BGOption from "./BGOption";
 import { UserContext } from "../../../tools/UserContext";
-import { upperFirst } from "lodash";
+import { upperFirst, lowerFirst } from "lodash";
 
 const BackgroundOptions = () => {
   const userContext = useContext(UserContext);
@@ -16,11 +16,11 @@ const BackgroundOptions = () => {
           return (
             <BGOption
               key={mode}
-              modeLabel={upperFirst(Mode[upperFirst(mode)])}
+              modeLabel={mode}
               selectionLabel={upperFirst(
-                userContext[`${Mode[upperFirst(mode)]}Background`]
+                userContext[`${lowerFirst(mode)}Background`]
               )}
-              selection={userContext[`${Mode[upperFirst(mode)]}Background`]}
+              selection={userContext[`${lowerFirst(mode)}Background`]}
             />
           );
         })}

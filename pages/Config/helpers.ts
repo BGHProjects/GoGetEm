@@ -1,3 +1,5 @@
+import { Mode } from "../../constants/types";
+
 interface onPressSubmitProps {
   otherColours: string[];
   whichMode: string;
@@ -21,7 +23,7 @@ export function onPressSubmit({
 
   let configOptions: Record<string, any> = {
     Classic: {
-      mode: "Classic",
+      mode: Mode.Classic,
       flag: "config",
       colour: selectedColour,
       rounds: selectedRound,
@@ -30,7 +32,7 @@ export function onPressSubmit({
       player3Colour: otherColours[1],
     },
     Chasedown: {
-      mode: "Chasedown",
+      mode: Mode.Chasedown,
       flag: "config",
       colour: selectedColour,
       rounds: selectedRound,
@@ -40,7 +42,7 @@ export function onPressSubmit({
       player3Colour: otherColours[1],
     },
     Hunt: {
-      mode: "Hunt",
+      mode: Mode.Hunt,
       flag: "config",
       colour: selectedColour,
       rounds: selectedRound,
@@ -49,7 +51,7 @@ export function onPressSubmit({
       player2Colour: otherColours[0],
     },
     TagTeam: {
-      mode: "TagTeam",
+      mode: Mode.TagTeam,
       flag: "config",
       colour: selectedColour,
       rounds: selectedRound,
