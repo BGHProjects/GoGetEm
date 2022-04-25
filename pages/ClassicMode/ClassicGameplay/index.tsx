@@ -87,6 +87,7 @@ const ClassicGameplayScreen = ({ navigation, route }) => {
     let mazeCell = getMazeCell(playerX, playerY, mazeGrid);
 
     if (playerY > 5 && mazeCell.top === 0 && !roundOver) {
+      Vibration.vibrate(5);
       setplayerY(playerY - 10);
     }
   };
@@ -95,6 +96,7 @@ const ClassicGameplayScreen = ({ navigation, route }) => {
     let mazeCell = getMazeCell(playerX, playerY, mazeGrid);
 
     if (playerX < 95 && mazeCell.right === 0 && !roundOver) {
+      Vibration.vibrate(5);
       setplayerX(playerX + 10);
     }
   };
@@ -103,6 +105,7 @@ const ClassicGameplayScreen = ({ navigation, route }) => {
     let mazeCell = getMazeCell(playerX, playerY, mazeGrid);
 
     if (playerX > 5 && mazeCell.left === 0 && !roundOver) {
+      Vibration.vibrate(5);
       setplayerX(playerX - 10);
     }
   };
@@ -111,6 +114,7 @@ const ClassicGameplayScreen = ({ navigation, route }) => {
     let mazeCell = getMazeCell(playerX, playerY, mazeGrid);
 
     if (playerY < 95 && mazeCell.bottom === 0 && !roundOver) {
+      Vibration.vibrate(5);
       setplayerY(playerY + 10);
     }
   };

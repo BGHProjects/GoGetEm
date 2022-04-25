@@ -62,6 +62,7 @@ const HuntGameplay = ({ navigation, route }: HuntGameplayProps) => {
     let mazeCell = getMazeCell(playerX, playerY);
 
     if (playerY > 5 && mazeCell.top === 0 && !roundOver) {
+      Vibration.vibrate(5);
       setPlayerY(playerY - 10);
     }
   };
@@ -70,6 +71,7 @@ const HuntGameplay = ({ navigation, route }: HuntGameplayProps) => {
     let mazeCell = getMazeCell(playerX, playerY);
 
     if (playerX < 95 && mazeCell.right === 0 && !roundOver) {
+      Vibration.vibrate(5);
       setPlayerX(playerX + 10);
     }
   };
@@ -78,6 +80,7 @@ const HuntGameplay = ({ navigation, route }: HuntGameplayProps) => {
     let mazeCell = getMazeCell(playerX, playerY);
 
     if (playerX > 5 && mazeCell.left === 0 && !roundOver) {
+      Vibration.vibrate(5);
       setPlayerX(playerX - 10);
     }
   };
@@ -86,6 +89,7 @@ const HuntGameplay = ({ navigation, route }: HuntGameplayProps) => {
     let mazeCell = getMazeCell(playerX, playerY);
 
     if (playerY < 95 && mazeCell.bottom === 0 && !roundOver) {
+      Vibration.vibrate(5);
       setPlayerY(playerY + 10);
     }
   };

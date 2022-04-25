@@ -24,7 +24,7 @@ const TagTeamRoles = ({ navigation, route }) => {
   let totalDetails = { ...configDetails, ...scoreDetails };
 
   const onPressSubmit = () => {
-    navigation.navigate("TagTeam Gameplay", totalDetails);
+    navigation.navigate("Countdown", totalDetails);
   };
 
   // Animation delays

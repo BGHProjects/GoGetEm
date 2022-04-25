@@ -124,7 +124,6 @@ const ChasedownGameplayScreen = ({
       : topLeftStart[1]
   );
   const [roundOver, setRoundOver] = useState(false);
-  // const [runAwayIntervalId, setRunAwayIntervalId] = useState<any>(null);
   const [timerRunning, setTimerRunning] = useState(false);
   const [roundOverDetails, setRoundOverDetails] = useState<any>();
   const roundOverRef = useRef<any>();
@@ -176,6 +175,7 @@ const ChasedownGameplayScreen = ({
     let mazeCell = getMazeCell(playerX, playerY);
 
     if (playerY > 5 && mazeCell.top === 0 && !roundOver) {
+      Vibration.vibrate(5);
       setPlayerY(playerY - 10);
     }
   };
@@ -184,6 +184,7 @@ const ChasedownGameplayScreen = ({
     let mazeCell = getMazeCell(playerX, playerY);
 
     if (playerX < 95 && mazeCell.right === 0 && !roundOver) {
+      Vibration.vibrate(5);
       setPlayerX(playerX + 10);
     }
   };
@@ -192,6 +193,7 @@ const ChasedownGameplayScreen = ({
     let mazeCell = getMazeCell(playerX, playerY);
 
     if (playerX > 5 && mazeCell.left === 0 && !roundOver) {
+      Vibration.vibrate(5);
       setPlayerX(playerX - 10);
     }
   };
@@ -200,6 +202,7 @@ const ChasedownGameplayScreen = ({
     let mazeCell = getMazeCell(playerX, playerY);
 
     if (playerY < 95 && mazeCell.bottom === 0 && !roundOver) {
+      Vibration.vibrate(5);
       setPlayerY(playerY + 10);
     }
   };
@@ -264,36 +267,6 @@ const ChasedownGameplayScreen = ({
 
     run();
   }
-
-  // function runAway() {
-  //   setRunAwayIntervalId(
-  //     setInterval(() => {
-  //       if (!roundOver) {
-  //         if (gameDetails.targetPlayer === 2) {
-  //           setPlayer2Pos((currentPlayer2Pos: any) => {
-  //             return runAwayAlgorithm(
-  //               currentPlayer2Pos,
-  //               searchPath1,
-  //               searchPath2,
-  //               mazeGrid
-  //             );
-  //           });
-  //         } else if (gameDetails.targetPlayer === 3) {
-  //           setPlayer3Pos((currentPlayer3Pos: any) => {
-  //             return runAwayAlgorithm(
-  //               currentPlayer3Pos,
-  //               searchPath1,
-  //               searchPath2,
-  //               mazeGrid
-  //             );
-  //           });
-  //         }
-  //       }
-  //     }, difficulty)
-  //   );
-
-  //   clearInterval(runAwayIntervalId);
-  // }
 
   useEffect(() => {
     setPlayer2X(player2Pos[0]);
@@ -444,7 +417,6 @@ const ChasedownGameplayScreen = ({
     if (roundOver) {
       roundOverRef.current = roundOver;
       Vibration.vibrate(500);
-      // clearInterval(runAwayIntervalId);
       gameDetails.player1Score = player1Score;
       gameDetails.player2Score = player2Score;
       gameDetails.player3Score = player3Score;

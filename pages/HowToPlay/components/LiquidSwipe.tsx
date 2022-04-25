@@ -2,37 +2,37 @@ import React, { useState } from "react";
 
 import Slider from "./Slider";
 import Slide from "./Slide";
+import { Colors } from "../../../constants/Colors";
 
 const slides = [
   {
-    color: "#F2A1AD",
-    title: "Dessert Recipes",
+    color: Colors.purple,
+    title: "Controls",
     description:
-      "Hot or cold, our dessert recipes can turn an average meal into a memorable event",
+      "Press the buttons on your controller to move your player through the maze",
   },
   {
-    color: "#0090D6",
-    title: "Healthy Foods",
+    color: Colors.blue,
+    title: "Classic Mode",
     description:
-      "Discover healthy recipes that are easy to do with detailed cooking instructions from top chefs",
+      "Catch your target, before they catch theirs... or before you're caught!",
   },
   {
-    color: "#69C743",
-    title: "Easy Meal Ideas",
+    color: Colors.primaryBackground,
+    title: "Chasedown Mode",
     description:
-      "explore recipes by food type, preparation method, cuisine, country and more",
+      "Catch the target before the other player\nIf you're the target, survive until time runs out",
   },
   {
-    color: "#FB3A4D",
-    title: "10000+ Recipes",
-    description:
-      "Browse thousands of curated recipes from top chefs, each with detailled cooking instructions",
+    color: Colors.red,
+    title: "Hunt Mode",
+    description: "Catch more targets than your opponent before time runs out",
   },
   {
-    color: "#F2AD62",
-    title: "Video Tutorials",
+    color: Colors.orange,
+    title: "TagTeam Mode",
     description:
-      "Browse our best themed recipes, cooking tips, and how-to food video & photos",
+      "Each team has one chaser and one target\nCatch the other team's target before they catch yours to win",
   },
 ];
 

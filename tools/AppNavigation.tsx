@@ -19,6 +19,7 @@ import EndGame from "../pages/EndGame";
 import ExpChange from "../pages/ExpChange";
 import Unlocks from "../pages/Unlocks";
 import HowToPlay from "../pages/HowToPlay";
+import Countdown from "../pages/Countdown";
 
 const AppNavigation = () => {
   const Stack = createStackNavigator();
@@ -121,6 +122,11 @@ const AppNavigation = () => {
       <Stack.Screen
         name="HowToPlay"
         component={HowToPlay}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Countdown"
+        component={Countdown}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import { View, Dimensions, Vibration } from "react-native";
 import { Svg, Circle } from "react-native-svg";
 import {
@@ -13,15 +13,14 @@ import {
   runAwaySingleChaser,
 } from "../../../tools/BotBrain";
 import Controller from "../../../components/Controller/Controller";
-import { Colors } from "../../../constants/Colors";
 import BGWithImage from "../../../components/BGWithImage";
 import { UserContext } from "../../../tools/UserContext";
 import RoundOverAlert from "../../../components/RoundOverAlert/RoundOverAlert";
 import { roundOverDuration } from "../../../constants/Animation";
 import globalStyles from "../../../constants/GlobalStyles";
+import { isUndefined } from "lodash";
 
 const height = Dimensions.get("window").height;
-const mazeSideLength = height * 0.45;
 const cellSize = height * 0.045;
 let mazeGrid: any = [];
 const wallWidth = 1;
@@ -74,13 +73,9 @@ const TagTeamGameplay = ({ navigation, route }) => {
       : 15
   );
 
-  const [search1IntervalId, setSearch1IntervalId] = useState<any>(null);
-  const [search2IntervalId, setSearch2IntervalId] = useState<any>(null);
-  const [runAway1IntervalId, setRunAway1IntervalId] = useState<any>(null);
-  const [runAway2IntervalId, setRunAway2IntervalId] = useState<any>(null);
-
   const [roundOver, setRoundOver] = useState(false);
-  const [roundOverDetails, setRoundOverDetails] = useState<any>({});
+  const [roundOverDetails, setRoundOverDetails] = useState<any>();
+  const roundOverRef = useRef<any>();
 
   /**
    * The below are necessary for the runAway algorithms
@@ -118,10 +113,18 @@ const TagTeamGameplay = ({ navigation, route }) => {
       ? 400
       : 300;
 
+  // So the details can't accidentally be set twice in the same game
+  const settingRoundOverDetails = (newDetails: any) => {
+    if (roundOverDetails === undefined) {
+      setRoundOverDetails(newDetails);
+    }
+  };
+
   const movePlayerUp = () => {
     let mazeCell = getMazeCell(playerX, playerY);
 
     if (playerY > 5 && mazeCell.top === 0 && !roundOver) {
+      Vibration.vibrate(5);
       setPlayerY(playerY - 10);
     }
   };
@@ -130,6 +133,7 @@ const TagTeamGameplay = ({ navigation, route }) => {
     let mazeCell = getMazeCell(playerX, playerY);
 
     if (playerX < 95 && mazeCell.right === 0 && !roundOver) {
+      Vibration.vibrate(5);
       setPlayerX(playerX + 10);
     }
   };
@@ -138,6 +142,7 @@ const TagTeamGameplay = ({ navigation, route }) => {
     let mazeCell = getMazeCell(playerX, playerY);
 
     if (playerX > 5 && mazeCell.left === 0 && !roundOver) {
+      Vibration.vibrate(5);
       setPlayerX(playerX - 10);
     }
   };
@@ -146,6 +151,7 @@ const TagTeamGameplay = ({ navigation, route }) => {
     let mazeCell = getMazeCell(playerX, playerY);
 
     if (playerY < 95 && mazeCell.bottom === 0 && !roundOver) {
+      Vibration.vibrate(5);
       setPlayerY(playerY + 10);
     }
   };
@@ -166,22 +172,30 @@ const TagTeamGameplay = ({ navigation, route }) => {
 
   function followPath(
     searchPath: any,
-    setPlayerX: Function,
-    setPlayerY: Function,
-    setSearch: Function,
-    intervalId: any
+    setX: (arg1: any) => void,
+    setY: (arg1: any) => void
   ) {
     let index = 0;
-    setSearch(
-      setInterval(() => {
-        if (index < searchPath.length) {
-          setPlayerX(searchPath[index][1] + 5);
-          setPlayerY(searchPath[index][0] + 5);
+    let timeout: any;
+
+    const follow = () => {
+      if (
+        !isUndefined(searchPath[index]) &&
+        index < searchPath.length &&
+        !roundOverRef.current
+      ) {
+        timeout = setTimeout(() => {
+          setX(searchPath[index][1] + 5);
+          setY(searchPath[index][0] + 5);
           index++;
-        }
-      }, difficulty + 50)
-    );
-    clearInterval(intervalId);
+          follow();
+        }, difficulty);
+      } else {
+        clearTimeout(timeout);
+      }
+    };
+
+    follow();
   }
 
   useEffect(() => {
@@ -199,23 +213,23 @@ const TagTeamGameplay = ({ navigation, route }) => {
     setPlayer4Y(player4Pos[1]);
   }, [player4Pos]);
 
-  function runAway(
-    setRunAwayIntervalId: Function,
-    runAwayIntervalId: any,
-    setPlayerPos: Function,
-    searchPath: any
-  ) {
-    setRunAwayIntervalId(
-      setInterval(() => {
-        if (!roundOver) {
-          setPlayerPos((currentPlayerPos: any) => {
-            return runAwaySingleChaser(currentPlayerPos, searchPath, mazeGrid);
-          });
-        }
-      }, difficulty)
-    );
+  function runAway(setPlayerPos: (arg1: any) => void, searchPath: any) {
+    let timeout: any;
 
-    clearInterval(runAwayIntervalId);
+    const run = () => {
+      if (!roundOverRef.current && !isUndefined(searchPath)) {
+        timeout = setTimeout(() => {
+          setPlayerPos((oldPos: any) => {
+            return runAwaySingleChaser(oldPos, searchPath, mazeGrid);
+          });
+          run();
+        }, difficulty);
+      } else {
+        clearTimeout(timeout);
+      }
+    };
+
+    run();
   }
 
   /**
@@ -223,6 +237,7 @@ const TagTeamGameplay = ({ navigation, route }) => {
    */
 
   useEffect(() => {
+    roundOverRef.current = roundOver;
     generateCells(mazeGrid, wallWidth, gridSquareLength);
     makeMaze(mazeGrid, stack);
     trimMaze(mazeGrid);
@@ -242,13 +257,7 @@ const TagTeamGameplay = ({ navigation, route }) => {
         player2Y
       );
       searchPath1 = searchPath1.reverse();
-      followPath(
-        searchPath1,
-        setPlayer4X,
-        setPlayer4Y,
-        setSearch1IntervalId,
-        search1IntervalId
-      );
+      followPath(searchPath1, setPlayer4X, setPlayer4Y);
 
       aStarSearch(
         searchGrid2,
@@ -260,18 +269,8 @@ const TagTeamGameplay = ({ navigation, route }) => {
       );
       searchPath2 = searchPath2.reverse();
 
-      runAway(
-        setRunAway1IntervalId,
-        runAway1IntervalId,
-        setPlayer2Pos,
-        searchPath1
-      );
-      runAway(
-        setRunAway2IntervalId,
-        runAway2IntervalId,
-        setPlayer3Pos,
-        searchPath2
-      );
+      runAway(setPlayer2Pos, searchPath1);
+      runAway(setPlayer3Pos, searchPath2);
     } else if (
       gameDetails.currentRound === 2 ||
       gameDetails.currentRound === 6
@@ -286,13 +285,7 @@ const TagTeamGameplay = ({ navigation, route }) => {
         player2Y
       );
       searchPath1 = searchPath1.reverse();
-      followPath(
-        searchPath1,
-        setPlayer3X,
-        setPlayer3Y,
-        setSearch1IntervalId,
-        search1IntervalId
-      );
+      followPath(searchPath1, setPlayer3X, setPlayer3Y);
 
       aStarSearch(
         searchGrid2,
@@ -304,18 +297,8 @@ const TagTeamGameplay = ({ navigation, route }) => {
       );
       searchPath2 = searchPath2.reverse();
 
-      runAway(
-        setRunAway1IntervalId,
-        runAway1IntervalId,
-        setPlayer2Pos,
-        searchPath1
-      );
-      runAway(
-        setRunAway2IntervalId,
-        runAway2IntervalId,
-        setPlayer4Pos,
-        searchPath2
-      );
+      runAway(setPlayer2Pos, searchPath1);
+      runAway(setPlayer4Pos, searchPath2);
     } else if (
       gameDetails.currentRound === 3 ||
       gameDetails.currentRound === 7
@@ -330,13 +313,7 @@ const TagTeamGameplay = ({ navigation, route }) => {
         player4Y
       );
       searchPath1 = searchPath1.reverse();
-      followPath(
-        searchPath1,
-        setPlayer2X,
-        setPlayer2Y,
-        setSearch1IntervalId,
-        search1IntervalId
-      );
+      followPath(searchPath1, setPlayer2X, setPlayer2Y);
 
       aStarSearch(
         searchGrid2,
@@ -347,20 +324,9 @@ const TagTeamGameplay = ({ navigation, route }) => {
         playerY
       );
       searchPath2 = searchPath2.reverse();
-      followPath(
-        searchPath2,
-        setPlayer3X,
-        setPlayer3Y,
-        setSearch2IntervalId,
-        search2IntervalId
-      );
+      followPath(searchPath2, setPlayer3X, setPlayer3Y);
 
-      runAway(
-        setRunAway1IntervalId,
-        runAway1IntervalId,
-        setPlayer4Pos,
-        searchPath1
-      );
+      runAway(setPlayer4Pos, searchPath1);
     } else if (gameDetails.currentRound === 4) {
       // 2 chasing 3, 4 chasing Player
       aStarSearch(
@@ -372,13 +338,7 @@ const TagTeamGameplay = ({ navigation, route }) => {
         player3Y
       );
       searchPath1 = searchPath1.reverse();
-      followPath(
-        searchPath1,
-        setPlayer2X,
-        setPlayer2Y,
-        setSearch1IntervalId,
-        search1IntervalId
-      );
+      followPath(searchPath1, setPlayer2X, setPlayer2Y);
 
       aStarSearch(
         searchGrid2,
@@ -389,20 +349,9 @@ const TagTeamGameplay = ({ navigation, route }) => {
         playerY
       );
       searchPath2 = searchPath2.reverse();
-      followPath(
-        searchPath2,
-        setPlayer4X,
-        setPlayer4Y,
-        setSearch2IntervalId,
-        search2IntervalId
-      );
+      followPath(searchPath2, setPlayer4X, setPlayer4Y);
 
-      runAway(
-        setRunAway1IntervalId,
-        runAway1IntervalId,
-        setPlayer3Pos,
-        searchPath1
-      );
+      runAway(setPlayer3Pos, searchPath1);
     }
   }, []);
 
@@ -432,7 +381,7 @@ const TagTeamGameplay = ({ navigation, route }) => {
     if (playerX === player3X && playerY === player3Y) {
       // Player is chasing 3
       if (gameDetails.currentRound === 1 || gameDetails.currentRound === 5) {
-        setRoundOverDetails({
+        settingRoundOverDetails({
           chaser: gameDetails.colour,
           caught: gameDetails.player3Colour,
         });
@@ -443,7 +392,7 @@ const TagTeamGameplay = ({ navigation, route }) => {
         gameDetails.currentRound === 3 ||
         gameDetails.currentRound === 7
       ) {
-        setRoundOverDetails({
+        settingRoundOverDetails({
           chaser: gameDetails.player3Colour,
           caught: gameDetails.colour,
         });
@@ -453,7 +402,7 @@ const TagTeamGameplay = ({ navigation, route }) => {
     } else if (playerX === player4X && playerY === player4Y) {
       // Player is chasing 4
       if (gameDetails.currentRound === 2 || gameDetails.currentRound === 6) {
-        setRoundOverDetails({
+        settingRoundOverDetails({
           chaser: gameDetails.colour,
           caught: gameDetails.player4Colour,
         });
@@ -461,7 +410,7 @@ const TagTeamGameplay = ({ navigation, route }) => {
       }
       // 4 is chasing Player
       else if (gameDetails.currentRound === 4) {
-        setRoundOverDetails({
+        settingRoundOverDetails({
           chaser: gameDetails.player4Colour,
           caught: gameDetails.colour,
         });
@@ -471,7 +420,7 @@ const TagTeamGameplay = ({ navigation, route }) => {
     } else if (player2X === player3X && player2Y === player3Y) {
       // 2 is chasing 3
       if (gameDetails.currentRound === 4) {
-        setRoundOverDetails({
+        settingRoundOverDetails({
           chaser: gameDetails.player2Colour,
           caught: gameDetails.player3Colour,
         });
@@ -482,7 +431,7 @@ const TagTeamGameplay = ({ navigation, route }) => {
         gameDetails.currentRound === 2 ||
         gameDetails.currentRound === 6
       ) {
-        setRoundOverDetails({
+        settingRoundOverDetails({
           chaser: gameDetails.player3Colour,
           caught: gameDetails.player2Colour,
         });
@@ -492,7 +441,7 @@ const TagTeamGameplay = ({ navigation, route }) => {
     } else if (player2X === player4X && player2Y === player4Y) {
       // 2 is chasing 4
       if (gameDetails.currentRound === 3 || gameDetails.currentRound === 7) {
-        setRoundOverDetails({
+        settingRoundOverDetails({
           chaser: gameDetails.player2Colour,
           caught: gameDetails.player4Colour,
         });
@@ -503,7 +452,7 @@ const TagTeamGameplay = ({ navigation, route }) => {
         gameDetails.currentRound === 1 ||
         gameDetails.currentRound === 5
       ) {
-        setRoundOverDetails({
+        settingRoundOverDetails({
           chaser: gameDetails.player4Colour,
           caught: gameDetails.player2Colour,
         });
@@ -528,11 +477,8 @@ const TagTeamGameplay = ({ navigation, route }) => {
 
   useEffect(() => {
     if (roundOver) {
+      roundOverRef.current = roundOver;
       Vibration.vibrate(500);
-      clearInterval(search1IntervalId);
-      clearInterval(search2IntervalId);
-      clearInterval(runAway1IntervalId);
-      clearInterval(runAway2IntervalId);
       gameDetails.team1Score = team1Score;
       gameDetails.team2Score = team2Score;
       gameDetails.flag = "gameplay";
@@ -625,7 +571,7 @@ const TagTeamGameplay = ({ navigation, route }) => {
       {roundOver && (
         <RoundOverAlert
           begin={roundOver}
-          gameOver={gameDetails.currentRound >= gameDetails.rounds}
+          gameOver={gameDetails.currentRound > gameDetails.rounds}
           details={roundOverDetails}
         />
       )}

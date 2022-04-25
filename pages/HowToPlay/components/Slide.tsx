@@ -1,35 +1,9 @@
 import { Colors } from "../../../constants/Colors";
 import React from "react";
-import { View, Text, StyleSheet, Dimensions, Image } from "react-native";
-import Svg, { RadialGradient, Defs, Rect, Stop } from "react-native-svg";
-
-const { width, height } = Dimensions.get("screen");
-const SIZE = width - 75;
-const styles = StyleSheet.create({
-  container: {
-    ...StyleSheet.absoluteFillObject,
-    padding: 75,
-    paddingTop: 150,
-    alignItems: "center",
-  },
-  image: {
-    width: SIZE,
-    height: SIZE,
-  },
-  title: {
-    fontSize: 48,
-    color: "white",
-    textAlign: "center",
-    marginBottom: 16,
-    fontFamily: "Main-Bold",
-  },
-  description: {
-    fontSize: 18,
-    color: "white",
-    textAlign: "center",
-    fontFamily: "Main-Bold",
-  },
-});
+import { View, Text, StyleSheet, Dimensions } from "react-native";
+import ControlsContent from "./ControlsContent";
+import ClassicContent from "./ClassicContent";
+import ChasedownContent from "./ChasedownContent";
 
 export interface SlideProps {
   slide: {
@@ -40,26 +14,46 @@ export interface SlideProps {
 }
 
 const Slide = ({ slide: { color, title, description } }: SlideProps) => {
-  const lighterColor = Colors.primaryBackground;
+  const whichComponent: Record<string, React.ReactNode> = {
+    Controls: <ControlsContent />,
+    "Classic Mode": <ClassicContent />,
+    "Chasedown Mode": <ChasedownContent />,
+  };
+
   return (
     <>
-      <Svg style={StyleSheet.absoluteFill}>
-        <Defs>
-          <RadialGradient id="gradient" cx="50%" cy="35%">
-            <Stop offset="0%" stopColor={lighterColor} />
-            <Stop offset="100%" stopColor={color} />
-          </RadialGradient>
-        </Defs>
-        <Rect x={0} y={0} width={width} height={height} fill="url(#gradient)" />
-      </Svg>
-      <View style={styles.container}>
+      <View style={[styles.container, { backgroundColor: color }]}>
         <View>
           <Text style={styles.title}>{title}</Text>
           <Text style={styles.description}>{description}</Text>
         </View>
+        {/* This is where each page's animation will be */}
+        {whichComponent[title]}
       </View>
     </>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    ...StyleSheet.absoluteFillObject,
+    padding: 75,
+    paddingTop: 125,
+    alignItems: "center",
+  },
+  title: {
+    fontSize: 32,
+    color: "white",
+    textAlign: "center",
+    marginBottom: 16,
+    fontFamily: "Main-Bold",
+  },
+  description: {
+    fontSize: 18,
+    color: "white",
+    textAlign: "center",
+    fontFamily: "Main",
+  },
+});
 
 export default Slide;

@@ -3,6 +3,7 @@ import { Colors } from "./Colors";
 
 const height = Dimensions.get("window").height;
 const mazeSideLength = height * 0.45;
+const CONTAINERSIZE = 150;
 
 export const globalStyles = () =>
   StyleSheet.create({
@@ -18,6 +19,12 @@ export const globalStyles = () =>
       fontSize: 20,
       fontFamily: "Main",
       marginTop: -3,
+    },
+    featureContainer: {
+      width: CONTAINERSIZE,
+      height: CONTAINERSIZE,
+      alignItems: "center",
+      justifyContent: "center",
     },
   });
 
