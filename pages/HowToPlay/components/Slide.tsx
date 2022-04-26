@@ -4,6 +4,7 @@ import { View, Text, StyleSheet, Dimensions } from "react-native";
 import ControlsContent from "./ControlsContent";
 import ClassicContent from "./ClassicContent";
 import ChasedownContent from "./ChasedownContent";
+import HuntContent from "./HuntContent";
 
 export interface SlideProps {
   slide: {
@@ -18,6 +19,7 @@ const Slide = ({ slide: { color, title, description } }: SlideProps) => {
     Controls: <ControlsContent />,
     "Classic Mode": <ClassicContent />,
     "Chasedown Mode": <ChasedownContent />,
+    "Hunt Mode": <HuntContent />,
   };
 
   return (
