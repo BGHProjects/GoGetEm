@@ -5,6 +5,7 @@ import ControlsContent from "./ControlsContent";
 import ClassicContent from "./ClassicContent";
 import ChasedownContent from "./ChasedownContent";
 import HuntContent from "./HuntContent";
+import TagTeamContent from "./TagTeamContent";
 
 export interface SlideProps {
   slide: {
@@ -14,12 +15,17 @@ export interface SlideProps {
   };
 }
 
+const Test = () => {
+  return <View style={{ width: 50, height: 50, backgroundColor: "red" }} />;
+};
+
 const Slide = ({ slide: { color, title, description } }: SlideProps) => {
   const whichComponent: Record<string, React.ReactNode> = {
     Controls: <ControlsContent />,
     "Classic Mode": <ClassicContent />,
     "Chasedown Mode": <ChasedownContent />,
     "Hunt Mode": <HuntContent />,
+    "TagTeam Mode": <TagTeamContent />,
   };
 
   return (
@@ -30,7 +36,7 @@ const Slide = ({ slide: { color, title, description } }: SlideProps) => {
           <Text style={styles.description}>{description}</Text>
         </View>
         {/* This is where each page's animation will be */}
-        {whichComponent[title]}
+        <View style={{ marginVertical: 20 }}>{whichComponent[title]}</View>
       </View>
     </>
   );
@@ -51,7 +57,7 @@ const styles = StyleSheet.create({
     fontFamily: "Main-Bold",
   },
   description: {
-    fontSize: 18,
+    fontSize: 14,
     color: "white",
     textAlign: "center",
     fontFamily: "Main",
