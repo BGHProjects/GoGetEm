@@ -122,7 +122,10 @@ const Slider = ({
       <Animated.View style={StyleSheet.absoluteFill}>
         {current}
         {prev && (
-          <Animated.View style={[StyleSheet.absoluteFill, leftStyle]}>
+          <Animated.View
+            style={[StyleSheet.absoluteFill, leftStyle]}
+            pointerEvents="none"
+          >
             <Wave
               position={left}
               side={Side.LEFT}
@@ -134,7 +137,7 @@ const Slider = ({
           </Animated.View>
         )}
         {next && (
-          <Animated.View style={StyleSheet.absoluteFill}>
+          <Animated.View style={StyleSheet.absoluteFill} pointerEvents="none">
             <Wave
               position={right}
               side={Side.RIGHT}

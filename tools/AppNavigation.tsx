@@ -1,7 +1,7 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import MainMenu from "../pages/MainMenu";
-import GameModes from "../pages/GameModes";
+// import GameModesOld from "../pages/GameModesOld";
 import ClassicRolesScreen from "../pages/ClassicMode/ClassicRoles";
 import ClassicGameplayScreen from "../pages/ClassicMode/ClassicGameplay";
 import ChasedownRolesScreen from "../pages/ChasedownMode/ChasedownRoles";
@@ -18,8 +18,9 @@ import Credits from "../pages/Credits";
 import EndGame from "../pages/EndGame";
 import ExpChange from "../pages/ExpChange";
 import Unlocks from "../pages/Unlocks";
-import HowToPlay from "../pages/HowToPlay";
+// import HowToPlay from "../pages/GameModes";
 import Countdown from "../pages/Countdown";
+import GameModes from "../pages/GameModes";
 
 const AppNavigation = () => {
   const Stack = createStackNavigator();
@@ -119,11 +120,11 @@ const AppNavigation = () => {
         component={Unlocks}
         options={{ headerShown: false }}
       />
-      <Stack.Screen
+      {/* <Stack.Screen
         name="HowToPlay"
         component={HowToPlay}
         options={{ headerShown: false }}
-      />
+      /> */}
       <Stack.Screen
         name="Countdown"
         component={Countdown}

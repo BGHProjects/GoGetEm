@@ -6,6 +6,8 @@ import ClassicContent from "./ClassicContent";
 import ChasedownContent from "./ChasedownContent";
 import HuntContent from "./HuntContent";
 import TagTeamContent from "./TagTeamContent";
+import MenuButton from "../../../components/MenuButton";
+import { Mode } from "../../../constants/types";
 
 export interface SlideProps {
   slide: {
@@ -15,30 +17,34 @@ export interface SlideProps {
   };
 }
 
-const Test = () => {
-  return <View style={{ width: 50, height: 50, backgroundColor: "red" }} />;
-};
-
-const Slide = ({ slide: { color, title, description } }: SlideProps) => {
+const Slide = ({ navigation, slide: { color, title, description } }: any) => {
   const whichComponent: Record<string, React.ReactNode> = {
     Controls: <ControlsContent />,
-    "Classic Mode": <ClassicContent />,
-    "Chasedown Mode": <ChasedownContent />,
-    "Hunt Mode": <HuntContent />,
-    "TagTeam Mode": <TagTeamContent />,
+    Classic: <ClassicContent />,
+    Chasedown: <ChasedownContent />,
+    Hunt: <HuntContent />,
+    TagTeam: <TagTeamContent />,
+  };
+
+  const onPressButton = (gameMode: string) => {
+    navigation.navigate("Config", Mode[gameMode]);
   };
 
   return (
-    <>
-      <View style={[styles.container, { backgroundColor: color }]}>
-        <View>
-          <Text style={styles.title}>{title}</Text>
-          <Text style={styles.description}>{description}</Text>
-        </View>
-        {/* This is where each page's animation will be */}
-        <View style={{ marginVertical: 20 }}>{whichComponent[title]}</View>
+    <View style={[styles.container, { backgroundColor: color }]}>
+      <View>
+        <Text style={styles.title}>{title}</Text>
+        <Text style={styles.description}>{description}</Text>
       </View>
-    </>
+      <View style={{ marginVertical: 20 }}>{whichComponent[title]}</View>
+      {title !== "Controls" && (
+        <MenuButton
+          text="Start"
+          shadowColour={Colors.fluroBlue}
+          operation={() => onPressButton(title)}
+        />
+      )}
+    </View>
   );
 };
 

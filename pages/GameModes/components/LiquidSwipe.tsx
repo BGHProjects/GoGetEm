@@ -13,31 +13,32 @@ const slides = [
   },
   {
     color: Colors.blue,
-    title: "Classic Mode",
+    title: "Classic",
     description:
       "Catch your target, before they catch theirs... or before you're caught!",
   },
   {
     color: Colors.primaryBackground,
-    title: "Chasedown Mode",
+    title: "Chasedown",
     description:
       "Catch the target before the other player\nIf you're the target, survive until time runs out",
   },
   {
     color: Colors.red,
-    title: "Hunt Mode",
+    title: "Hunt",
     description: "Catch more targets than your opponent before time runs out",
   },
   {
     color: Colors.orange,
-    title: "TagTeam Mode",
+    title: "TagTeam",
     description:
       "Each team has one chaser and one target\nCatch the other team's target before they catch yours to win",
   },
 ];
 
-const LiquidSwipe = () => {
-  const [index, setIndex] = useState(0);
+const LiquidSwipe = ({ navigation }) => {
+  // Start at the second one, because the first one is the Controls page
+  const [index, setIndex] = useState(1);
   const prev = slides[index - 1];
   const next = slides[index + 1];
   return (
@@ -48,7 +49,7 @@ const LiquidSwipe = () => {
       prev={prev && <Slide slide={prev} />}
       next={next && <Slide slide={next} />}
     >
-      <Slide slide={slides[index]!} />
+      <Slide navigation={navigation} slide={slides[index]!} />
     </Slider>
   );
 };
