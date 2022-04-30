@@ -43,3 +43,24 @@ export enum Data {
   HuntBackground = "HuntBackground",
   TagTeamBackground = "TagTeamBackground",
 }
+
+export enum Screens {
+  MainMenu = "Main Menu",
+  GameModes = "Game Modes",
+  ClassicRoles = "Classic Roles",
+  ClassicGameplay = "Classic Gameplay",
+  ChasedownRoles = "Chasedown Roles",
+  ChasedownGameplay = "Chasedown Gameplay",
+  HuntRoles = "Hunt Roles",
+  HuntGameplay = "Hunt Gameplay",
+  TagTeamRoles = "TagTeam Roles",
+  TagTeamGameplay = "TagTeam Gameplay",
+  Statistics = "Statistics",
+  Config = "Config",
+  Customise = "Customise",
+  Credits = "Credits",
+  EndGame = "End Game",
+  ExpChange = "ExpChange",
+  Unlocks = "Unlocks",
+  Countdown = "Countdown",
+}

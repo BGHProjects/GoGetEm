@@ -10,13 +10,18 @@ import Animated, {
   withDelay,
 } from "react-native-reanimated";
 import { calcExpToNextLevel } from "../../tools/calcNextLevelExp";
-import { progressBarDuration } from "../../constants/Animation";
+import {
+  progressBarDuration,
+  progressBarDelay,
+} from "../../constants/Animation";
 import { updateStorageValue } from "../../tools/updateStorageValue";
 import { Data } from "../../constants/types";
+import { calculateBarPositions } from "./helpers/handleProgressBar";
 
-const ExpChange = ({ navigation, route }) => {
+const ExpChange = ({ navigation, route }: any) => {
   const userContext = useContext(UserContext);
-  const details = route.params;
+  const prevExp = route.params[0];
+  const newExp = route.params[1];
   const [leveledUp, setLeveledUp] = useState(false);
   const nextLevelExp = calcExpToNextLevel(userContext.level);
   const [levelLabel, setLevelLabel] = useState(userContext.level);
@@ -29,51 +34,83 @@ const ExpChange = ({ navigation, route }) => {
   const prevLevelExp =
     userContext.level > 0 ? calcExpToNextLevel(userContext.level - 1) : 100;
 
-  // Adjusts calculations based on if the user is level 0
-  function accountForLevel0(value: number) {
-    if (userContext.level > 0) return value - prevLevelExp;
-    return value;
-  }
-
-  // If the user is starting from 0, make the initial 0
-  const initialBarLength =
-    details[0] === 0
-      ? 0
-      : (accountForLevel0(details[0]) / accountForLevel0(nextLevelExp)) * 100;
-
-  // If the newExp is more than the nextLevelExp, the bar will be filled 100%
-  const endBarLength =
-    nextLevelExp > details[1]
-      ? (accountForLevel0(details[1]) / accountForLevel0(nextLevelExp)) * 100
-      : 100;
+  // Needs to be set initially and be accessible by the return function below
+  const barLength = useSharedValue(0);
 
   // Used for animations
-  const barLength = useSharedValue(initialBarLength);
   const showProgress = useAnimatedStyle(() => {
     return {
       width: `${barLength.value}%`,
     };
   }, []);
 
-  useEffect(() => {
-    if (nextLevelExp <= details[1]) setLeveledUp(true);
+  const handleExpChange = (
+    prevExp: number,
+    newExp: number,
+    nextLevelExp: number,
+    userLevel: number,
+    prevLevelExp: number
+  ) => {
+    const { initialBarLength, endBarLength } = calculateBarPositions(
+      prevExp,
+      newExp,
+      nextLevelExp,
+      userLevel,
+      prevLevelExp
+    );
+
+    barLength.value = initialBarLength;
+
     barLength.value = withDelay(
-      500,
+      progressBarDelay,
       withTiming(endBarLength, { duration: progressBarDuration })
     );
-  }, []);
+
+    if (nextLevelExp > newExp) return;
+
+    // This just handles which page is navigated to next
+    setLeveledUp(true);
+
+    handleLevelUp();
+
+    // This is so the animation lines up with the calculation
+    setTimeout(() => {
+      // Prepping new values for recursive call for next level
+      const overFlowExp = newExp;
+      const newPrevExp = nextLevelExp;
+      const newUserLevel = userLevel + 1;
+      const newNextLevelExp = calcExpToNextLevel(newUserLevel);
+      const newPrevLevelExp = calcExpToNextLevel(userLevel);
+
+      handleExpChange(
+        newPrevExp,
+        overFlowExp,
+        newNextLevelExp,
+        newUserLevel,
+        newPrevLevelExp
+      );
+    }, progressBarDuration + progressBarDelay * 2);
+  };
+
+  const handleLevelUp = () => {
+    userContext.setLevel((old) => old + 1);
+    updateStorageValue(Data.Level, 1);
+
+    // Delays change to line up with animation
+    setTimeout(() => {
+      setLevelLabel((old) => old + 1);
+    }, progressBarDuration + progressBarDelay);
+  };
 
   useEffect(() => {
-    if (leveledUp) {
-      userContext.setLevel((old) => old + 1);
-      updateStorageValue(Data.Level, 1);
-
-      // Delays change to line up with animation
-      setTimeout(() => {
-        setLevelLabel((old) => old + 1);
-      }, progressBarDuration + 500);
-    }
-  }, [leveledUp]);
+    handleExpChange(
+      prevExp,
+      newExp,
+      nextLevelExp,
+      userContext.level,
+      prevLevelExp
+    );
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>

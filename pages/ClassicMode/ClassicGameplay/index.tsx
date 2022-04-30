@@ -15,6 +15,7 @@ import { getMazeCell } from "../../../tools/BotBrain";
 import RoundOverAlert from "../../../components/RoundOverAlert/RoundOverAlert";
 import { roundOverDuration } from "../../../constants/Animation";
 import globalStyles from "../../../constants/GlobalStyles";
+import { Screens } from "../../../constants/types";
 
 const height = Dimensions.get("window").height;
 const cellSize = height * 0.045;
@@ -296,20 +297,15 @@ const ClassicGameplayScreen = ({ navigation, route }) => {
       if (gameDetails.currentRound > gameDetails.rounds) {
         gameDetails.gameOver = true;
         setTimeout(() => {
-          navigation.navigate("End Game", gameDetails);
+          navigation.navigate(Screens.EndGame, gameDetails);
         }, roundOverDuration);
       } else {
         setTimeout(() => {
-          navigation.navigate("Classic Roles", gameDetails);
+          navigation.navigate(Screens.ClassicRoles, gameDetails);
         }, roundOverDuration);
       }
     }
   }, [roundOver]);
-
-  // just for testing
-  useEffect(() => {
-    console.log("roundOverDetails", roundOverDetails);
-  }, [roundOverDetails]);
 
   return (
     <>

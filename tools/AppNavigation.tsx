@@ -1,7 +1,6 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import MainMenu from "../pages/MainMenu";
-// import GameModesOld from "../pages/GameModesOld";
 import ClassicRolesScreen from "../pages/ClassicMode/ClassicRoles";
 import ClassicGameplayScreen from "../pages/ClassicMode/ClassicGameplay";
 import ChasedownRolesScreen from "../pages/ChasedownMode/ChasedownRoles";
@@ -18,15 +17,15 @@ import Credits from "../pages/Credits";
 import EndGame from "../pages/EndGame";
 import ExpChange from "../pages/ExpChange";
 import Unlocks from "../pages/Unlocks";
-// import HowToPlay from "../pages/GameModes";
 import Countdown from "../pages/Countdown";
 import GameModes from "../pages/GameModes";
+import { Screens } from "../constants/types";
 
 const AppNavigation = () => {
   const Stack = createStackNavigator();
 
   return (
-    <Stack.Navigator initialRouteName="Main Menu" screenOptions={{}}>
+    <Stack.Navigator initialRouteName={Screens.MainMenu} screenOptions={{}}>
       {/* 
       // TODO Eliminate this dude
       <Stack.Screen
@@ -35,98 +34,93 @@ const AppNavigation = () => {
         options={{ headerShown: false }}
       /> */}
       <Stack.Screen
-        name="Main Menu"
+        name={Screens.MainMenu}
         component={MainMenu}
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name="Game Modes"
+        name={Screens.GameModes}
         component={GameModes}
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name="Classic Roles"
+        name={Screens.ClassicRoles}
         component={ClassicRolesScreen}
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name="Classic Gameplay"
+        name={Screens.ClassicGameplay}
         component={ClassicGameplayScreen}
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name="Chasedown Roles"
+        name={Screens.ChasedownRoles}
         component={ChasedownRolesScreen}
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name="Chasedown Gameplay"
+        name={Screens.ChasedownGameplay}
         component={ChasedownGameplayScreen}
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name="Hunt Roles"
+        name={Screens.HuntRoles}
         component={HuntRoles}
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name="Hunt Gameplay"
+        name={Screens.HuntGameplay}
         component={HuntGameplay}
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name="TagTeam Roles"
+        name={Screens.TagTeamRoles}
         component={TagTeamRoles}
         options={{ headerShown: false }}
       />
 
       <Stack.Screen
-        name="TagTeam Gameplay"
+        name={Screens.TagTeamGameplay}
         component={TagTeamGameplay}
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name="Statistics"
+        name={Screens.Statistics}
         component={Statistics}
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name="Config"
+        name={Screens.Config}
         component={ConfigScreen}
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name="Customise"
+        name={Screens.Customise}
         component={Customise}
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name="Credits"
+        name={Screens.Credits}
         component={Credits}
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name="End Game"
+        name={Screens.EndGame}
         component={EndGame}
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name="ExpChange"
+        name={Screens.ExpChange}
         component={ExpChange}
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name="Unlocks"
+        name={Screens.Unlocks}
         component={Unlocks}
         options={{ headerShown: false }}
       />
-      {/* <Stack.Screen
-        name="HowToPlay"
-        component={HowToPlay}
-        options={{ headerShown: false }}
-      /> */}
       <Stack.Screen
-        name="Countdown"
+        name={Screens.Countdown}
         component={Countdown}
         options={{ headerShown: false }}
       />
