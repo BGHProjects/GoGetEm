@@ -1,4 +1,9 @@
-import { Colors } from "../../../constants/Colors";
+import {
+  XYStart,
+  XYEnd,
+  Colors,
+  ColorGradients,
+} from "../../../constants/Colors";
 import React, { useEffect } from "react";
 import { View, StyleSheet } from "react-native";
 import Animated, {
@@ -10,6 +15,7 @@ import Animated, {
   withDelay,
 } from "react-native-reanimated";
 import globalStyles from "../../../constants/GlobalStyles";
+import { LinearGradient } from "expo-linear-gradient";
 
 const FULL = 100;
 const BUTTONSIZE = 27.5;
@@ -133,7 +139,14 @@ const ControlsContent = () => {
   return (
     <View>
       <View style={globalStyles().featureContainer}>
-        <Animated.View style={[styles.playerRepresentation, playerAnimation]} />
+        <Animated.View style={playerAnimation}>
+          <LinearGradient
+            style={styles.playerRepresentation}
+            colors={ColorGradients.ice}
+            start={XYStart}
+            end={XYEnd}
+          />
+        </Animated.View>
       </View>
       <View style={globalStyles().featureContainer}>
         <View style={[styles.basicCircle, styles.outerCircle]}>
@@ -190,7 +203,6 @@ const styles = StyleSheet.create({
     height: PLAYERSIZE,
     width: PLAYERSIZE,
     borderRadius: 90,
-    backgroundColor: Colors.red,
   },
 });
 

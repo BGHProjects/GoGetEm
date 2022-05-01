@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { View, Text, StyleSheet } from "react-native";
-import { Colors } from "../../constants/Colors";
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -8,14 +7,17 @@ import Animated, {
   withDelay,
   withSequence,
 } from "react-native-reanimated";
+import { XYStart, XYEnd, Colors } from "../../constants/Colors";
+import { LinearGradient } from "expo-linear-gradient";
+import globalStyles from "../../constants/GlobalStyles";
 
 interface RoundOverAlertProps {
   begin: boolean;
   gameOver: boolean;
   details?: {
-    chaser?: string | undefined;
-    caught?: string | undefined;
-    survivor?: string | undefined;
+    chaser?: string[] | undefined;
+    caught?: string[] | undefined;
+    survivor?: string[] | undefined;
   };
 }
 
@@ -93,30 +95,41 @@ const RoundOverAlert = ({ begin, gameOver, details }: RoundOverAlertProps) => {
               <View style={styles.playerRow}>
                 <Animated.View
                   style={[
-                    { backgroundColor: details.chaser, zIndex: 2 },
+                    { zIndex: 2 },
                     styles.playerRepresentation,
                     moveAcross,
                   ]}
-                />
-                <Animated.View
-                  style={[
-                    styles.playerRepresentation,
-                    { backgroundColor: details.caught },
-                    fadeOut,
-                  ]}
-                />
+                >
+                  <LinearGradient
+                    style={globalStyles().gradientFill}
+                    colors={details.chaser}
+                    start={XYStart}
+                    end={XYEnd}
+                  />
+                </Animated.View>
+                <Animated.View style={[styles.playerRepresentation, fadeOut]}>
+                  <LinearGradient
+                    style={globalStyles().gradientFill}
+                    colors={details.caught}
+                    start={XYStart}
+                    end={XYEnd}
+                  />
+                </Animated.View>
               </View>
             )}
             {/* Basically all other situations */}
             {details.survivor && (
               <View style={styles.playerRow}>
                 <Animated.View
-                  style={[
-                    { backgroundColor: details.survivor ?? details.chaser },
-                    styles.playerRepresentation,
-                    survivorShuffle,
-                  ]}
-                />
+                  style={[styles.playerRepresentation, survivorShuffle]}
+                >
+                  <LinearGradient
+                    style={globalStyles().gradientFill}
+                    colors={details.survivor ?? details.chaser}
+                    start={XYStart}
+                    end={XYEnd}
+                  />
+                </Animated.View>
               </View>
             )}
           </>

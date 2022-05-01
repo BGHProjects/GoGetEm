@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext, useRef } from "react";
 import { View, Dimensions, Vibration } from "react-native";
-import { Svg, Circle } from "react-native-svg";
 import {
   generateCells,
   makeMaze,
@@ -16,6 +15,8 @@ import RoundOverAlert from "../../../components/RoundOverAlert/RoundOverAlert";
 import { roundOverDuration } from "../../../constants/Animation";
 import globalStyles from "../../../constants/GlobalStyles";
 import { Screens } from "../../../constants/types";
+import { ColorGradients, XYEnd, XYStart } from "../../../constants/Colors";
+import PlayerAvatar from "../../../components/PlayerAvatar";
 
 const height = Dimensions.get("window").height;
 const cellSize = height * 0.045;
@@ -36,7 +37,7 @@ const playerStart = [55, 15];
 const leftStart = [5, 85];
 const rightStart = [95, 85];
 
-const ClassicGameplayScreen = ({ navigation, route }) => {
+const ClassicGameplayScreen = ({ navigation, route }: any) => {
   const userContext = useContext(UserContext);
 
   let gameDetails = route.params;
@@ -180,7 +181,7 @@ const ClassicGameplayScreen = ({ navigation, route }) => {
           player2X,
           player2Y
         );
-    //Search Paths are compiled in reverse
+    // Search Paths are compiled in reverse
     searchPath1 = searchPath1.reverse();
     searchPath2 = searchPath2.reverse();
     setPlayer2Started(true); // Need to dig deeper to find out why I need this
@@ -310,7 +311,12 @@ const ClassicGameplayScreen = ({ navigation, route }) => {
   return (
     <>
       <BGWithImage image={userContext.classicBackground}>
-        <View style={[globalStyles().mazeContainer, { marginTop: 50 }]}>
+        <View
+          style={[
+            globalStyles().mazeContainer,
+            { marginTop: 50, position: "relative" },
+          ]}
+        >
           {mazeGrid.map((item: any) => (
             <View
               key={(`${item.row}` + `${item.col}`).toString()}
@@ -330,32 +336,29 @@ const ClassicGameplayScreen = ({ navigation, route }) => {
             />
           ))}
 
-          <Svg height="100%" width="100%" viewBox="0 0 100 100">
-            <Circle
-              cx={player3X}
-              cy={player3Y}
-              r={playerSize.toString()}
-              fill={`${gameDetails.player3Colour}`}
-            />
-            <Circle
-              cx={player2X}
-              cy={player2Y}
-              r={playerSize.toString()}
-              fill={`${gameDetails.player2Colour}`}
-            />
-            <Circle
-              cx={playerX}
-              cy={playerY}
-              r={playerSize.toString()}
-              fill={`${gameDetails.colour}`}
-            />
-          </Svg>
+          <PlayerAvatar
+            top={playerY}
+            left={playerX}
+            colour={gameDetails.colour}
+          />
+
+          <PlayerAvatar
+            top={player2Y}
+            left={player2X}
+            colour={gameDetails.player2Colour}
+          />
+
+          <PlayerAvatar
+            top={player3Y}
+            left={player3X}
+            colour={gameDetails.player3Colour}
+          />
         </View>
         <Controller
-          movePlayerDown={movePlayerDown}
-          movePlayerLeft={movePlayerLeft}
-          movePlayerRight={movePlayerRight}
-          movePlayerUp={movePlayerUp}
+          downFunction={movePlayerDown}
+          leftFunction={movePlayerLeft}
+          rightFunction={movePlayerRight}
+          upFunction={movePlayerUp}
         />
       </BGWithImage>
       {roundOver && (

@@ -1,4 +1,4 @@
-import { Colors } from "../../../constants/Colors";
+import { XYStart, XYEnd, ColorGradients } from "../../../constants/Colors";
 import React, { useEffect } from "react";
 import { View, StyleSheet } from "react-native";
 import Animated, {
@@ -9,6 +9,7 @@ import Animated, {
   withRepeat,
   withDelay,
 } from "react-native-reanimated";
+import { LinearGradient } from "expo-linear-gradient";
 
 const CONTENTSIZE = 150;
 const PLAYERSIZE = 25;
@@ -155,17 +156,38 @@ const ClassicContent = () => {
     <View style={styles.container}>
       <Animated.View
         style={[styles.playerRepresentation, styles.topPlayer, topAnimation]}
-      />
+      >
+        <LinearGradient
+          style={styles.gradientFill}
+          colors={ColorGradients.red}
+          start={XYStart}
+          end={XYEnd}
+        />
+      </Animated.View>
       <Animated.View
         style={[styles.playerRepresentation, styles.leftPlayer, leftAnimation]}
-      />
+      >
+        <LinearGradient
+          style={styles.gradientFill}
+          colors={ColorGradients.yellow}
+          start={XYStart}
+          end={XYEnd}
+        />
+      </Animated.View>
       <Animated.View
         style={[
           styles.playerRepresentation,
           styles.rightPlayer,
           rightAnimation,
         ]}
-      />
+      >
+        <LinearGradient
+          style={styles.gradientFill}
+          colors={ColorGradients.green}
+          start={XYStart}
+          end={XYEnd}
+        />
+      </Animated.View>
     </View>
   );
 };
@@ -183,19 +205,21 @@ const styles = StyleSheet.create({
     position: "absolute",
   },
   topPlayer: {
-    backgroundColor: Colors.gold,
     top: `${OFFSET}%`,
     left: `${FULL / 2 - PLAYERSIZE / 2}%`,
   },
   leftPlayer: {
-    backgroundColor: Colors.fluroBlue,
     top: `${FULL - PLAYERSIZE - OFFSET}%`,
     left: `${-OFFSET}%`,
   },
   rightPlayer: {
-    backgroundColor: Colors.orange,
     top: `${FULL - PLAYERSIZE - OFFSET}%`,
     left: `${FULL - PLAYERSIZE + OFFSET}%`,
+  },
+  gradientFill: {
+    height: "100%",
+    width: "100%",
+    borderRadius: 90,
   },
 });
 

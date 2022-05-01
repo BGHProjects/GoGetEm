@@ -1,12 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
 import { Rect } from "react-native-svg";
 import { Dimensions } from "react-native";
-import { animation } from "./buttonAnimation";
 
 const height = Dimensions.get("window").height;
 
 interface ButtonProps {
-  buttonFunction?: Function;
+  buttonFunction: Function;
   colour: string;
   position: string;
 }
@@ -23,24 +22,16 @@ const SquareButton: React.FC<ButtonProps> = ({
     right: { x: "72.5%", y: "40%" },
   };
 
-  const [buttonOpacity, setButtonOpacity] = useState(1);
-
-  const handleButtonPressed = () => {
-    animation(setButtonOpacity);
-    buttonFunction();
-  };
-
   return (
     <Rect
       x={positionOption[position].x}
       y={positionOption[position].y}
       width={height / 32}
       height={height / 32}
-      onPress={() => handleButtonPressed()}
+      onPress={() => buttonFunction()}
       stroke={colour}
       strokeWidth="2"
       fill="transparent"
-      opacity={buttonOpacity}
     />
   );
 };

@@ -9,10 +9,12 @@ import Animated, {
 } from "react-native-reanimated";
 import { useIsFocused } from "@react-navigation/native";
 import { AutoSizeText, ResizeTextMode } from "react-native-auto-size-text";
-import { Colors } from "../../constants/Colors";
+import { XYStart, XYEnd, Colors } from "../../constants/Colors";
+import { LinearGradient } from "expo-linear-gradient";
+import globalStyles from "../../constants/GlobalStyles";
 
 interface PlayerRepresentationProps {
-  colour: string;
+  colour: any;
   showFlag?: boolean;
   score?: number | null;
   whichAnimation?: string;
@@ -78,12 +80,17 @@ const PlayerRepresentation = ({
   return (
     <Animated.View
       style={[
-        { backgroundColor: `${colour}` },
         { transform: [{ rotate: `${rotation}deg` }] },
         styles.playerRepresentation,
         fadeIn,
       ]}
     >
+      <LinearGradient
+        style={[globalStyles().gradientFill, { position: "absolute" }]}
+        colors={colour}
+        start={XYStart}
+        end={XYEnd}
+      />
       {showFlag && score !== null && (
         <AutoSizeText
           fontSize={30}
@@ -105,16 +112,18 @@ const styles = StyleSheet.create({
     borderRadius: 90,
     justifyContent: "center",
     alignItems: "center",
+    position: "relative",
   },
   scoreText: {
+    position: "absolute",
     fontFamily: "Main-Bold",
     fontSize: 30,
     color: Colors.white,
     alignSelf: "center",
-    marginTop: -5,
     textShadowColor: "black",
     textShadowOffset: { width: 1, height: 1 },
     textShadowRadius: 2,
+    top: 2,
   },
 });
 

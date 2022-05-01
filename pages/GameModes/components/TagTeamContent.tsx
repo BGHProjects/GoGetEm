@@ -1,4 +1,4 @@
-import { Colors } from "../../../constants/Colors";
+import { XYStart, XYEnd, ColorGradients } from "../../../constants/Colors";
 import React, { useEffect } from "react";
 import { View, StyleSheet } from "react-native";
 import Animated, {
@@ -9,6 +9,7 @@ import Animated, {
   withRepeat,
   withDelay,
 } from "react-native-reanimated";
+import { LinearGradient } from "expo-linear-gradient";
 
 const CONTENTSIZE = 150;
 const PLAYERSIZE = 25;
@@ -225,18 +226,44 @@ const TagTeamContent = () => {
 
   return (
     <View style={styles.container}>
-      <Animated.View
-        style={[styles.playerRepresentation, styles.team1Chaser, team1Chaser]}
-      />
+      <Animated.View style={[styles.playerRepresentation, team1Chaser]}>
+        <LinearGradient
+          style={styles.gradientFill}
+          colors={ColorGradients.yellow}
+          start={XYStart}
+          end={XYEnd}
+        />
+      </Animated.View>
       <Animated.View
         style={[styles.playerRepresentation, styles.team1Target, team1Target]}
-      />
+      >
+        <LinearGradient
+          style={styles.gradientFill}
+          colors={ColorGradients.softBlue}
+          start={XYStart}
+          end={XYEnd}
+        />
+      </Animated.View>
       <Animated.View
         style={[styles.playerRepresentation, styles.team2Chaser, team2Chaser]}
-      />
+      >
+        <LinearGradient
+          style={styles.gradientFill}
+          colors={ColorGradients.green}
+          start={XYStart}
+          end={XYEnd}
+        />
+      </Animated.View>
       <Animated.View
         style={[styles.playerRepresentation, styles.team2Target, team2Target]}
-      />
+      >
+        <LinearGradient
+          style={styles.gradientFill}
+          colors={ColorGradients.purple}
+          start={XYStart}
+          end={XYEnd}
+        />
+      </Animated.View>
     </View>
   );
 };
@@ -253,19 +280,20 @@ const styles = StyleSheet.create({
     borderRadius: 90,
     position: "absolute",
   },
-  team1Chaser: { backgroundColor: Colors.red },
   team1Target: {
-    backgroundColor: Colors.blue,
     top: `${FULL - PLAYERSIZE + 20}%`,
   },
   team2Target: {
-    backgroundColor: Colors.green,
     left: `${FULL - PLAYERSIZE}%`,
   },
   team2Chaser: {
-    backgroundColor: Colors.purple,
     left: `${FULL - PLAYERSIZE}%`,
     top: `${FULL - PLAYERSIZE + 20}%`,
+  },
+  gradientFill: {
+    height: "100%",
+    width: "100%",
+    borderRadius: 90,
   },
 });
 

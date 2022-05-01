@@ -1,12 +1,14 @@
-import { Colors } from "../../constants/Colors";
+import { ColorGradients } from "../../constants/Colors";
 
 export const colourValues = [
-  Colors.red,
-  Colors.gold,
-  Colors.blue,
-  Colors.green,
-  Colors.orange,
-  Colors.purple,
+  ColorGradients.red,
+  ColorGradients.yellow,
+  ColorGradients.softBlue,
+  ColorGradients.green,
+  ColorGradients.orange,
+  ColorGradients.purple,
+  ColorGradients.ice,
+  ColorGradients.fire,
 ];
 export const selectionWidth = 60;
 export const roundNumbers = [1, 2, 3, 4, 5, 6, 7];

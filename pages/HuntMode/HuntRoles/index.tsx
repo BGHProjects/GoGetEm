@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet, View, SafeAreaView } from "react-native";
-import { Colors } from "../../../constants/Colors";
+import { ColorGradients, Colors } from "../../../constants/Colors";
 import MenuButton from "../../../components/MenuButton";
 import GameInfo from "../../../components/RolesScreen/GameInfo";
 import Arrow from "../../../components/RolesScreen/Arrow";
@@ -85,7 +85,7 @@ const HuntRoles = ({ navigation, route }) => {
            * Middle player
            */}
           <PlayerRepresentation
-            colour={Colors.white}
+            colour={ColorGradients.white}
             showFlag={totalDetails.flag === "gameplay" ? true : false}
             delay={animationDelays["target"]}
             animationDuration={animationDuration}

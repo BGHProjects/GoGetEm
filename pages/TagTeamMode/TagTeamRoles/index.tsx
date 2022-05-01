@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet, View, SafeAreaView } from "react-native";
-import { Colors } from "../../../constants/Colors";
+import { ColorGradients, Colors } from "../../../constants/Colors";
 import GameInfo from "../../../components/RolesScreen/GameInfo";
 import MenuButton from "../../../components/MenuButton";
 import PlayerRepresentation from "../../../components/RolesScreen/PlayerRepresentation";
@@ -8,7 +8,7 @@ import Arrow from "../../../components/RolesScreen/Arrow";
 
 const contentSize = 200;
 
-const TagTeamRoles = ({ navigation, route }) => {
+const TagTeamRoles = ({ navigation, route }: any) => {
   const configDetails = route.params;
   let scoreDetails;
 
@@ -39,6 +39,8 @@ const TagTeamRoles = ({ navigation, route }) => {
     scores: animationDelay * 4,
   };
 
+  console.log("totalDetails", totalDetails);
+
   return (
     <SafeAreaView style={styles.container}>
       <GameInfo
@@ -50,14 +52,14 @@ const TagTeamRoles = ({ navigation, route }) => {
         {/**Score indicators */}
         <View style={styles.indicatorRow}>
           <PlayerRepresentation
-            colour={"transparent"}
+            colour={ColorGradients.transparent}
             showFlag
             score={totalDetails.team1Score}
             delay={animationDelays["scores"]}
             animationDuration={animationDuration}
           />
           <PlayerRepresentation
-            colour={"transparent"}
+            colour={ColorGradients.transparent}
             showFlag
             score={totalDetails.team2Score}
             delay={animationDelays["scores"]}
@@ -69,11 +71,11 @@ const TagTeamRoles = ({ navigation, route }) => {
 
         <View style={styles.indicatorRow}>
           <PlayerRepresentation
-            colour={`${
+            colour={
               configDetails.team1Target === configDetails.player2Colour
                 ? configDetails.colour
                 : configDetails.player2Colour
-            }`}
+            }
             delay={animationDelays["chasers"]}
             animationDuration={animationDuration}
             pulsateDelay={animationDelays["scores"]}
@@ -91,11 +93,11 @@ const TagTeamRoles = ({ navigation, route }) => {
           />
 
           <PlayerRepresentation
-            colour={`${
+            colour={
               configDetails.team2Target === configDetails.player3Colour
                 ? configDetails.player3Colour
                 : configDetails.player4Colour
-            }`}
+            }
             delay={animationDelays["targets"]}
             animationDuration={animationDuration}
           />
@@ -104,11 +106,11 @@ const TagTeamRoles = ({ navigation, route }) => {
         {/**Second row of indicators */}
         <View style={styles.indicatorRow}>
           <PlayerRepresentation
-            colour={`${
+            colour={
               configDetails.team1Target === configDetails.player2Colour
                 ? configDetails.player2Colour
                 : configDetails.colour
-            }`}
+            }
             delay={animationDelays["targets"]}
             animationDuration={animationDuration}
             pulsateDelay={animationDelays["scores"]}
@@ -125,11 +127,11 @@ const TagTeamRoles = ({ navigation, route }) => {
             animationDuration={animationDuration}
           />
           <PlayerRepresentation
-            colour={`${
+            colour={
               configDetails.team2Target === configDetails.player3Colour
                 ? configDetails.player4Colour
                 : configDetails.player3Colour
-            }`}
+            }
             delay={animationDelays["chasers"]}
             animationDuration={animationDuration}
           />

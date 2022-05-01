@@ -18,7 +18,6 @@ import {
   timeActuals,
 } from "./values";
 import TitleText from "../../components/TitleText";
-import { upperFirst } from "lodash";
 
 const width = Dimensions.get("window").width;
 
@@ -86,7 +85,7 @@ const ConfigScreen = ({ navigation, route }) => {
 
         <View style={{ marginBottom: 80 }}>
           <MenuButton
-            text="Begin"
+            text="Confirm"
             operation={() =>
               onPressSubmit({
                 otherColours: getOtherColours({

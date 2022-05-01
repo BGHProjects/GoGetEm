@@ -10,18 +10,18 @@ const height = Dimensions.get("window").height;
 
 interface Props {
   outerCircle?: Function;
-  movePlayerUp: Function;
-  movePlayerLeft: Function;
-  movePlayerDown: Function;
-  movePlayerRight: Function;
+  upFunction: Function;
+  leftFunction: Function;
+  downFunction: Function;
+  rightFunction: Function;
 }
 
 const Controller: FC<Props> = ({
   outerCircle,
-  movePlayerUp,
-  movePlayerLeft,
-  movePlayerDown,
-  movePlayerRight,
+  upFunction,
+  leftFunction,
+  downFunction,
+  rightFunction,
 }) => {
   const userContext = useContext(UserContext);
   const outlineColour = split(userContext.controllerOutlineColour, "-")[1];
@@ -43,7 +43,7 @@ const Controller: FC<Props> = ({
         {/* Top Button */}
         <ControllerButton
           whichButton={userContext.controllerTopButton}
-          operation={() => movePlayerUp()}
+          operation={() => upFunction()}
         />
 
         {/*
@@ -51,21 +51,20 @@ const Controller: FC<Props> = ({
          */}
         <ControllerButton
           whichButton={userContext.controllerLeftButton}
-          operation={() => movePlayerLeft()}
+          operation={() => leftFunction()}
         />
 
         {/* Down Button */}
 
         <ControllerButton
           whichButton={userContext.controllerDownButton}
-          operation={() => movePlayerDown()}
+          operation={() => downFunction()}
         />
 
         {/* Right Button */}
-
         <ControllerButton
           whichButton={userContext.controllerRightButton}
-          operation={() => movePlayerRight()}
+          operation={() => rightFunction()}
         />
       </Svg>
     </View>

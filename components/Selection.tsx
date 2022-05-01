@@ -78,7 +78,6 @@ const Selection = ({ variant }: SelectionProps) => {
         }
         break;
       case "letter":
-      case "top":
         button = (
           <TopLetter
             colour={Colors[`${colour}`]}

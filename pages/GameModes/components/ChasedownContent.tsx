@@ -1,4 +1,4 @@
-import { Colors } from "../../../constants/Colors";
+import { XYStart, XYEnd, ColorGradients } from "../../../constants/Colors";
 import React, { useEffect } from "react";
 import { View, StyleSheet } from "react-native";
 import Animated, {
@@ -9,6 +9,7 @@ import Animated, {
   withRepeat,
   withDelay,
 } from "react-native-reanimated";
+import { LinearGradient } from "expo-linear-gradient";
 
 const CONTENTSIZE = 150;
 const PLAYERSIZE = 25;
@@ -147,23 +148,42 @@ const ChasedownContent = () => {
 
   return (
     <View style={styles.container}>
-      <Animated.View
-        style={[styles.playerRepresentation, styles.topPlayer, topAnimation]}
-      />
+      <Animated.View style={[styles.playerRepresentation, topAnimation]}>
+        <LinearGradient
+          style={styles.gradientFill}
+          colors={ColorGradients.red}
+          start={XYStart}
+          end={XYEnd}
+        />
+      </Animated.View>
       <Animated.View
         style={[
           styles.playerRepresentation,
           styles.middlePlayer,
           middleAnimation,
         ]}
-      />
+      >
+        <LinearGradient
+          style={styles.gradientFill}
+          colors={ColorGradients.orange}
+          start={XYStart}
+          end={XYEnd}
+        />
+      </Animated.View>
       <Animated.View
         style={[
           styles.playerRepresentation,
           styles.bottomPlayer,
           bottomAnimation,
         ]}
-      />
+      >
+        <LinearGradient
+          style={styles.gradientFill}
+          colors={ColorGradients.purple}
+          start={XYStart}
+          end={XYEnd}
+        />
+      </Animated.View>
     </View>
   );
 };
@@ -180,16 +200,18 @@ const styles = StyleSheet.create({
     borderRadius: 90,
     position: "absolute",
   },
-  topPlayer: { backgroundColor: Colors.red },
   middlePlayer: {
-    backgroundColor: Colors.orange,
     left: `${FULL / 2 - PLAYERSIZE / 2}%`,
     top: `${FULL / 2 - PLAYERSIZE / 2}%`,
   },
   bottomPlayer: {
-    backgroundColor: Colors.purple,
     left: `${FULL - PLAYERSIZE}%`,
     top: `${FULL - PLAYERSIZE}%`,
+  },
+  gradientFill: {
+    height: "100%",
+    width: "100%",
+    borderRadius: 90,
   },
 });
 

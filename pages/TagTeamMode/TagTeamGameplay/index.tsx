@@ -19,6 +19,8 @@ import RoundOverAlert from "../../../components/RoundOverAlert/RoundOverAlert";
 import { roundOverDuration } from "../../../constants/Animation";
 import globalStyles from "../../../constants/GlobalStyles";
 import { isUndefined } from "lodash";
+import PlayerAvatar from "../../../components/PlayerAvatar";
+import { Screens } from "../../../constants/types";
 
 const height = Dimensions.get("window").height;
 const cellSize = height * 0.045;
@@ -35,7 +37,7 @@ let team1Score: any;
 let team2Score: any;
 let playerSize = 4;
 
-const TagTeamGameplay = ({ navigation, route }) => {
+const TagTeamGameplay = ({ navigation, route }: any) => {
   const userContext = useContext(UserContext);
   let gameDetails = route.params;
   const [playerX, setPlayerX] = useState(15);
@@ -501,11 +503,11 @@ const TagTeamGameplay = ({ navigation, route }) => {
       if (gameDetails.currentRound > gameDetails.rounds) {
         gameDetails.gameOver = true;
         setTimeout(() => {
-          navigation.navigate("End Game", gameDetails);
+          navigation.navigate(Screens.EndGame, gameDetails);
         }, roundOverDuration);
       } else {
         setTimeout(() => {
-          navigation.navigate("TagTeam Roles", gameDetails);
+          navigation.navigate(Screens.TagTeamRoles, gameDetails);
         }, roundOverDuration);
       }
     }
@@ -534,38 +536,32 @@ const TagTeamGameplay = ({ navigation, route }) => {
             />
           ))}
 
-          <Svg height="100%" width="100%" viewBox="0 0 100 100">
-            <Circle
-              cx={playerX}
-              cy={playerY}
-              r={playerSize.toString()}
-              fill={`${gameDetails.colour}`}
-            />
-            <Circle
-              cx={player2X}
-              cy={player2Y}
-              r={playerSize.toString()}
-              fill={`${gameDetails.player2Colour}`}
-            />
-            <Circle
-              cx={player3X}
-              cy={player3Y}
-              r={playerSize.toString()}
-              fill={`${gameDetails.player3Colour}`}
-            />
-            <Circle
-              cx={player4X}
-              cy={player4Y}
-              r={playerSize.toString()}
-              fill={`${gameDetails.player4Colour}`}
-            />
-          </Svg>
+          <PlayerAvatar
+            top={player4Y}
+            left={player4X}
+            colour={gameDetails.player4Colour}
+          />
+          <PlayerAvatar
+            top={player3Y}
+            left={player3X}
+            colour={gameDetails.player3Colour}
+          />
+          <PlayerAvatar
+            top={player2Y}
+            left={player2X}
+            colour={gameDetails.player2Colour}
+          />
+          <PlayerAvatar
+            top={playerY}
+            left={playerX}
+            colour={gameDetails.colour}
+          />
         </View>
         <Controller
-          movePlayerDown={movePlayerDown}
-          movePlayerLeft={movePlayerLeft}
-          movePlayerRight={movePlayerRight}
-          movePlayerUp={movePlayerUp}
+          downFunction={movePlayerDown}
+          leftFunction={movePlayerLeft}
+          rightFunction={movePlayerRight}
+          upFunction={movePlayerUp}
         />
       </BGWithImage>
       {roundOver && (

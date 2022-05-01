@@ -19,6 +19,7 @@ import { UserContext } from "../../../tools/UserContext";
 import RoundOverAlert from "../../../components/RoundOverAlert/RoundOverAlert";
 import { roundOverDuration } from "../../../constants/Animation";
 import globalStyles from "../../../constants/GlobalStyles";
+import PlayerAvatar from "../../../components/PlayerAvatar";
 
 const height = Dimensions.get("window").height;
 const cellSize = height * 0.045;
@@ -497,32 +498,29 @@ const ChasedownGameplayScreen = ({
             />
           ))}
 
-          <Svg height="100%" width="100%" viewBox="0 0 100 100">
-            <Circle
-              cx={player3X}
-              cy={player3Y}
-              r={playerSize.toString()}
-              fill={`${gameDetails.player3Colour}`}
-            />
-            <Circle
-              cx={player2X}
-              cy={player2Y}
-              r={playerSize.toString()}
-              fill={`${gameDetails.player2Colour}`}
-            />
-            <Circle
-              cx={playerX}
-              cy={playerY}
-              r={playerSize.toString()}
-              fill={`${gameDetails.colour}`}
-            />
-          </Svg>
+          <PlayerAvatar
+            top={playerY}
+            left={playerX}
+            colour={gameDetails.colour}
+          />
+
+          <PlayerAvatar
+            top={player2Y}
+            left={player2X}
+            colour={gameDetails.player2Colour}
+          />
+
+          <PlayerAvatar
+            top={player3Y}
+            left={player3X}
+            colour={gameDetails.player3Colour}
+          />
         </View>
         <Controller
-          movePlayerDown={movePlayerDown}
-          movePlayerLeft={movePlayerLeft}
-          movePlayerRight={movePlayerRight}
-          movePlayerUp={movePlayerUp}
+          downFunction={movePlayerDown}
+          leftFunction={movePlayerLeft}
+          rightFunction={movePlayerRight}
+          upFunction={movePlayerUp}
         />
       </BGWithImage>
       {roundOver && (

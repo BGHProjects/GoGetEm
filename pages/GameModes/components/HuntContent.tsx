@@ -1,4 +1,4 @@
-import { Colors } from "../../../constants/Colors";
+import { XYStart, XYEnd, ColorGradients } from "../../../constants/Colors";
 import React, { useEffect } from "react";
 import { View, StyleSheet } from "react-native";
 import Animated, {
@@ -9,6 +9,7 @@ import Animated, {
   withRepeat,
   withDelay,
 } from "react-native-reanimated";
+import { LinearGradient } from "expo-linear-gradient";
 
 const CONTENTSIZE = 150;
 const PLAYERSIZE = 25;
@@ -231,51 +232,92 @@ const HuntContent = () => {
 
   return (
     <View style={styles.container}>
-      <Animated.View
-        style={[
-          styles.playerRepresentation,
-          styles.TLTarget,
-          TLTargetAnimation,
-        ]}
-      />
+      <Animated.View style={[styles.playerRepresentation, TLTargetAnimation]}>
+        <LinearGradient
+          style={styles.gradientFill}
+          colors={ColorGradients.white}
+          start={XYStart}
+          end={XYEnd}
+        />
+      </Animated.View>
       <Animated.View
         style={[
           styles.playerRepresentation,
           styles.TRTarget,
           TRTargetAnimation,
         ]}
-      />
+      >
+        <LinearGradient
+          style={styles.gradientFill}
+          colors={ColorGradients.white}
+          start={XYStart}
+          end={XYEnd}
+        />
+      </Animated.View>
       <Animated.View
         style={[
           styles.playerRepresentation,
           styles.middleTarget,
           middleTargetAnimation,
         ]}
-      />
+      >
+        <LinearGradient
+          style={styles.gradientFill}
+          colors={ColorGradients.white}
+          start={XYStart}
+          end={XYEnd}
+        />
+      </Animated.View>
       <Animated.View
         style={[
           styles.playerRepresentation,
           styles.BLTarget,
           BLTargetAnimation,
         ]}
-      />
+      >
+        <LinearGradient
+          style={styles.gradientFill}
+          colors={ColorGradients.white}
+          start={XYStart}
+          end={XYEnd}
+        />
+      </Animated.View>
       <Animated.View
         style={[
           styles.playerRepresentation,
           styles.BRTarget,
           BRTargetAnimation,
         ]}
-      />
-      <Animated.View
-        style={[styles.playerRepresentation, styles.topPlayer, topAnimation]}
-      />
+      >
+        <LinearGradient
+          style={styles.gradientFill}
+          colors={ColorGradients.white}
+          start={XYStart}
+          end={XYEnd}
+        />
+      </Animated.View>
+      <Animated.View style={[styles.playerRepresentation, topAnimation]}>
+        <LinearGradient
+          style={styles.gradientFill}
+          colors={ColorGradients.ice}
+          start={XYStart}
+          end={XYEnd}
+        />
+      </Animated.View>
       <Animated.View
         style={[
           styles.playerRepresentation,
           styles.bottomPlayer,
           bottomAnimation,
         ]}
-      />
+      >
+        <LinearGradient
+          style={styles.gradientFill}
+          colors={ColorGradients.fire}
+          start={XYStart}
+          end={XYEnd}
+        />
+      </Animated.View>
     </View>
   );
 };
@@ -292,32 +334,28 @@ const styles = StyleSheet.create({
     borderRadius: 90,
     position: "absolute",
   },
-  topPlayer: { backgroundColor: Colors.gold },
   middleTarget: {
-    backgroundColor: Colors.white,
     left: `${FULL / 2 - PLAYERSIZE / 2}%`,
     top: `${FULL / 2 - PLAYERSIZE / 2}%`,
   },
-  TLTarget: {
-    backgroundColor: Colors.white,
-  },
   TRTarget: {
-    backgroundColor: Colors.white,
     left: `${FULL - PLAYERSIZE}%`,
   },
   bottomPlayer: {
-    backgroundColor: Colors.purple,
     left: `${FULL - PLAYERSIZE}%`,
     top: `${FULL - PLAYERSIZE}%`,
   },
   BRTarget: {
-    backgroundColor: Colors.white,
     left: `${FULL - PLAYERSIZE}%`,
     top: `${FULL - PLAYERSIZE}%`,
   },
   BLTarget: {
-    backgroundColor: Colors.white,
     top: `${FULL - PLAYERSIZE}%`,
+  },
+  gradientFill: {
+    height: "100%",
+    width: "100%",
+    borderRadius: 90,
   },
 });
 

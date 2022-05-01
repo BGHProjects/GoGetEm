@@ -1,10 +1,20 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { selectionWidth } from "../values";
+import { LinearGradient } from "expo-linear-gradient";
+import { XYEnd, XYStart } from "../../../constants/Colors";
+import globalStyles from "../../../constants/GlobalStyles";
 
 export const renderColour = ({ item }: any) => {
   return (
-    <View style={{ ...styles.renderColourLabel, backgroundColor: `${item}` }} />
+    <View style={{ ...styles.renderColourLabel }}>
+      <LinearGradient
+        style={globalStyles().gradientFill}
+        colors={item}
+        start={XYStart}
+        end={XYEnd}
+      />
+    </View>
   );
 };
 
@@ -33,7 +43,7 @@ const styles = StyleSheet.create({
   renderColourLabel: {
     width: selectionWidth,
     height: selectionWidth,
-    borderRadius: 100,
+    borderRadius: 90,
     alignItems: "center",
     justifyContent: "center",
   },

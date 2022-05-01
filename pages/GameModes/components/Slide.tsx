@@ -27,7 +27,7 @@ const Slide = ({ navigation, slide: { color, title, description } }: any) => {
   };
 
   const onPressButton = (gameMode: string) => {
-    navigation.navigate("Config", Mode[gameMode]);
+    navigation.navigate("Config", Mode[gameMode as Mode]);
   };
 
   return (
@@ -40,7 +40,7 @@ const Slide = ({ navigation, slide: { color, title, description } }: any) => {
       {title !== "Controls" && (
         <MenuButton
           text="Start"
-          shadowColour={Colors.fluroBlue}
+          shadowColour={Colors.gold}
           operation={() => onPressButton(title)}
         />
       )}

@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import { Polygon } from "react-native-svg";
-import { animation } from "./buttonAnimation";
 
 interface ButtonProps {
-  buttonFunction?: Function;
+  buttonFunction: Function;
   colour: string;
   position: string;
 }
@@ -20,21 +19,13 @@ const ShardButton: React.FC<ButtonProps> = ({
     right: "69,36 93,50 69,63 57,50",
   };
 
-  const [buttonOpacity, setButtonOpacity] = useState(1);
-
-  const handleButtonPressed = () => {
-    animation(setButtonOpacity);
-    buttonFunction();
-  };
-
   return (
     <Polygon
       points={positionOption[position]}
-      onPress={() => handleButtonPressed()}
+      onPress={() => buttonFunction()}
       stroke={colour}
       strokeWidth="2"
       fill="transparent"
-      opacity={buttonOpacity}
     />
   );
 };

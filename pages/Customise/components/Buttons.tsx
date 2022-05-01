@@ -114,7 +114,7 @@ export const DownPointer = ({ colour }: ShapeProps) => (
 );
 
 export const TopLetter = ({ colour, letter }: LetterProps) => (
-  <Svg height="180%" width="180%" viewBox="0 -30 100 100">
+  <Svg height="100%" width="100%" viewBox="0 0 50 20">
     <LetterButton
       buttonFunction={() => {
         return;

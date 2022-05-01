@@ -17,10 +17,10 @@ const ControllerOption = () => {
     <View style={styles.container}>
       <Controller
         outerCircle={() => makeSelection(Selection.Outline)}
-        movePlayerDown={() => makeSelection(Selection.Down)}
-        movePlayerUp={() => makeSelection(Selection.Top)}
-        movePlayerRight={() => makeSelection(Selection.Right)}
-        movePlayerLeft={() => makeSelection(Selection.Left)}
+        downFunction={() => makeSelection(Selection.Down)}
+        upFunction={() => makeSelection(Selection.Top)}
+        rightFunction={() => makeSelection(Selection.Right)}
+        leftFunction={() => makeSelection(Selection.Left)}
       />
       {showModal && (
         <ControllerOptionModal

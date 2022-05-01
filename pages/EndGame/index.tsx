@@ -1,7 +1,6 @@
 import React, { useContext, useState } from "react";
 import { StyleSheet, Text, View, SafeAreaView } from "react-native";
 import MenuButton from "../../components/MenuButton";
-import { Colors } from "../../constants/Colors";
 import {
   determineThreePlayer,
   threePlayerWinnerColour,
@@ -10,8 +9,11 @@ import {
 } from "./helpers";
 import { handlePostGame } from "../ExpChange/helpers/handlePostGame";
 import { UserContext } from "../../tools/UserContext";
-import { Data } from "../../constants/types";
+import { Data, Mode } from "../../constants/types";
 import { updateStorageValue } from "../../tools/updateStorageValue";
+import { XYStart, XYEnd, Colors } from "../../constants/Colors";
+import { LinearGradient } from "expo-linear-gradient";
+import globalStyles from "../../constants/GlobalStyles";
 
 const EndGame = ({ navigation, route }) => {
   const userContext = useContext(UserContext);
@@ -108,41 +110,41 @@ const EndGame = ({ navigation, route }) => {
           ]}
         >
           {/**
-           * If its an array, display both members of the team
+           * If its a team game, display both members of the team
            */}
-          {Array.isArray(player[1]) ? (
+          {gameDetails.mode === Mode.TagTeam ? (
             <>
               <View style={styles.playerRow}>
-                <View
-                  style={[
-                    styles.playerRepresentation,
-                    {
-                      backgroundColor: player[1][0],
-                    },
-                  ]}
-                />
-                <View
-                  style={[
-                    styles.playerRepresentation,
-                    {
-                      backgroundColor: player[1][1],
-                    },
-                  ]}
-                />
+                <View style={styles.playerRepresentation}>
+                  <LinearGradient
+                    style={globalStyles().gradientFill}
+                    colors={player[1][0]}
+                    start={XYStart}
+                    end={XYEnd}
+                  />
+                </View>
+                <View style={styles.playerRepresentation}>
+                  <LinearGradient
+                    style={globalStyles().gradientFill}
+                    colors={player[1][1]}
+                    start={XYStart}
+                    end={XYEnd}
+                  />
+                </View>
               </View>
 
               <Text style={styles.scoreLabel}>{player[0]}</Text>
             </>
           ) : (
             <>
-              <View
-                style={[
-                  styles.playerRepresentation,
-                  {
-                    backgroundColor: player[1],
-                  },
-                ]}
-              />
+              <View style={styles.playerRepresentation}>
+                <LinearGradient
+                  style={globalStyles().gradientFill}
+                  colors={player[1]}
+                  start={XYStart}
+                  end={XYEnd}
+                />
+              </View>
               <Text style={styles.scoreLabel}>{player[0]}</Text>
             </>
           )}

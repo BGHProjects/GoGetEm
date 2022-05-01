@@ -21,7 +21,7 @@ const ControllerButton = ({ whichButton, operation }: ButtonProps) => {
     case "circle":
       button = (
         <CircleButton
-          colour={Colors[`${parts[1]}`]}
+          colour={Colors[`${parts[1]}` as keyof typeof Colors]}
           position={parts[0]}
           buttonFunction={() => operation()}
         />
@@ -30,7 +30,7 @@ const ControllerButton = ({ whichButton, operation }: ButtonProps) => {
     case "square":
       button = (
         <SquareButton
-          colour={Colors[`${parts[1]}`]}
+          colour={Colors[`${parts[1]}` as keyof typeof Colors]}
           position={parts[0]}
           buttonFunction={() => operation()}
         />
@@ -39,7 +39,7 @@ const ControllerButton = ({ whichButton, operation }: ButtonProps) => {
     case "triangle":
       button = (
         <TriangleButton
-          colour={Colors[`${parts[1]}`]}
+          colour={Colors[`${parts[1]}` as keyof typeof Colors]}
           position={parts[0]}
           buttonFunction={() => operation()}
         />
@@ -48,7 +48,7 @@ const ControllerButton = ({ whichButton, operation }: ButtonProps) => {
     case "shard":
       button = (
         <ShardButton
-          colour={Colors[`${parts[1]}`]}
+          colour={Colors[`${parts[1]}` as keyof typeof Colors]}
           position={parts[0]}
           buttonFunction={() => operation()}
         />
@@ -57,7 +57,7 @@ const ControllerButton = ({ whichButton, operation }: ButtonProps) => {
     case "pointer":
       button = (
         <PointerButton
-          colour={Colors[`${parts[1]}`]}
+          colour={Colors[`${parts[1]}` as keyof typeof Colors]}
           position={parts[0]}
           buttonFunction={() => operation()}
         />
@@ -66,7 +66,7 @@ const ControllerButton = ({ whichButton, operation }: ButtonProps) => {
     case "letter":
       button = (
         <LetterButton
-          colour={Colors[`${parts[1]}`]}
+          colour={Colors[`${parts[1]}` as keyof typeof Colors]}
           position={parts[0]}
           letter={capitalize(parts[3])}
           buttonFunction={() => operation()}
@@ -76,7 +76,7 @@ const ControllerButton = ({ whichButton, operation }: ButtonProps) => {
     default:
       button = (
         <CircleButton
-          colour={Colors[`${parts[1]}`]}
+          colour={Colors[`${parts[1]}` as keyof typeof Colors]}
           position={parts[0]}
           buttonFunction={() => operation()}
         />

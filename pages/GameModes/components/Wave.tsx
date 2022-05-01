@@ -110,7 +110,7 @@ const Wave = ({
       ]}
     >
       <AnimatedPath
-        fill={Platform.OS === "android" ? children.props.slide.color : "black"}
+        fill={children.props.slide.color}
         animatedProps={animatedProps}
       />
     </Svg>
@@ -130,7 +130,7 @@ const Wave = ({
       ],
     };
   });
-  if (Platform.OS === "android") {
+  {
     return (
       <View style={StyleSheet.absoluteFill}>
         {maskElement}
@@ -140,11 +140,6 @@ const Wave = ({
       </View>
     );
   }
-  return (
-    <MaskedView style={StyleSheet.absoluteFill} maskElement={maskElement}>
-      {children}
-    </MaskedView>
-  );
 };
 
 export default Wave;

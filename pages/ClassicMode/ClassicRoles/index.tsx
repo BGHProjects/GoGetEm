@@ -5,11 +5,12 @@ import { Colors } from "../../../constants/Colors";
 import PlayerRepresentation from "../../../components/RolesScreen/PlayerRepresentation";
 import Arrow from "../../../components/RolesScreen/Arrow";
 import GameInfo from "../../../components/RolesScreen/GameInfo";
+import { Screens } from "../../../constants/types";
 
 const width = Dimensions.get("window").width;
 const contentSize = 200;
 
-const ClassicRolesScreen = ({ navigation, route }) => {
+const ClassicRolesScreen = ({ navigation, route }: any) => {
   const configDetails = route.params;
 
   let scoreDetails;
@@ -45,11 +46,10 @@ const ClassicRolesScreen = ({ navigation, route }) => {
   let totalDetails = { ...configDetails, ...scoreDetails };
 
   const onPressSubmit = () => {
-    navigation.navigate("Countdown", totalDetails);
+    navigation.navigate(Screens.Countdown, totalDetails);
   };
 
   // Animation delays
-
   const animationDelay = 300;
   const animationDuration = 200;
   const pulsateDuration = 750;
