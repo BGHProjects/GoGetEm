@@ -12,7 +12,7 @@ import Animated, {
 import Svg, { Path } from "react-native-svg";
 import { Vector } from "react-native-redash";
 
-import { SlideProps } from "./Slide";
+import { SlideProps } from "../constants/liquidSwipeConstants";
 
 export const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 export const MIN_LEDGE = 25;

@@ -1,6 +1,6 @@
 import { Colors } from "../../../constants/Colors";
 import React from "react";
-import { View, Text, StyleSheet, Dimensions } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import ControlsContent from "./ControlsContent";
 import ClassicContent from "./ClassicContent";
 import ChasedownContent from "./ChasedownContent";
@@ -9,15 +9,10 @@ import TagTeamContent from "./TagTeamContent";
 import MenuButton from "../../../components/MenuButton";
 import { Mode } from "../../../constants/types";
 
-export interface SlideProps {
-  slide: {
-    color: string;
-    title: string;
-    description: string;
-  };
-}
-
-const Slide = ({ navigation, slide: { color, title, description } }: any) => {
+const GameModeSlide = ({
+  navigation,
+  slide: { color, title, description },
+}: any) => {
   const whichComponent: Record<string, React.ReactNode> = {
     Controls: <ControlsContent />,
     Classic: <ClassicContent />,
@@ -70,4 +65,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Slide;
+export default GameModeSlide;

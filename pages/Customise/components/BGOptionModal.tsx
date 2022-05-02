@@ -4,9 +4,9 @@ import {
   StyleSheet,
   ImageBackground,
   TouchableOpacity,
+  Text,
 } from "react-native";
 import { Colors } from "../../../constants/Colors";
-import Carousel from "react-native-snap-carousel";
 import ModalButton from "../../../components/ModalButton";
 import { Backgrounds } from "../../../constants/Backgrounds";
 import { AutoSizeText, ResizeTextMode } from "react-native-auto-size-text";
@@ -23,6 +23,7 @@ import Unlockables from "../../../constants/Unlockables";
 import { UserContext } from "../../../tools/UserContext";
 import { Data } from "../../../constants/types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { ScrollView } from "react-native-gesture-handler";
 
 interface BGOptionModalProps {
   modeLabel: string;
@@ -38,7 +39,7 @@ const BGOptionModal = ({ modeLabel, closeFunction }: BGOptionModalProps) => {
     "-"
   );
 
-  let options = [];
+  let options: any = [];
 
   function validateItem(item, index) {
     let borderColour;
@@ -83,10 +84,12 @@ const BGOptionModal = ({ modeLabel, closeFunction }: BGOptionModalProps) => {
     setButtonOptions(options);
   }, []);
 
-  const renderOption = ({ item }) => {
+  const renderOption = ({ item }: any) => {
     let bgString = split(values(item)[0][0], "-")[1];
     let bgBorderColour = values(item)[0][1];
-    let level = parseInt(findKey(item));
+    let level = parseInt(findKey(item) as string);
+
+    const itemKey = Object.keys(item)[0];
 
     return (
       <TouchableOpacity
@@ -101,10 +104,17 @@ const BGOptionModal = ({ modeLabel, closeFunction }: BGOptionModalProps) => {
         }
       >
         <View
-          style={[styles.imageOptionContainer, { borderColor: bgBorderColour }]}
+          key={item.toString()}
+          style={[
+            styles.imageOptionContainer,
+            {
+              borderColor: bgBorderColour,
+              marginLeft: itemKey === "0" ? 30 : 0,
+            },
+          ]}
         >
           <ImageBackground
-            source={Backgrounds[bgString]}
+            source={Backgrounds[bgString as keyof typeof Backgrounds]}
             resizeMode="cover"
             style={styles.bgImage}
           />
@@ -129,16 +139,12 @@ const BGOptionModal = ({ modeLabel, closeFunction }: BGOptionModalProps) => {
     <View style={styles.fullContainer}>
       <View style={styles.modalContainer}>
         <View style={styles.scrollContainer}>
-          <Carousel
-            data={buttonOptions}
-            renderItem={renderOption}
-            sliderWidth={245}
-            itemWidth={160}
-            layout={"default"}
-            inactiveSlideOpacity={0.5}
-            activeAnimationType={"spring"}
-            enableMomentum={false}
-          />
+          <Text style={styles.modeLabel}>{modeLabel}</Text>
+          <ScrollView horizontal={true}>
+            {buttonOptions.map((item) => {
+              return renderOption({ item });
+            })}
+          </ScrollView>
         </View>
         <View style={styles.buttonContainer}>
           <ModalButton
@@ -166,15 +172,17 @@ const styles = StyleSheet.create({
     position: "absolute",
     justifyContent: "center",
     alignItems: "center",
+    left: -150,
   },
   imageOptionContainer: {
     borderRadius: 5,
     borderWidth: 2,
     height: "90%",
-    width: "100%",
+    width: 180,
     alignItems: "center",
     justifyContent: "center",
     marginTop: 20,
+    marginHorizontal: 20,
     position: "relative",
   },
   levelContainer: {
@@ -210,6 +218,13 @@ const styles = StyleSheet.create({
     height: "80%",
     alignItems: "center",
     justifyContent: "center",
+  },
+  modeLabel: {
+    textAlign: "center",
+    fontFamily: "Main",
+    color: Colors.white,
+    fontSize: 20,
+    marginTop: 10,
   },
 });
 

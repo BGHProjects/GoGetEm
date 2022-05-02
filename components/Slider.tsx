@@ -11,8 +11,8 @@ import { PanGestureHandler } from "react-native-gesture-handler";
 import { snapPoint, useVector } from "react-native-redash";
 
 import Wave, { HEIGHT, MARGIN_WIDTH, Side, WIDTH } from "./Wave";
-import Button from "./Button";
-import { SlideProps } from "./Slide";
+import Button from "../pages/GameModes/components/Button";
+import { SlideProps } from "../constants/liquidSwipeConstants";
 
 const PREV = WIDTH;
 const NEXT = 0;

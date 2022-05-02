@@ -2,11 +2,8 @@ import React, { useState, useEffect, useContext } from "react";
 import { View, StyleSheet, ImageBackground } from "react-native";
 import { Colors } from "../../../constants/Colors";
 import { Backgrounds } from "../../../constants/Backgrounds";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import { AutoSizeText, ResizeTextMode } from "react-native-auto-size-text";
 import { capitalize, lowerFirst } from "lodash";
-
-import BGOptionModal from "./BGOptionModal";
 import { UserContext } from "../../../tools/UserContext";
 
 interface BGOptionProps {
@@ -27,43 +24,33 @@ const BGOption = ({ modeLabel, selectionLabel, selection }: BGOptionProps) => {
   }, [showModal]);
 
   return (
-    <>
-      <TouchableOpacity onPress={() => setShowModal(true)}>
-        <View style={styles.optionContainer}>
-          <View style={styles.labelsContainer}>
-            <AutoSizeText
-              fontSize={18}
-              numberOfLines={2}
-              mode={ResizeTextMode.max_lines}
-              style={styles.modeLabel}
-            >
-              {modeLabel}
-            </AutoSizeText>
-            <AutoSizeText
-              fontSize={24}
-              numberOfLines={2}
-              mode={ResizeTextMode.max_lines}
-              style={styles.selectionLabel}
-            >
-              {BGLabel}
-            </AutoSizeText>
-          </View>
-          <View style={styles.imageContainer}>
-            <ImageBackground
-              source={Backgrounds[BG]}
-              style={styles.bgImage}
-              resizeMode="cover"
-            />
-          </View>
-        </View>
-      </TouchableOpacity>
-      {showModal && (
-        <BGOptionModal
-          closeFunction={() => setShowModal(false)}
-          modeLabel={modeLabel}
+    <View style={styles.optionContainer}>
+      <View style={styles.labelsContainer}>
+        <AutoSizeText
+          fontSize={14}
+          numberOfLines={2}
+          mode={ResizeTextMode.max_lines}
+          style={styles.modeLabel}
+        >
+          {modeLabel}
+        </AutoSizeText>
+        <AutoSizeText
+          fontSize={20}
+          numberOfLines={2}
+          mode={ResizeTextMode.max_lines}
+          style={styles.selectionLabel}
+        >
+          {BGLabel}
+        </AutoSizeText>
+      </View>
+      <View style={styles.imageContainer}>
+        <ImageBackground
+          source={Backgrounds[BG as keyof typeof Backgrounds]}
+          style={styles.bgImage}
+          resizeMode="cover"
         />
-      )}
-    </>
+      </View>
+    </View>
   );
 };
 
@@ -87,14 +74,16 @@ const styles = StyleSheet.create({
     justifyContent: "space-evenly",
   },
   optionContainer: {
-    width: 300,
-    height: 120,
+    width: 250,
+    height: 110,
     borderRadius: 5,
     borderColor: Colors.fluroBlue,
     borderWidth: 2,
     justifyContent: "center",
     flexDirection: "row",
     marginBottom: 20,
+    marginLeft: 50,
+    backgroundColor: Colors.primaryBackground,
   },
   selectionLabel: {
     fontFamily: "Main-Bold",

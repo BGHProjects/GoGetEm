@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet, ScrollView } from "react-native";
+import { View, StyleSheet, Text } from "react-native";
 import { Colors } from "../../../constants/Colors";
-import { forEach, split, toPairs, keys, values } from "lodash";
+import { forEach, split, toPairs, keys, values, upperFirst } from "lodash";
 import Selection from "../../../constants/Selections";
 import ModalButton from "../../../components/ModalButton";
 import ButtonOption from "./ButtonOption";
@@ -13,6 +13,7 @@ import Animated, {
   withRepeat,
 } from "react-native-reanimated";
 import { loadingPulsation } from "../../../constants/Animation";
+import { ScrollView } from "react-native-gesture-handler";
 
 interface ControllerOptionModalProps {
   closeFunction: Function;
@@ -65,6 +66,12 @@ const ControllerOptionModal = ({
   return (
     <View style={styles.fullContainer}>
       <View style={styles.modalContainer}>
+        {finishedLoading && (
+          <Text style={styles.selectionLabel}>
+            {upperFirst(variant)}
+            {variant !== "outline" ? " Button" : " Colour"}
+          </Text>
+        )}
         <ScrollView
           style={styles.scrollContainer}
           contentContainerStyle={styles.scrollContainerContent}
@@ -74,6 +81,7 @@ const ControllerOptionModal = ({
               Loading...
             </Animated.Text>
           )}
+
           {buttonOptions.map((item, index) => {
             if (index === buttonOptions.length - 1 && !finishedLoading) {
               setFinishedLoading(true);
@@ -108,11 +116,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   fullContainer: {
-    width: "100%",
+    width: 330,
     height: "100%",
     position: "absolute",
     justifyContent: "center",
     alignItems: "center",
+    left: -70,
   },
   modalContainer: {
     width: "80%",
@@ -139,6 +148,13 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     marginTop: "50%",
     fontFamily: "Main",
+  },
+  selectionLabel: {
+    fontFamily: "Main",
+    color: Colors.white,
+    textAlign: "center",
+    fontSize: 20,
+    marginVertical: 15,
   },
 });
 

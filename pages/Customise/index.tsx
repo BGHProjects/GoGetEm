@@ -1,35 +1,15 @@
-import React, { useState } from "react";
-import { View } from "react-native";
-import { Colors } from "../../constants/Colors";
-import { TabView, SceneMap } from "react-native-tab-view";
+import React from "react";
+import { slides } from "../../constants/customiseSlideContent";
+import LiquidSwipe from "../../components/LiquidSwipe";
+import { LiquidSwipeMenu } from "../../constants/types";
 
-import RenderTabBar from "../Statistics/components/RenderTabBar";
-import ControllerOption from "./components/ControllerOption";
-
-import BackgroundOptions from "./components/BackgroundOptions";
-
-const Customise = ({ navigation }) => {
-  const renderScene = SceneMap({
-    first: ControllerOption,
-    second: BackgroundOptions,
-  });
-
-  const [index, setIndex] = useState(0);
-  const [routes] = useState([
-    { key: "first", title: "Controller" },
-    { key: "second", title: "Backgrounds" },
-  ]);
-
+const Customise = ({ navigation }: any) => {
   return (
-    <View style={{ flex: 1, backgroundColor: Colors.primaryBackground }}>
-      <TabView
-        renderTabBar={RenderTabBar}
-        navigationState={{ index, routes }}
-        renderScene={renderScene}
-        onIndexChange={setIndex}
-        style={{ marginTop: 50 }}
-      />
-    </View>
+    <LiquidSwipe
+      navigation={navigation}
+      slidesInfo={slides}
+      variant={LiquidSwipeMenu.Customise}
+    />
   );
 };
 

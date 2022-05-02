@@ -7,7 +7,7 @@ import { Vector } from "react-native-redash";
 import { Feather as Icon } from "@expo/vector-icons";
 import { Dimensions } from "react-native";
 
-import { Side } from "./Wave";
+import { Side } from "../../../components/Wave";
 
 const { width } = Dimensions.get("screen");
 const RADIUS = 25;

@@ -24,7 +24,10 @@ const ButtonOption = ({ level, variant, closeFunction }: ButtonOptionProps) => {
     if (split(variant, "-").length > 2) {
       userContext[`setController${capitalize(position)}Button`](variant);
 
-      await AsyncStorage.setItem(Data[`Controller${position}Button`], variant);
+      await AsyncStorage.setItem(
+        Data[`Controller${position}Button` as keyof typeof Data],
+        variant
+      );
     } else {
       userContext.setControllerOutlineColour(variant);
       await AsyncStorage.setItem(Data.ControllerOutlineColour, variant);
@@ -111,8 +114,8 @@ const styles = StyleSheet.create({
     marginLeft: 5,
   },
   optionContainer: {
-    height: 80,
-    width: 80,
+    height: 70,
+    width: 70,
     borderWidth: 2,
     borderRadius: 5,
     position: "relative",

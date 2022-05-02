@@ -64,3 +64,8 @@ export enum Screens {
   Unlocks = "Unlocks",
   Countdown = "Countdown",
 }
+
+export enum LiquidSwipeMenu {
+  GameModes = "GameModes",
+  Customise = "Customise",
+}
