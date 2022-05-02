@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext, useRef } from "react";
 import { View, Dimensions, Vibration } from "react-native";
-import { Svg, Circle } from "react-native-svg";
 import {
   generateCells,
   makeMaze,
@@ -11,6 +10,7 @@ import {
   aStarSearch,
   updateSearchPath,
   runAwaySingleChaser,
+  getMazeCell,
 } from "../../../tools/BotBrain";
 import Controller from "../../../components/Controller/Controller";
 import BGWithImage from "../../../components/BGWithImage";
@@ -21,6 +21,7 @@ import globalStyles from "../../../constants/GlobalStyles";
 import { isUndefined } from "lodash";
 import PlayerAvatar from "../../../components/PlayerAvatar";
 import { Screens } from "../../../constants/types";
+import { SingleTeamScore } from "../../../components/GameComponents";
 
 const height = Dimensions.get("window").height;
 const cellSize = height * 0.045;
@@ -35,7 +36,6 @@ let searchGrid2: any = [];
 let searchPath2: any = [];
 let team1Score: any;
 let team2Score: any;
-let playerSize = 4;
 
 const TagTeamGameplay = ({ navigation, route }: any) => {
   const userContext = useContext(UserContext);
@@ -123,7 +123,7 @@ const TagTeamGameplay = ({ navigation, route }: any) => {
   };
 
   const movePlayerUp = () => {
-    let mazeCell = getMazeCell(playerX, playerY);
+    let mazeCell = getMazeCell(playerX, playerY, mazeGrid);
 
     if (playerY > 5 && mazeCell.top === 0 && !roundOver) {
       Vibration.vibrate(5);
@@ -132,7 +132,7 @@ const TagTeamGameplay = ({ navigation, route }: any) => {
   };
 
   const movePlayerRight = () => {
-    let mazeCell = getMazeCell(playerX, playerY);
+    let mazeCell = getMazeCell(playerX, playerY, mazeGrid);
 
     if (playerX < 95 && mazeCell.right === 0 && !roundOver) {
       Vibration.vibrate(5);
@@ -141,7 +141,7 @@ const TagTeamGameplay = ({ navigation, route }: any) => {
   };
 
   const movePlayerLeft = () => {
-    let mazeCell = getMazeCell(playerX, playerY);
+    let mazeCell = getMazeCell(playerX, playerY, mazeGrid);
 
     if (playerX > 5 && mazeCell.left === 0 && !roundOver) {
       Vibration.vibrate(5);
@@ -150,27 +150,13 @@ const TagTeamGameplay = ({ navigation, route }: any) => {
   };
 
   const movePlayerDown = () => {
-    let mazeCell = getMazeCell(playerX, playerY);
+    let mazeCell = getMazeCell(playerX, playerY, mazeGrid);
 
     if (playerY < 95 && mazeCell.bottom === 0 && !roundOver) {
       Vibration.vibrate(5);
       setPlayerY(playerY + 10);
     }
   };
-
-  function getMazeCell(X: any, Y: any) {
-    let digit1 = (X - 5).toString();
-    let digit2 = (Y - 5).toString();
-    let digits;
-
-    if (digit2 === "0") {
-      digits = digit1[0];
-    } else {
-      digits = digit2[0] + digit1[0];
-    }
-
-    return mazeGrid[digits];
-  }
 
   function followPath(
     searchPath: any,
@@ -516,7 +502,19 @@ const TagTeamGameplay = ({ navigation, route }: any) => {
   return (
     <>
       <BGWithImage image={userContext.tagTeamBackground}>
-        <View style={[globalStyles().mazeContainer, { marginTop: 50 }]}>
+        <View style={globalStyles().gameHeaderContainer}>
+          <SingleTeamScore
+            colour1={gameDetails.colour}
+            colour2={gameDetails.player2Colour}
+            score={gameDetails.team1Score}
+          />
+          <SingleTeamScore
+            colour1={gameDetails.player3Colour}
+            colour2={gameDetails.player4Colour}
+            score={gameDetails.team2Score}
+          />
+        </View>
+        <View style={globalStyles().mazeContainer}>
           {mazeGrid.map((item: any) => (
             <View
               key={(`${item.row}` + `${item.col}`).toString()}

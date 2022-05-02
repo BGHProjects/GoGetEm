@@ -13,6 +13,7 @@ export const Colors = {
   silver: "#5F6C81",
   gold: "#FFD700",
   transparentBlack: "rgba(0,0,0,0.5)",
+  darkTransparentBlack: "rgba(0,0,0,0.8)",
   fluroPink: "#FF3DEE",
   fluroBlue: "#3DFFFF",
   fluroGreen: "#27FF00",

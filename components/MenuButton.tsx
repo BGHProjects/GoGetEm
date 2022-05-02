@@ -1,13 +1,12 @@
 import React from "react";
-import { View } from "react-native";
-
+import { View, StyleSheet } from "react-native";
 import { Colors } from "../constants/Colors";
 import AwesomeButton from "react-native-really-awesome-button";
 import { AutoSizeText, ResizeTextMode } from "react-native-auto-size-text";
 
 interface MenuButtonProps {
   text: string;
-  operation: Function;
+  operation: () => void;
   shadowColour: string;
 }
 
@@ -20,24 +19,14 @@ const MenuButton = ({ text, operation, shadowColour }: MenuButtonProps) => {
       borderRadius={10}
       onPress={operation}
       raiseLevel={5}
-      style={{ alignSelf: "center", marginTop: 20 }}
+      style={styles.awesomeButtonContainer}
     >
-      <View
-        style={{
-          width: "90%",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
+      <View style={styles.textContainer}>
         <AutoSizeText
           fontSize={24}
           numberOfLines={2}
           mode={ResizeTextMode.max_lines}
-          style={{
-            color: "white",
-            fontFamily: "Main",
-            textAlign: "center",
-          }}
+          style={styles.label}
         >
           {text}
         </AutoSizeText>
@@ -45,5 +34,19 @@ const MenuButton = ({ text, operation, shadowColour }: MenuButtonProps) => {
     </AwesomeButton>
   );
 };
+
+const styles = StyleSheet.create({
+  awesomeButtonContainer: { alignSelf: "center", marginTop: 20 },
+  textContainer: {
+    width: "90%",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  label: {
+    color: "white",
+    fontFamily: "Main",
+    textAlign: "center",
+  },
+});
 
 export default MenuButton;

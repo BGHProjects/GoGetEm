@@ -15,8 +15,9 @@ import RoundOverAlert from "../../../components/RoundOverAlert/RoundOverAlert";
 import { roundOverDuration } from "../../../constants/Animation";
 import globalStyles from "../../../constants/GlobalStyles";
 import { Screens } from "../../../constants/types";
-import { ColorGradients, XYEnd, XYStart } from "../../../constants/Colors";
 import PlayerAvatar from "../../../components/PlayerAvatar";
+import { Colors } from "react-native/Libraries/NewAppScreen";
+import { SinglePlayerScore } from "../../../components/GameComponents";
 
 const height = Dimensions.get("window").height;
 const cellSize = height * 0.045;
@@ -24,7 +25,6 @@ let mazeGrid: any = [];
 const wallWidth = 1;
 const gridSquareLength = 10;
 const stack: any = [];
-let gridColor = "white";
 let searchGrid1: any = [];
 let searchGrid2: any = [];
 let searchPath1: any = [];
@@ -32,7 +32,6 @@ let searchPath2: any = [];
 let player1Score: number;
 let player2Score: number;
 let player3Score: number;
-let playerSize = 4;
 const playerStart = [55, 15];
 const leftStart = [5, 85];
 const rightStart = [95, 85];
@@ -311,12 +310,21 @@ const ClassicGameplayScreen = ({ navigation, route }: any) => {
   return (
     <>
       <BGWithImage image={userContext.classicBackground}>
-        <View
-          style={[
-            globalStyles().mazeContainer,
-            { marginTop: 50, position: "relative" },
-          ]}
-        >
+        <View style={globalStyles().gameHeaderContainer}>
+          <SinglePlayerScore
+            colour={gameDetails.colour}
+            score={gameDetails.player1Score}
+          />
+          <SinglePlayerScore
+            colour={gameDetails.player2Colour}
+            score={gameDetails.player2Score}
+          />
+          <SinglePlayerScore
+            colour={gameDetails.player3Colour}
+            score={gameDetails.player3Score}
+          />
+        </View>
+        <View style={globalStyles().mazeContainer}>
           {mazeGrid.map((item: any) => (
             <View
               key={(`${item.row}` + `${item.col}`).toString()}
@@ -326,7 +334,7 @@ const ClassicGameplayScreen = ({ navigation, route }: any) => {
                 position: "absolute",
                 left: `${item.col}%`,
                 top: `${item.row}%`,
-                borderColor: gridColor,
+                borderColor: Colors.white,
                 borderTopWidth: item.top,
                 borderRightWidth: item.right,
                 borderBottomWidth: item.bottom,

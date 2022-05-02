@@ -2,6 +2,7 @@ import { StyleSheet, Dimensions } from "react-native";
 import { Colors } from "./Colors";
 
 const height = Dimensions.get("window").height;
+const width = Dimensions.get("window").width;
 const mazeSideLength = height * 0.45;
 const CONTAINERSIZE = 150;
 const cellSize = height * 0.045;
@@ -9,7 +10,6 @@ const cellSize = height * 0.045;
 export const globalStyles = () =>
   StyleSheet.create({
     mazeContainer: {
-      marginTop: height / 32,
       width: mazeSideLength,
       height: mazeSideLength,
       alignSelf: "center",
@@ -43,6 +43,14 @@ export const globalStyles = () =>
       height: "100%",
       width: "100%",
       borderRadius: 90,
+    },
+    gameHeaderContainer: {
+      marginTop: 20,
+      height: 80,
+      width: width,
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-evenly",
     },
   });
 

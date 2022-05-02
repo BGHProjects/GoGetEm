@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { StyleSheet, Text, View, Dimensions, Vibration } from "react-native";
-import { Svg, Circle } from "react-native-svg";
+import { View, Dimensions, Vibration } from "react-native";
 import {
   generateCells,
   makeMaze,
@@ -17,6 +16,12 @@ import { roundOverDuration } from "../../../constants/Animation";
 import globalStyles from "../../../constants/GlobalStyles";
 import PlayerAvatar from "../../../components/PlayerAvatar";
 import { ColorGradients } from "../../../constants/Colors";
+import { timerDetails } from "../../../constants/gameConstants";
+import {
+  ClockText,
+  SinglePlayerScore,
+} from "../../../components/GameComponents";
+import { Screens } from "../../../constants/types";
 
 const height = Dimensions.get("window").height;
 const cellSize = height * 0.045;
@@ -29,7 +34,6 @@ let searchGrid1: any = [];
 let searchPath1: any = [];
 let player1Score: any;
 let player2Score: any;
-let playerSize = 4;
 
 interface HuntGameplayProps {
   navigation: any;
@@ -183,11 +187,11 @@ const HuntGameplay = ({ navigation, route }: HuntGameplayProps) => {
       if (gameDetails.currentRound > gameDetails.rounds) {
         gameDetails.gameOver = true;
         setTimeout(() => {
-          navigation.navigate("End Game", gameDetails);
+          navigation.navigate(Screens.EndGame, gameDetails);
         }, roundOverDuration);
       } else {
         setTimeout(() => {
-          navigation.navigate("Hunt Roles", gameDetails);
+          navigation.navigate(Screens.HuntRoles, gameDetails);
         }, roundOverDuration);
       }
     }
@@ -224,29 +228,21 @@ const HuntGameplay = ({ navigation, route }: HuntGameplayProps) => {
   return (
     <>
       <BGWithImage image={userContext.huntBackground}>
-        <View style={{ marginTop: 20, alignSelf: "center" }}>
+        <View style={globalStyles().gameHeaderContainer}>
+          <SinglePlayerScore colour={gameDetails.colour} score={player1Score} />
+          <SinglePlayerScore
+            colour={gameDetails.player2Colour}
+            score={player2Score}
+          />
           <CountdownCircleTimer
             isPlaying={timerRunning}
             duration={gameDetails.timeLimit}
-            colors={[
-              ["#00ff00", 0.4],
-              ["#ffff00", 0.4],
-              ["#ff0000", 0.2],
-            ]}
+            colors={timerDetails as any}
             size={60}
             strokeWidth={2}
             onComplete={() => setRoundOver(true)}
           >
-            {({ remainingTime }) => (
-              <Text style={globalStyles().clockText}>
-                {Math.floor(remainingTime / 60)}:
-                {(remainingTime % 60).toString().length === 1 &&
-                remainingTime % 60 !== 0
-                  ? "0" + (remainingTime % 60)
-                  : remainingTime % 60}
-                {remainingTime % 60 === 0 && 0}
-              </Text>
-            )}
+            {({ remainingTime }) => <ClockText remainingTime={remainingTime} />}
           </CountdownCircleTimer>
         </View>
         <View style={globalStyles().mazeContainer}>

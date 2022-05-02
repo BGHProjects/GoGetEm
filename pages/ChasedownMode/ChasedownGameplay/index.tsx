@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext, useRef } from "react";
-import { Text, View, Dimensions, Vibration } from "react-native";
-import { Svg, Circle } from "react-native-svg";
+import { View, Dimensions, Vibration } from "react-native";
 import {
   generateCells,
   makeMaze,
@@ -20,6 +19,11 @@ import RoundOverAlert from "../../../components/RoundOverAlert/RoundOverAlert";
 import { roundOverDuration } from "../../../constants/Animation";
 import globalStyles from "../../../constants/GlobalStyles";
 import PlayerAvatar from "../../../components/PlayerAvatar";
+import { timerDetails } from "../../../constants/gameConstants";
+import {
+  ClockText,
+  SinglePlayerScore,
+} from "../../../components/GameComponents";
 
 const height = Dimensions.get("window").height;
 const cellSize = height * 0.045;
@@ -35,7 +39,6 @@ let searchPath2: any = [];
 let player1Score: any;
 let player2Score: any;
 let player3Score: any;
-let playerSize = 4;
 const targetStart = [55, 55];
 const topLeftStart = [5, 5];
 const topRightStart = [95, 5];
@@ -418,6 +421,7 @@ const ChasedownGameplayScreen = ({
     if (roundOver) {
       roundOverRef.current = roundOver;
       Vibration.vibrate(500);
+      setTimerRunning(false);
       gameDetails.player1Score = player1Score;
       gameDetails.player2Score = player2Score;
       gameDetails.player3Score = player3Score;
@@ -453,29 +457,29 @@ const ChasedownGameplayScreen = ({
   return (
     <>
       <BGWithImage image={userContext.chasedownBackground}>
-        <View style={{ marginTop: 20, alignSelf: "center" }}>
+        <View style={globalStyles().gameHeaderContainer}>
+          <SinglePlayerScore
+            colour={gameDetails.colour}
+            score={gameDetails.player1Score}
+          />
+          <SinglePlayerScore
+            colour={gameDetails.player2Colour}
+            score={gameDetails.player2Score}
+          />
+          <SinglePlayerScore
+            colour={gameDetails.player3Colour}
+            score={gameDetails.player3Score}
+          />
+
           <CountdownCircleTimer
             isPlaying={timerRunning}
             duration={gameDetails.timeLimit}
-            colors={[
-              ["#00ff00", 0.4],
-              ["#ffff00", 0.4],
-              ["#ff0000", 0.2],
-            ]}
+            colors={timerDetails as any}
             size={60}
             strokeWidth={2}
             onComplete={() => timerExpired()}
           >
-            {({ remainingTime }) => (
-              <Text style={globalStyles().clockText}>
-                {Math.floor(remainingTime / 60)}:
-                {(remainingTime % 60).toString().length === 1 &&
-                remainingTime % 60 !== 0
-                  ? "0" + (remainingTime % 60)
-                  : remainingTime % 60}
-                {remainingTime % 60 === 0 && 0}
-              </Text>
-            )}
+            {({ remainingTime }) => <ClockText remainingTime={remainingTime} />}
           </CountdownCircleTimer>
         </View>
         <View style={globalStyles().mazeContainer}>

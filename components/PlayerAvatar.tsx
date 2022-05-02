@@ -2,12 +2,12 @@ import React from "react";
 import { View } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import globalStyles from "../constants/GlobalStyles";
-import { ColorGradients, XYStart, XYEnd, Colors } from "../constants/Colors";
+import { XYStart, XYEnd } from "../constants/Colors";
 
 interface PlayerAvatarProps {
   top: number;
   left: number;
-  colour: typeof ColorGradients | typeof Colors | string | string[] | undefined;
+  colour: string[];
 }
 
 // TODO Decide if the "- 5" should be handled outside of this component or not
