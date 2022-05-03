@@ -1,6 +1,5 @@
-import { Colors } from "../../../constants/Colors";
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
 import ControllerOption from "./ControllerOption";
 import BackgroundOptions from "./BackgroundOptions";
 

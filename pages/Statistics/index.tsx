@@ -1,31 +1,17 @@
-import React, { useState, useContext } from "react";
+import React, { useContext } from "react";
 import { View, StyleSheet, ImageBackground } from "react-native";
 import { Colors } from "../../constants/Colors";
 import { AutoSizeText, ResizeTextMode } from "react-native-auto-size-text";
 import { UserContext } from "../../tools/UserContext";
-import { TabView, SceneMap } from "react-native-tab-view";
-
-import BaseStats from "./components/BaseStats";
-import DifficultyStats from "./components/DifficultyStats";
-import GameModeStats from "./components/GameModeStats";
-import RenderTabBar from "./components/RenderTabBar";
 import { Backgrounds } from "../../constants/Backgrounds";
+import LiquidSwipe from "../../components/LiquidSwipe";
+import { slides } from "../../constants/statisticsSlideContent";
+import { LiquidSwipeMenu } from "../../constants/types";
 
-const Statistics = ({ navigation }) => {
+const topDivHeight = 200;
+
+const Statistics = () => {
   const userContext = useContext(UserContext);
-
-  const renderScene = SceneMap({
-    first: BaseStats,
-    second: GameModeStats,
-    third: DifficultyStats,
-  });
-
-  const [index, setIndex] = useState(0);
-  const [routes] = useState([
-    { key: "first", title: "Base" },
-    { key: "second", title: "Game Mode" },
-    { key: "third", title: "Difficulty" },
-  ]);
 
   return (
     <View style={{ flex: 1, backgroundColor: Colors.primaryBackground }}>
@@ -35,7 +21,7 @@ const Statistics = ({ navigation }) => {
         style={styles.topDiv}
       >
         <View style={styles.pageContentContainer} />
-        <View style={{ marginTop: 150 }}>
+        <View style={{ marginTop: topDivHeight / 2 - topDivHeight / 4 }}>
           <AutoSizeText
             fontSize={20}
             numberOfLines={1}
@@ -56,13 +42,7 @@ const Statistics = ({ navigation }) => {
           </View>
         </View>
       </ImageBackground>
-      <TabView
-        renderTabBar={RenderTabBar}
-        navigationState={{ index, routes }}
-        renderScene={renderScene}
-        onIndexChange={setIndex}
-        style={{ marginTop: 50 }}
-      />
+      <LiquidSwipe slidesInfo={slides} variant={LiquidSwipeMenu.Statistics} />
     </View>
   );
 };
@@ -98,7 +78,7 @@ const styles = StyleSheet.create({
   },
   topDiv: {
     width: "100%",
-    height: 200,
+    height: topDivHeight,
     borderRadius: 40,
     marginTop: -50,
     justifyContent: "center",

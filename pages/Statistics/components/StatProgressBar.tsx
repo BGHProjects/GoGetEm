@@ -16,7 +16,7 @@ const StatProgressBar = ({
 
   return (
     <Progress.Bar
-      width={width * 0.8}
+      width={width / 2.5}
       progress={
         // Avoids infinity problems if one of the values is 0
         Number(progressValue) !== 0 && Number(completeValue) !== 0

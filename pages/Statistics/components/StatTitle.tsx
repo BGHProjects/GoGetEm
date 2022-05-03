@@ -10,7 +10,7 @@ const StatTitle = ({ label }: StatTitleProps) => (
     fontSize={16}
     numberOfLines={1}
     mode={ResizeTextMode.max_lines}
-    style={{ color: "white", fontFamily: "Main-Bold" }}
+    style={{ color: "white", fontFamily: "Main-Bold", width: "100%" }}
   >
     {label}
   </AutoSizeText>

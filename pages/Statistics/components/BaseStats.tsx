@@ -1,11 +1,12 @@
 import React, { useContext } from "react";
-import { ScrollView, View, StyleSheet } from "react-native";
-import { HStack } from "native-base";
+import { View, StyleSheet, Text } from "react-native";
 import { UserContext } from "../../../tools/UserContext";
 import StatBasic from "./StatBasic";
 import StatFull from "./StatFull";
 import { calcExpToNextLevel } from "../../../tools/calcNextLevelExp";
 import StatProgressBar from "./StatProgressBar";
+import { ScrollView } from "react-native-gesture-handler";
+import { Colors } from "react-native/Libraries/NewAppScreen";
 
 const BaseStats = () => {
   const userContext = useContext(UserContext);
@@ -17,13 +18,33 @@ const BaseStats = () => {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.contentContainer}>
-        <HStack style={{ justifyContent: "space-between" }}>
-          <StatBasic titleLabel="Total Exp" valueLabel={userContext.totalExp} />
-          <StatBasic
-            titleLabel="Exp Until Next Level"
-            valueLabel={expUntilNextLevel}
-          />
-        </HStack>
+        <View style={styles.totalExpContainer}>
+          <Text
+            style={[
+              styles.totalExpLabel,
+              {
+                fontSize: 20,
+                marginBottom: 10,
+              },
+            ]}
+          >
+            Total Exp
+          </Text>
+          <Text
+            style={[
+              styles.totalExpLabel,
+              {
+                fontSize: 30,
+              },
+            ]}
+          >
+            {userContext.totalExp}
+          </Text>
+        </View>
+        <StatBasic
+          titleLabel="Exp Until Next Level"
+          valueLabel={expUntilNextLevel}
+        />
         {/*
          * If the level is past 0, calculate based on amount between current and next level
          * (so you don't take into account all of the user's exp in calculation)
@@ -56,7 +77,18 @@ const styles = StyleSheet.create({
     backgroundColor: "transparent",
     alignItems: "center",
   },
-  contentContainer: { marginTop: 20, width: "80%" },
+  contentContainer: { width: "80%" },
+  totalExpLabel: {
+    fontFamily: "Main-Bold",
+    color: Colors.white,
+    textAlign: "center",
+  },
+  totalExpContainer: {
+    width: "100%",
+    marginBottom: 30,
+    alignItems: "center",
+    justifyContent: "center",
+  },
 });
 
 export default BaseStats;

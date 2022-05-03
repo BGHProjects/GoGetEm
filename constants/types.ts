@@ -68,4 +68,12 @@ export enum Screens {
 export enum LiquidSwipeMenu {
   GameModes = "GameModes",
   Customise = "Customise",
+  Statistics = "Statistics",
+}
+
+export enum Difficulty {
+  Meh = "Meh",
+  OhOK = "Oh OK",
+  HangOn = "Hang On",
+  WhatThe = "What The",
 }

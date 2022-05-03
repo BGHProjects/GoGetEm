@@ -1,4 +1,5 @@
 import React from "react";
+import { StyleSheet } from "react-native";
 import { AutoSizeText, ResizeTextMode } from "react-native-auto-size-text";
 
 interface StatValueProps {
@@ -7,18 +8,22 @@ interface StatValueProps {
 
 const StatValue = ({ label }: StatValueProps) => (
   <AutoSizeText
-    fontSize={30}
+    fontSize={24}
     numberOfLines={1}
     mode={ResizeTextMode.max_lines}
-    style={{
-      color: "white",
-      fontFamily: "Main-Bold",
-      marginLeft: 20,
-      marginTop: 10,
-    }}
+    style={styles.label}
   >
     {label}
   </AutoSizeText>
 );
+
+const styles = StyleSheet.create({
+  label: {
+    color: "white",
+    fontFamily: "Main-Bold",
+    marginLeft: 10,
+    marginTop: 10,
+  },
+});
 
 export default StatValue;

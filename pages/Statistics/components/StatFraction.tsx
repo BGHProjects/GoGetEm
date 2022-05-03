@@ -1,4 +1,5 @@
 import React from "react";
+import { StyleSheet } from "react-native";
 import { AutoSizeText, ResizeTextMode } from "react-native-auto-size-text";
 
 interface StatFractionProps {
@@ -11,16 +12,19 @@ const StatFraction = ({ winValue, totalValue }: StatFractionProps) => (
     fontSize={20}
     numberOfLines={1}
     mode={ResizeTextMode.max_lines}
-    style={{
-      color: "white",
-      fontFamily: "Main-Bold",
-      marginLeft: 20,
-      marginTop: 10,
-      alignSelf: "center",
-    }}
+    style={styles.text}
   >
     ({winValue}/{totalValue})
   </AutoSizeText>
 );
+
+const styles = StyleSheet.create({
+  text: {
+    color: "white",
+    fontFamily: "Main-Bold",
+    marginLeft: 30,
+    marginTop: 10,
+  },
+});
 
 export default StatFraction;

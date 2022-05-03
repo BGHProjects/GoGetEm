@@ -2,16 +2,17 @@ import React, { useState } from "react";
 import Slider from "./Slider";
 import GameModeSlide from "../pages/GameModes/components/GameModeSlide";
 import CustomiseSlide from "../pages/Customise/components/CustomiseSlide";
+import StatisticsSlide from "../pages/Statistics/components/StatisticsSlide";
 import { LiquidSwipeMenu } from "../constants/types";
 
 interface LiquidSwipeProps {
   navigation?: any;
   slidesInfo: any[];
-  variant: any;
+  variant: LiquidSwipeMenu;
 }
 
 const LiquidSwipe = ({ navigation, slidesInfo, variant }: LiquidSwipeProps) => {
-  // Start at the second one, because the first one is the Controls page
+  // Start at the second one for the Game Modes menu, because the first one is the Controls page
   const [index, setIndex] = useState(
     variant === LiquidSwipeMenu.GameModes ? 1 : 0
   );
@@ -30,6 +31,11 @@ const LiquidSwipe = ({ navigation, slidesInfo, variant }: LiquidSwipeProps) => {
       prevSlide: <CustomiseSlide slide={prev} />,
       nextSlide: <CustomiseSlide slide={next} />,
       initialSlide: <CustomiseSlide slide={slidesInfo[index]!} />,
+    },
+    [LiquidSwipeMenu.Statistics]: {
+      prevSlide: <StatisticsSlide slide={prev} />,
+      nextSlide: <StatisticsSlide slide={next} />,
+      initialSlide: <StatisticsSlide slide={slidesInfo[index]!} />,
     },
   };
 

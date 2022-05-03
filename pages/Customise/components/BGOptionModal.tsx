@@ -41,7 +41,7 @@ const BGOptionModal = ({ modeLabel, closeFunction }: BGOptionModalProps) => {
 
   let options: any = [];
 
-  function validateItem(item, index) {
+  function validateItem(item: any, index: any) {
     let borderColour;
 
     forEach(item, (element) => {
@@ -93,6 +93,7 @@ const BGOptionModal = ({ modeLabel, closeFunction }: BGOptionModalProps) => {
 
     return (
       <TouchableOpacity
+        key={values(item).toString()}
         onPress={
           // Handles the initial three backgrounds
           // TODO Find a better way to do this
@@ -104,7 +105,6 @@ const BGOptionModal = ({ modeLabel, closeFunction }: BGOptionModalProps) => {
         }
       >
         <View
-          key={item.toString()}
           style={[
             styles.imageOptionContainer,
             {

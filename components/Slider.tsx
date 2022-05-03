@@ -119,7 +119,7 @@ const Slider = ({
 
   return (
     <PanGestureHandler onGestureEvent={onGestureEvent}>
-      <Animated.View style={StyleSheet.absoluteFill}>
+      <Animated.View style={{ flex: 1 }}>
         {current}
         {prev && (
           <Animated.View

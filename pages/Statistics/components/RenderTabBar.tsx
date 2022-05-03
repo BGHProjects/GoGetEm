@@ -2,6 +2,7 @@ import React from "react";
 import { TabBar } from "react-native-tab-view";
 import { AutoSizeText, ResizeTextMode } from "react-native-auto-size-text";
 
+// TODO Check if this dude is still begin used, otherwise delete
 const RenderTabBar = (props) => {
   return (
     <TabBar

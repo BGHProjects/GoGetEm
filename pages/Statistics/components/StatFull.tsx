@@ -18,9 +18,9 @@ const StatFull = ({ titleLabel, winValue, totalValue }: StatFullProps) => {
       : "0%";
 
   return (
-    <View style={{ marginBottom: 40 }}>
+    <View style={{ width: 200, marginBottom: 40 }}>
       <StatTitle label={titleLabel} />
-      <View style={{ flexDirection: "row", width: "80%" }}>
+      <View style={{ width: "80%" }}>
         <StatValue label={valueLabel} />
         <StatFraction winValue={winValue} totalValue={totalValue} />
       </View>

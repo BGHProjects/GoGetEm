@@ -25,7 +25,10 @@ const BackgroundOptions = () => {
         <ScrollView>
           {modes.map((mode: Mode) => {
             return (
-              <TouchableOpacity onPress={() => handleOptionPressed(mode)}>
+              <TouchableOpacity
+                onPress={() => handleOptionPressed(mode)}
+                key={mode.toString()}
+              >
                 <BGOption
                   key={mode}
                   modeLabel={mode}
