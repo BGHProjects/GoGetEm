@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, View, SafeAreaView, ImageBackground } from "react-native";
 import { Colors } from "../constants/Colors";
-import { Backgrounds } from "../constants/Backgrounds";
+import { Backgrounds } from "../constants/Images";
 
 interface BGWithImageProps {
   image: string;
@@ -12,7 +12,7 @@ const BGWithImage = ({ image, children }: BGWithImageProps) => {
   return (
     <SafeAreaView style={styles.container}>
       <ImageBackground
-        source={Backgrounds[image]}
+        source={Backgrounds[image as keyof typeof Backgrounds]}
         resizeMode="cover"
         style={styles.container}
       >

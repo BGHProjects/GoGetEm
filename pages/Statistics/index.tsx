@@ -3,7 +3,7 @@ import { View, StyleSheet, ImageBackground } from "react-native";
 import { Colors } from "../../constants/Colors";
 import { AutoSizeText, ResizeTextMode } from "react-native-auto-size-text";
 import { UserContext } from "../../tools/UserContext";
-import { Backgrounds } from "../../constants/Backgrounds";
+import { Backgrounds } from "../../constants/Images";
 import LiquidSwipe from "../../components/LiquidSwipe";
 import { slides } from "../../constants/statisticsSlideContent";
 import { LiquidSwipeMenu } from "../../constants/types";

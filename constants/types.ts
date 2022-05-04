@@ -69,6 +69,7 @@ export enum LiquidSwipeMenu {
   GameModes = "GameModes",
   Customise = "Customise",
   Statistics = "Statistics",
+  Credits = "Credits",
 }
 
 export enum Difficulty {

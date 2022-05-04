@@ -10,7 +10,7 @@ import TitleText from "../../components/TitleText";
 import LoadingDots from "react-native-loading-dots";
 import { AutoSizeText, ResizeTextMode } from "react-native-auto-size-text";
 import ModalButton from "../../components/ModalButton";
-import { Backgrounds } from "../../constants/Backgrounds";
+import { Backgrounds } from "../../constants/Images";
 import sha256 from "crypto-js/sha256";
 import Base64 from "crypto-js/enc-base64";
 

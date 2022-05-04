@@ -12,11 +12,12 @@ import { Colors } from "../../constants/Colors";
 import Unlockables from "../../constants/Unlockables";
 import determineDetails from "./helpers/determineDetails";
 import Selection from "../../components/Selection";
-import { Backgrounds } from "../../constants/Backgrounds";
+import { Backgrounds } from "../../constants/Images";
 
-const Unlocks = ({ navigation, route }) => {
+const Unlocks = ({ navigation, route }: any) => {
   const userContext = useContext(UserContext);
-  const unlockedContent = Unlockables[userContext.level];
+  const unlockedContent =
+    Unlockables[userContext.level as keyof typeof Unlockables];
 
   return (
     <SafeAreaView style={styles.container}>
@@ -41,7 +42,9 @@ const Unlocks = ({ navigation, route }) => {
             <View style={styles.previewContainer}>
               {item.split("-")[0] === "background" ? (
                 <ImageBackground
-                  source={Backgrounds[item.split("-")[1]]}
+                  source={
+                    Backgrounds[item.split("-")[1] as keyof typeof Backgrounds]
+                  }
                   style={styles.bgImage}
                   resizeMode="cover"
                 />

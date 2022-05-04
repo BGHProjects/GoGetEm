@@ -10,7 +10,7 @@ const InGameTitle = ({ label }: InGameTitleProps) => {
   return (
     <View style={styles.inGameNameContainer}>
       <AutoSizeText
-        fontSize={16}
+        fontSize={14}
         numberOfLines={1}
         mode={ResizeTextMode.max_lines}
         style={styles.modeLabel}
@@ -26,6 +26,7 @@ const styles = StyleSheet.create({
     alignSelf: "flex-start",
     width: "100%",
     alignItems: "center",
+    marginBottom: 5,
   },
   modeLabel: {
     fontFamily: "Main",

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { View, StyleSheet, ImageBackground } from "react-native";
 import { Colors } from "../../../constants/Colors";
-import { Backgrounds } from "../../../constants/Backgrounds";
+import { Backgrounds } from "../../../constants/Images";
 import { AutoSizeText, ResizeTextMode } from "react-native-auto-size-text";
 import { capitalize, lowerFirst } from "lodash";
 import { UserContext } from "../../../tools/UserContext";

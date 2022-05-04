@@ -4,18 +4,20 @@ import { AutoSizeText, ResizeTextMode } from "react-native-auto-size-text";
 
 interface AuthorNameProps {
   label: string;
+  prefix?: string;
 }
 
-const AuthorName = ({ label }: AuthorNameProps) => {
+const AuthorName = ({ label, prefix }: AuthorNameProps) => {
   return (
-    <View style={[styles.detailsContainer, { marginLeft: 40 }]}>
+    <View style={[styles.detailsContainer]}>
       <AutoSizeText
-        fontSize={16}
-        numberOfLines={2}
+        fontSize={14}
+        numberOfLines={4}
         mode={ResizeTextMode.max_lines}
         style={styles.selectionLabel}
       >
-        by {label}
+        {prefix}
+        {label}
       </AutoSizeText>
     </View>
   );
@@ -23,14 +25,14 @@ const AuthorName = ({ label }: AuthorNameProps) => {
 
 const styles = StyleSheet.create({
   detailsContainer: {
-    alignSelf: "flex-start",
+    alignSelf: "center",
+    justifyContent: "center",
     width: "90%",
-    marginLeft: 20,
   },
   selectionLabel: {
     fontFamily: "Main-Bold",
     color: "white",
-    textAlign: "left",
+    textAlign: "center",
   },
 });
 

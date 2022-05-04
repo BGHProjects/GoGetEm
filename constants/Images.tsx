@@ -13,3 +13,9 @@ export const Backgrounds = {
   neonFuture: require("../assets/NeonFutureBG.jpg"),
   space: require("../assets/SpaceBG.jpg"),
 };
+
+export const Youtubers = {
+  williamCandillon: require("../assets/WilliamCandillon.jpg"),
+  reactiive: require("../assets/Reactiive.jpg"),
+  missCoding: require("../assets/MissCoding.jpg"),
+};

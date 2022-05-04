@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import { Colors } from "../../../constants/Colors";
 import ModalButton from "../../../components/ModalButton";
-import { Backgrounds } from "../../../constants/Backgrounds";
+import { Backgrounds } from "../../../constants/Images";
 import { AutoSizeText, ResizeTextMode } from "react-native-auto-size-text";
 import {
   forEach,

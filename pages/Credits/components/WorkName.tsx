@@ -6,6 +6,7 @@ interface WorkNameProps {
   label: string;
 }
 
+// TODO Check if I am still using this, otherwise delete
 const WorkName = ({ label }: WorkNameProps) => {
   return (
     <View style={styles.detailsContainer}>
