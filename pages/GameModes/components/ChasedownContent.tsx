@@ -151,7 +151,7 @@ const ChasedownContent = () => {
       <Animated.View style={[styles.playerRepresentation, topAnimation]}>
         <LinearGradient
           style={styles.gradientFill}
-          colors={ColorGradients.red}
+          colors={ColorGradients.yellow}
           start={XYStart}
           end={XYEnd}
         />
@@ -165,7 +165,7 @@ const ChasedownContent = () => {
       >
         <LinearGradient
           style={styles.gradientFill}
-          colors={ColorGradients.orange}
+          colors={ColorGradients.green}
           start={XYStart}
           end={XYEnd}
         />

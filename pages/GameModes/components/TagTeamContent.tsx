@@ -239,7 +239,7 @@ const TagTeamContent = () => {
       >
         <LinearGradient
           style={styles.gradientFill}
-          colors={ColorGradients.softBlue}
+          colors={ColorGradients.fire}
           start={XYStart}
           end={XYEnd}
         />
