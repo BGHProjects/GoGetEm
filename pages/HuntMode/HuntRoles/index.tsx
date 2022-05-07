@@ -8,7 +8,7 @@ import PlayerRepresentation from "../../../components/RolesScreen/PlayerRepresen
 
 const contentSize = 200;
 
-const HuntRoles = ({ navigation, route }) => {
+const HuntRoles = ({ navigation, route }: any) => {
   const configDetails = route.params;
   let scoreDetails;
 
@@ -114,8 +114,8 @@ const HuntRoles = ({ navigation, route }) => {
 
       <MenuButton
         text={totalDetails.currentRound === 1 ? "Begin" : "Start Round"}
-        shadowColour="red"
         operation={() => onPressSubmit()}
+        shadowColour={Colors.gold}
       />
     </SafeAreaView>
   );

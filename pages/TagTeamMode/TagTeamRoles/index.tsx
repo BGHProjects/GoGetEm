@@ -5,6 +5,7 @@ import GameInfo from "../../../components/RolesScreen/GameInfo";
 import MenuButton from "../../../components/MenuButton";
 import PlayerRepresentation from "../../../components/RolesScreen/PlayerRepresentation";
 import Arrow from "../../../components/RolesScreen/Arrow";
+import { Screens } from "../../../constants/types";
 
 const contentSize = 200;
 
@@ -24,7 +25,7 @@ const TagTeamRoles = ({ navigation, route }: any) => {
   let totalDetails = { ...configDetails, ...scoreDetails };
 
   const onPressSubmit = () => {
-    navigation.navigate("Countdown", totalDetails);
+    navigation.navigate(Screens.Countdown, totalDetails);
   };
 
   // Animation delays
@@ -38,8 +39,6 @@ const TagTeamRoles = ({ navigation, route }: any) => {
     targets: animationDelay * 3,
     scores: animationDelay * 4,
   };
-
-  console.log("totalDetails", totalDetails);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -140,8 +139,8 @@ const TagTeamRoles = ({ navigation, route }: any) => {
 
       <MenuButton
         text={totalDetails.currentRound === 1 ? "Begin" : "Start Round"}
-        shadowColour="red"
         operation={() => onPressSubmit()}
+        shadowColour={Colors.gold}
       />
     </SafeAreaView>
   );

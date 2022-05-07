@@ -97,11 +97,7 @@ const ControllerOptionModal = ({
           })}
         </ScrollView>
         <View style={styles.buttonContainer}>
-          <ModalButton
-            text="Close"
-            shadowColour="red"
-            operation={() => closeFunction()}
-          />
+          <ModalButton text="Close" operation={() => closeFunction()} />
         </View>
       </View>
     </View>

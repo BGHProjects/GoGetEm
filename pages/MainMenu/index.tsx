@@ -1,17 +1,20 @@
 import React, { useEffect, useContext } from "react";
+import { ScrollView } from "react-native";
 import BGWithImage from "../../components/BGWithImage";
-import MenuButton from "../../components/MenuButton";
-import { Colors } from "../../constants/Colors";
 import TitleText from "../../components/TitleText";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Data } from "../../constants/types";
 import { UserContext } from "../../tools/UserContext";
 import { lowerFirst } from "lodash";
+import { MainMenuOption } from "../../constants/types";
+import MainMenuButton from "../../components/MainMenuButton";
 
-const MainMenu = ({ navigation }) => {
+const MainMenu = ({ navigation }: any) => {
   const userContext = useContext(UserContext);
 
   const onPressButton = (page: string) => {
+    // Just so the mapping function below is clean
+    if (page === "Play") page = "Game Modes";
     navigation.navigate(page);
   };
 
@@ -93,26 +96,17 @@ const MainMenu = ({ navigation }) => {
     <BGWithImage image={"mainMenu"}>
       <>
         <TitleText text="GoGetEm" style={{ marginBottom: 40 }} />
-        <MenuButton
-          text="Play"
-          shadowColour={Colors.green}
-          operation={() => onPressButton("Game Modes")}
-        />
-        <MenuButton
-          text="Customise"
-          shadowColour={Colors.red}
-          operation={() => onPressButton("Customise")}
-        />
-        <MenuButton
-          text="Statistics"
-          shadowColour={Colors.red}
-          operation={() => onPressButton("Statistics")}
-        />
-        <MenuButton
-          text="Credits"
-          shadowColour={Colors.red}
-          operation={() => onPressButton("Credits")}
-        />
+        <ScrollView>
+          {Object.keys(MainMenuOption).map((option, index) => (
+            <MainMenuButton
+              key={option.toString()}
+              text={option}
+              operation={() => onPressButton(option)}
+              menuOption={MainMenuOption[option as keyof typeof MainMenuOption]}
+              delay={index * 300}
+            />
+          ))}
+        </ScrollView>
       </>
     </BGWithImage>
   );

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, View, SafeAreaView, Dimensions } from "react-native";
+import { StyleSheet, View, SafeAreaView } from "react-native";
 import { Colors } from "../../../constants/Colors";
 import MenuButton from "../../../components/MenuButton";
 import GameInfo from "../../../components/RolesScreen/GameInfo";
@@ -8,7 +8,7 @@ import PlayerRepresentation from "../../../components/RolesScreen/PlayerRepresen
 
 const contentSize = 200;
 
-const ChasedownRolesScreen = ({ navigation, route }) => {
+const ChasedownRolesScreen = ({ navigation, route }: any) => {
   const configDetails = route.params;
   let scoreDetails;
   const [topColour, setTopColour] = useState(configDetails.colour);
@@ -164,7 +164,7 @@ const ChasedownRolesScreen = ({ navigation, route }) => {
 
       <MenuButton
         text={totalDetails.currentRound === 1 ? "Begin" : "Start Round"}
-        shadowColour="red"
+        shadowColour={Colors.fluroBlue}
         operation={() => onPressSubmit()}
       />
     </SafeAreaView>

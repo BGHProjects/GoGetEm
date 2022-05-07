@@ -11,12 +11,7 @@ import { Backgrounds } from "../../../constants/Images";
 
 const ImageCredits = () => {
   return (
-    <View
-      style={{
-        flex: 1,
-        alignItems: "center",
-      }}
-    >
+    <View style={styles.container}>
       <ScrollView>
         {BackgroundWorks.map((item) => (
           <TouchableOpacity
@@ -48,6 +43,10 @@ const ImageCredits = () => {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: "center",
+  },
   inGameNameContainer: {
     alignSelf: "flex-start",
     width: "100%",

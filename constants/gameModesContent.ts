@@ -14,7 +14,7 @@ export const slides = [
       "Catch your target, before they catch theirs... or before you're caught!",
   },
   {
-    color: Colors.lightBlue,
+    color: Colors.cherryPink,
     title: "Chasedown",
     description:
       "Catch the target before the other player\nIf you're the target, survive until time runs out",
@@ -25,7 +25,7 @@ export const slides = [
     description: "Catch more targets than your opponent before time runs out",
   },
   {
-    color: Colors.cherryPink,
+    color: Colors.softBlue,
     title: "TagTeam",
     description:
       "Each team has one chaser and one target\nCatch the other team's target before they catch yours to win",

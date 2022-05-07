@@ -100,7 +100,7 @@ const ConfigScreen = ({ navigation, route }) => {
                 navigation,
               })
             }
-            shadowColour="red"
+            shadowColour={Colors.gold}
           />
         </View>
       </ScrollView>

@@ -140,7 +140,7 @@ const ClassicRolesScreen = ({ navigation, route }: any) => {
 
       <MenuButton
         text={totalDetails.currentRound === 1 ? "Begin" : "Start Round"}
-        shadowColour="red"
+        shadowColour={Colors.fluroBlue}
         operation={() => onPressSubmit()}
       />
     </SafeAreaView>

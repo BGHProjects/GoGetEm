@@ -10,12 +10,7 @@ import { ScrollView } from "react-native-gesture-handler";
 
 const YoutubeCredits = () => {
   return (
-    <View
-      style={{
-        flex: 1,
-        alignItems: "center",
-      }}
-    >
+    <View style={styles.container}>
       <ScrollView>
         {CodingWorks.map((item) => (
           <TouchableOpacity
@@ -46,20 +41,9 @@ const YoutubeCredits = () => {
 };
 
 const styles = StyleSheet.create({
-  inGameNameContainer: {
-    alignSelf: "flex-start",
-    width: "100%",
+  container: {
+    flex: 1,
     alignItems: "center",
-  },
-  detailsContainer: {
-    alignSelf: "flex-start",
-    width: "90%",
-    marginLeft: 20,
-  },
-  modeLabel: {
-    fontFamily: "Main",
-    color: "white",
-    marginLeft: 10,
   },
   optionContainer: {
     width: 200,
@@ -70,11 +54,6 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     marginBottom: 20,
     backgroundColor: Colors.primaryBackground,
-  },
-  selectionLabel: {
-    fontFamily: "Main-Bold",
-    color: "white",
-    textAlign: "left",
   },
   bgImage: { width: "99%", height: "99%" },
   contentRowContainer: { width: "100%", height: "100%", flexDirection: "row" },

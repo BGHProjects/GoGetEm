@@ -13,8 +13,9 @@ import Unlockables from "../../constants/Unlockables";
 import determineDetails from "./helpers/determineDetails";
 import Selection from "../../components/Selection";
 import { Backgrounds } from "../../constants/Images";
+import { Screens } from "../../constants/types";
 
-const Unlocks = ({ navigation, route }: any) => {
+const Unlocks = ({ navigation }: any) => {
   const userContext = useContext(UserContext);
   const unlockedContent =
     Unlockables[userContext.level as keyof typeof Unlockables];
@@ -65,8 +66,8 @@ const Unlocks = ({ navigation, route }: any) => {
 
       <MenuButton
         text="Continue"
-        shadowColour="red"
-        operation={() => navigation.navigate("Game Modes")}
+        operation={() => navigation.navigate(Screens.GameModes)}
+        shadowColour={Colors.fluroBlue}
       />
     </SafeAreaView>
   );

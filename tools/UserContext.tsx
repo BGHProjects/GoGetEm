@@ -1,7 +1,7 @@
 import React, { createContext, useState, useEffect } from "react";
 import NetInfo from "@react-native-community/netinfo";
 
-interface User {
+export interface User {
   username: string | null;
   setUsername: React.Dispatch<React.SetStateAction<string | null>>;
   connected: Boolean;

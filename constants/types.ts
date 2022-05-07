@@ -78,3 +78,10 @@ export enum Difficulty {
   HangOn = "Hang On",
   WhatThe = "What The",
 }
+
+export enum MainMenuOption {
+  Play = "Play",
+  Customise = "Customise",
+  Statistics = "Statstics",
+  Credits = "Credits",
+}

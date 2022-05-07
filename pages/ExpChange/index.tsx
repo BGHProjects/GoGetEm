@@ -120,10 +120,10 @@ const ExpChange = ({ navigation, route }: any) => {
       </View>
       <MenuButton
         text="Continue"
-        shadowColour="red"
         operation={() =>
           navigation.navigate(leveledUp ? "Unlocks" : "Game Modes")
         }
+        shadowColour={Colors.fluroBlue}
       />
     </SafeAreaView>
   );

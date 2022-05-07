@@ -61,7 +61,10 @@ const BGOptionModal = ({ modeLabel, closeFunction }: BGOptionModalProps) => {
 
   async function changeSetting(variant: string) {
     userContext[`set${modeLabel}Background`](variant);
-    await AsyncStorage.setItem(Data[`${modeLabel}Background`], variant);
+    await AsyncStorage.setItem(
+      Data[`${modeLabel}Background` as keyof typeof Data],
+      variant
+    );
     closeFunction();
   }
 
@@ -147,11 +150,7 @@ const BGOptionModal = ({ modeLabel, closeFunction }: BGOptionModalProps) => {
           </ScrollView>
         </View>
         <View style={styles.buttonContainer}>
-          <ModalButton
-            text="Close"
-            shadowColour="red"
-            operation={() => closeFunction()}
-          />
+          <ModalButton text="Close" operation={() => closeFunction()} />
         </View>
       </View>
     </View>

@@ -15,7 +15,7 @@ import { XYStart, XYEnd, Colors } from "../../constants/Colors";
 import { LinearGradient } from "expo-linear-gradient";
 import globalStyles from "../../constants/GlobalStyles";
 
-const EndGame = ({ navigation, route }) => {
+const EndGame = ({ navigation, route }: any) => {
   const userContext = useContext(UserContext);
   const gameDetails = route.params;
   const [prevExp, setPrevExp] = useState<number | null>(null);
@@ -83,8 +83,8 @@ const EndGame = ({ navigation, route }) => {
         userContext.setTotalExp((oldExp) => oldExp + increment);
         updateStorageValue(Data.TotalExp, increment);
       } else {
-        userContext[`set${update}`]((old) => old + 1);
-        updateStorageValue(Data[update], 1);
+        userContext[`set${update}`]((old: number) => old + 1);
+        updateStorageValue(Data[update as keyof typeof Data], 1);
       }
     });
 
@@ -153,7 +153,7 @@ const EndGame = ({ navigation, route }) => {
 
       <MenuButton
         text="Continue"
-        shadowColour="red"
+        shadowColour={Colors.fluroBlue}
         operation={() => navigation.navigate("ExpChange", [prevExp, newExp])}
       />
     </SafeAreaView>
