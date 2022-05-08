@@ -14,6 +14,7 @@ import { updateStorageValue } from "../../tools/updateStorageValue";
 import { Colors } from "../../constants/Colors";
 import EndGameScoreCard from "./components/EndGameScoreCard";
 import { BGColourOption } from "../../constants/gameConstants";
+import Unlockables from "../../constants/Unlockables";
 
 const animationDuration = 400;
 
@@ -75,8 +76,12 @@ const EndGame = ({ navigation, route }: any) => {
     ),
   };
 
-  // Ensures that this happens only initially
-  if (prevExp === null && newExp === null) {
+  // Ensures that this happens only initially, and doesn't happen if the user is at the maximum level
+  if (
+    prevExp === null &&
+    newExp === null &&
+    userContext.level < Object.keys(Unlockables).length
+  ) {
     const { currentExp, newExp, updates, increment } = handlePostGame(
       userContext.totalExp,
       gameDetails
@@ -119,7 +124,7 @@ const EndGame = ({ navigation, route }: any) => {
         text="Continue"
         shadowColour={Colors.fluroBlue}
         operation={() =>
-          navigation.navigate(Screens.EndGame, [
+          navigation.navigate(Screens.ExpChange, [
             prevExp,
             newExp,
             gameDetails.mode,

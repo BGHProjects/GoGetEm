@@ -115,6 +115,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     marginBottom: 20,
     alignItems: "center",
+    alignSelf: "center",
   },
   itemLabel: {
     color: "white",

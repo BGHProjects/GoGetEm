@@ -1,36 +1,54 @@
-import React, { useContext } from "react";
-import { StyleSheet, Text, SafeAreaView } from "react-native";
-import { UserContext } from "../../tools/UserContext";
+import React, { useEffect, useState } from "react";
+import { StyleSheet, Text, View } from "react-native";
 import MenuButton from "../../components/MenuButton";
 import { Colors } from "../../constants/Colors";
 import Unlockables from "../../constants/Unlockables";
-import { Mode, Screens } from "../../constants/types";
+import { Screens } from "../../constants/types";
 import UnlockedItemCard from "./components/UnlockedItemCard";
+import { ScrollView } from "react-native-gesture-handler";
 
 const animationDuration = 400;
 
 const Unlocks = ({ navigation, route }: any) => {
-  const userContext = useContext(UserContext);
-  const unlockedContent =
-    Unlockables[userContext.level as keyof typeof Unlockables];
+  const newLevels = route.params;
+
+  const [unlockedContent, setUnlockedContent] = useState<string[]>([]);
+
+  useEffect(() => {
+    let totalContent: string[] = [];
+
+    newLevels.map((level: number) => {
+      Unlockables[level as keyof typeof Unlockables].map((item: string) => {
+        totalContent.push(item);
+      });
+    });
+
+    setUnlockedContent(totalContent);
+  }, []);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <Text style={styles.titleLabel}>You unlocked: </Text>
-      {unlockedContent.map((item, index) => (
-        <UnlockedItemCard
-          item={item}
-          delay={index * animationDuration}
-          key={item.toString()}
+      <ScrollView contentContainerStyle={styles.scrollView}>
+        <View>
+          {unlockedContent &&
+            unlockedContent.map((item, index) => {
+              return (
+                <UnlockedItemCard
+                  item={item}
+                  delay={index * animationDuration}
+                  key={item as string}
+                />
+              );
+            })}
+        </View>
+        <MenuButton
+          text="Continue"
+          operation={() => navigation.navigate(Screens.GameModes)}
+          shadowColour={Colors.fluroBlue}
         />
-      ))}
-
-      <MenuButton
-        text="Continue"
-        operation={() => navigation.navigate(Screens.GameModes)}
-        shadowColour={Colors.fluroBlue}
-      />
-    </SafeAreaView>
+      </ScrollView>
+    </View>
   );
 };
 
@@ -46,6 +64,11 @@ const styles = StyleSheet.create({
     fontFamily: "Main-Bold",
     fontSize: 30,
     marginBottom: 40,
+    marginTop: 80,
+  },
+  scrollView: {
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
 

@@ -18,6 +18,7 @@ import { updateStorageValue } from "../../tools/updateStorageValue";
 import { Data, Mode, Screens } from "../../constants/types";
 import { calculateBarPositions } from "./helpers/handleProgressBar";
 import { BGColourOption } from "../../constants/gameConstants";
+import Unlockables from "../../constants/Unlockables";
 
 const ExpChange = ({ navigation, route }: any) => {
   const userContext = useContext(UserContext);
@@ -27,6 +28,7 @@ const ExpChange = ({ navigation, route }: any) => {
   const [leveledUp, setLeveledUp] = useState(false);
   const nextLevelExp = calcExpToNextLevel(userContext.level);
   const [levelLabel, setLevelLabel] = useState(userContext.level);
+  const [newLevels, setNewLevels] = useState<any>([]);
 
   /**
    * This value is used to normalize the exp
@@ -73,28 +75,32 @@ const ExpChange = ({ navigation, route }: any) => {
     // This just handles which page is navigated to next
     setLeveledUp(true);
 
-    handleLevelUp();
+    // Don't level up again if you are the maximum level
+    if (userContext.level < Object.keys(Unlockables).length) {
+      handleLevelUp();
 
-    // This is so the animation lines up with the calculation
-    setTimeout(() => {
-      // Prepping new values for recursive call for next level
-      const overFlowExp = newExp;
-      const newPrevExp = nextLevelExp;
-      const newUserLevel = userLevel + 1;
-      const newNextLevelExp = calcExpToNextLevel(newUserLevel);
-      const newPrevLevelExp = calcExpToNextLevel(userLevel);
+      // This is so the animation lines up with the calculation
+      setTimeout(() => {
+        // Prepping new values for recursive call for next level
+        const overFlowExp = newExp;
+        const newPrevExp = nextLevelExp;
+        const newUserLevel = userLevel + 1;
+        const newNextLevelExp = calcExpToNextLevel(newUserLevel);
+        const newPrevLevelExp = calcExpToNextLevel(userLevel);
 
-      handleExpChange(
-        newPrevExp,
-        overFlowExp,
-        newNextLevelExp,
-        newUserLevel,
-        newPrevLevelExp
-      );
-    }, progressBarDuration + progressBarDelay * 2);
+        handleExpChange(
+          newPrevExp,
+          overFlowExp,
+          newNextLevelExp,
+          newUserLevel,
+          newPrevLevelExp
+        );
+      }, progressBarDuration + progressBarDelay * 2);
+    }
   };
 
   const handleLevelUp = () => {
+    setNewLevels((oldArray: any[]) => [...oldArray, userContext.level + 1]);
     userContext.setLevel((old) => old + 1);
     updateStorageValue(Data.Level, 1);
 
@@ -105,18 +111,20 @@ const ExpChange = ({ navigation, route }: any) => {
   };
 
   useEffect(() => {
-    handleExpChange(
-      prevExp,
-      newExp,
-      nextLevelExp,
-      userContext.level,
-      prevLevelExp
-    );
+    if (userContext.level < Object.keys(Unlockables).length) {
+      handleExpChange(
+        prevExp,
+        newExp,
+        nextLevelExp,
+        userContext.level,
+        prevLevelExp
+      );
+    }
   }, []);
 
   const handleContinue = () => {
-    if (leveledUp) {
-      navigation.navigate(Screens.Unlocks, [whichMode]);
+    if (leveledUp && userContext.level < Object.keys(Unlockables).length) {
+      navigation.navigate(Screens.Unlocks, newLevels);
     } else {
       navigation.navigate(Screens.GameModes);
     }
@@ -128,10 +136,19 @@ const ExpChange = ({ navigation, route }: any) => {
         { backgroundColor: BGColourOption[whichMode as Mode] },
       ]}
     >
-      <Text style={styles.levelLabel}>Level {levelLabel}</Text>
-      <View style={styles.barContainer}>
-        <Animated.View style={[styles.progressBar, showProgress]} />
-      </View>
+      {userContext.level < Object.keys(Unlockables).length && (
+        <>
+          <Text style={styles.levelLabel}>Level {levelLabel}</Text>
+          <View style={styles.barContainer}>
+            <Animated.View style={[styles.progressBar, showProgress]} />
+          </View>
+        </>
+      )}
+
+      {userContext.level >= Object.keys(Unlockables).length && (
+        <Text style={styles.levelLabel}>Maximum Level Reached</Text>
+      )}
+
       <MenuButton
         text="Continue"
         operation={() => handleContinue()}

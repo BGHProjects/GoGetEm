@@ -60,7 +60,7 @@ const EndGameScoreCard = ({
           borderColor:
             player[1] === gameDetails.colour ||
             player[1][0] === gameDetails.colour
-              ? Colors.yellow
+              ? Colors.gold
               : Colors.fluroBlue,
         },
       ]}
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
     width: "70%",
     height: 60,
     borderRadius: 5,
-    borderWidth: 2,
+    borderWidth: 3,
     justifyContent: "space-between",
     flexDirection: "row",
     marginBottom: 20,
