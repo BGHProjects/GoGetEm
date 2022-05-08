@@ -15,13 +15,15 @@ import {
   progressBarDelay,
 } from "../../constants/Animation";
 import { updateStorageValue } from "../../tools/updateStorageValue";
-import { Data } from "../../constants/types";
+import { Data, Mode, Screens } from "../../constants/types";
 import { calculateBarPositions } from "./helpers/handleProgressBar";
+import { BGColourOption } from "../../constants/gameConstants";
 
 const ExpChange = ({ navigation, route }: any) => {
   const userContext = useContext(UserContext);
   const prevExp = route.params[0];
   const newExp = route.params[1];
+  const whichMode = route.params[2];
   const [leveledUp, setLeveledUp] = useState(false);
   const nextLevelExp = calcExpToNextLevel(userContext.level);
   const [levelLabel, setLevelLabel] = useState(userContext.level);
@@ -112,17 +114,27 @@ const ExpChange = ({ navigation, route }: any) => {
     );
   }, []);
 
+  const handleContinue = () => {
+    if (leveledUp) {
+      navigation.navigate(Screens.Unlocks, [whichMode]);
+    } else {
+      navigation.navigate(Screens.GameModes);
+    }
+  };
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView
+      style={[
+        styles.container,
+        { backgroundColor: BGColourOption[whichMode as Mode] },
+      ]}
+    >
       <Text style={styles.levelLabel}>Level {levelLabel}</Text>
       <View style={styles.barContainer}>
         <Animated.View style={[styles.progressBar, showProgress]} />
       </View>
       <MenuButton
         text="Continue"
-        operation={() =>
-          navigation.navigate(leveledUp ? "Unlocks" : "Game Modes")
-        }
+        operation={() => handleContinue()}
         shadowColour={Colors.fluroBlue}
       />
     </SafeAreaView>
@@ -132,20 +144,19 @@ const ExpChange = ({ navigation, route }: any) => {
 const styles = StyleSheet.create({
   progressBar: {
     height: "100%",
-    backgroundColor: Colors.fluroBlue,
+    backgroundColor: Colors.fluroGreen,
     borderRadius: 5,
   },
   barContainer: {
     borderRadius: 10,
     borderWidth: 5,
-    borderColor: Colors.fluroPink,
+    borderColor: Colors.white,
     height: 80,
     width: "80%",
     marginBottom: 50,
   },
   container: {
     flex: 1,
-    backgroundColor: Colors.primaryBackground,
     alignItems: "center",
     justifyContent: "center",
   },

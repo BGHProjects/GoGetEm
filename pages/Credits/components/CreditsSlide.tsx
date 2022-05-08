@@ -1,5 +1,6 @@
 import React from "react";
 import { View, StyleSheet, Text } from "react-native";
+import BackButton from "../../../components/BackButton";
 import { Colors } from "../../../constants/Colors";
 import ImageCredits from "./ImageCredits";
 import YoutubeCredits from "./YoutuberCredits";
@@ -12,6 +13,7 @@ const CreditsSlide = ({ slide: { color, variant } }: any) => {
 
   return (
     <View style={[styles.container, { backgroundColor: color }]}>
+      <BackButton />
       <View style={styles.titleContainer}>
         <Text style={styles.title}>{variant}</Text>
       </View>

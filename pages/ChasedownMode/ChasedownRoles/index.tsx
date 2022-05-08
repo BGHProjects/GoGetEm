@@ -5,6 +5,8 @@ import MenuButton from "../../../components/MenuButton";
 import GameInfo from "../../../components/RolesScreen/GameInfo";
 import Arrow from "../../../components/RolesScreen/Arrow";
 import PlayerRepresentation from "../../../components/RolesScreen/PlayerRepresentation";
+import BackButton from "../../../components/BackButton";
+import { Screens } from "../../../constants/types";
 
 const contentSize = 200;
 
@@ -66,7 +68,7 @@ const ChasedownRolesScreen = ({ navigation, route }: any) => {
   }, [totalDetails]);
 
   const onPressSubmit = () => {
-    navigation.navigate("Countdown", totalDetails);
+    navigation.navigate(Screens.Countdown, totalDetails);
   };
 
   // Animation delays
@@ -82,6 +84,7 @@ const ChasedownRolesScreen = ({ navigation, route }: any) => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <BackButton backToGameMenu />
       <GameInfo
         difficulty={totalDetails.difficulty}
         rounds={totalDetails.rounds}
@@ -174,7 +177,7 @@ const ChasedownRolesScreen = ({ navigation, route }: any) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.primaryBackground,
+    backgroundColor: Colors.cherryPink,
     alignItems: "center",
     justifyContent: "center",
   },

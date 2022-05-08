@@ -7,6 +7,7 @@ import { Backgrounds } from "../../constants/Images";
 import LiquidSwipe from "../../components/LiquidSwipe";
 import { slides } from "../../constants/statisticsSlideContent";
 import { LiquidSwipeMenu } from "../../constants/types";
+import BackButton from "../../components/BackButton";
 
 const topDivHeight = 200;
 
@@ -42,6 +43,7 @@ const Statistics = () => {
           </View>
         </View>
       </ImageBackground>
+      <BackButton />
       <LiquidSwipe slidesInfo={slides} variant={LiquidSwipeMenu.Statistics} />
     </View>
   );

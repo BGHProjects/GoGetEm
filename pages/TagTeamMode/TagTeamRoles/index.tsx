@@ -6,6 +6,7 @@ import MenuButton from "../../../components/MenuButton";
 import PlayerRepresentation from "../../../components/RolesScreen/PlayerRepresentation";
 import Arrow from "../../../components/RolesScreen/Arrow";
 import { Screens } from "../../../constants/types";
+import BackButton from "../../../components/BackButton";
 
 const contentSize = 200;
 
@@ -42,6 +43,7 @@ const TagTeamRoles = ({ navigation, route }: any) => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <BackButton backToGameMenu />
       <GameInfo
         difficulty={totalDetails.difficulty}
         rounds={totalDetails.rounds}
@@ -56,6 +58,7 @@ const TagTeamRoles = ({ navigation, route }: any) => {
             score={totalDetails.team1Score}
             delay={animationDelays["scores"]}
             animationDuration={animationDuration}
+            noBorder
           />
           <PlayerRepresentation
             colour={ColorGradients.transparent}
@@ -63,6 +66,7 @@ const TagTeamRoles = ({ navigation, route }: any) => {
             score={totalDetails.team2Score}
             delay={animationDelays["scores"]}
             animationDuration={animationDuration}
+            noBorder
           />
         </View>
 
@@ -156,7 +160,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: Colors.primaryBackground,
+    backgroundColor: Colors.softBlue,
     alignItems: "center",
     justifyContent: "center",
   },

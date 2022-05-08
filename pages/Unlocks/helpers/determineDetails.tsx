@@ -11,7 +11,7 @@ export const determineDetails = (item: any) => {
     colourUsed = Colors.white;
     label = capitalize(itemParts[1]) + " " + capitalize(itemParts[0]);
   } else {
-    colourUsed = Colors[itemParts[1]];
+    colourUsed = Colors[itemParts[1] as keyof typeof Colors];
     if (itemParts[0] === "outline") {
       label = capitalize(itemParts[1]) + " " + capitalize(itemParts[0]);
     } else {

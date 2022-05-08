@@ -1,6 +1,5 @@
 import React from "react";
 import { View } from "react-native";
-import { Divider } from "native-base";
 import Carousel from "react-native-snap-carousel";
 import SelectionHeader from "./SelectionHeader";
 
@@ -39,7 +38,6 @@ const SelectionCarousel = ({
           firstItem={0}
           enableMomentum={false}
         />
-        <Divider mt="10" w="80%" alignSelf="center" />
       </View>
     </>
   );

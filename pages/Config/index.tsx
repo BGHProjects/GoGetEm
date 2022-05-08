@@ -18,10 +18,13 @@ import {
   timeActuals,
 } from "./values";
 import TitleText from "../../components/TitleText";
+import BackButton from "../../components/BackButton";
+import { Mode } from "../../constants/types";
+import { BGColourOption } from "../../constants/gameConstants";
 
 const width = Dimensions.get("window").width;
 
-const ConfigScreen = ({ navigation, route }) => {
+const ConfigScreen = ({ navigation, route }: any) => {
   const whichMode = route.params;
   const [selectedColour, setSelectedColour] = useState<any>(colourValues[0]);
   const [selectedRound, setSelectedRound] = useState<any>(roundNumbers[0]);
@@ -29,12 +32,18 @@ const ConfigScreen = ({ navigation, route }) => {
   const [timeLimit, setTimeLimit] = useState<any>(timeActuals[0]);
 
   return (
-    <View style={{ flex: 1, backgroundColor: Colors.primaryBackground }}>
+    <View
+      style={{
+        flex: 1,
+        backgroundColor: BGColourOption[whichMode as Mode],
+      }}
+    >
+      <BackButton />
       <TitleText text={whichMode} style={{ marginBottom: 40 }} />
 
       <ScrollView>
         <SelectionCarousel
-          headerLabel="Colour"
+          headerLabel="Avatar"
           values={colourValues}
           renderComponent={renderColour}
           width={width}
@@ -69,7 +78,7 @@ const ConfigScreen = ({ navigation, route }) => {
           itemBuffer={120}
         />
 
-        {(whichMode === "Hunt" || whichMode === "Chasedown") && (
+        {(whichMode === Mode.Hunt || whichMode === Mode.Chasedown) && (
           <SelectionCarousel
             headerLabel="Time Limit"
             values={timeLabels}

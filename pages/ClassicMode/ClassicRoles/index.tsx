@@ -6,6 +6,7 @@ import PlayerRepresentation from "../../../components/RolesScreen/PlayerRepresen
 import Arrow from "../../../components/RolesScreen/Arrow";
 import GameInfo from "../../../components/RolesScreen/GameInfo";
 import { Screens } from "../../../constants/types";
+import BackButton from "../../../components/BackButton";
 
 const width = Dimensions.get("window").width;
 const contentSize = 200;
@@ -64,6 +65,7 @@ const ClassicRolesScreen = ({ navigation, route }: any) => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <BackButton backToGameMenu />
       <GameInfo
         difficulty={totalDetails.difficulty}
         rounds={totalDetails.rounds}
@@ -150,7 +152,7 @@ const ClassicRolesScreen = ({ navigation, route }: any) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.primaryBackground,
+    backgroundColor: Colors.richPurple,
     alignItems: "center",
     justifyContent: "center",
   },

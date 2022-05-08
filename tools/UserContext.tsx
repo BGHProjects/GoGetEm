@@ -145,7 +145,7 @@ export const UserContext = createContext(userDetails);
 
 export const UserContextProvider = ({
   children,
-}: React.ReactNode | React.ReactNodeArray | JSX.Element) => {
+}: React.ReactNode | React.ReactNode[] | JSX.Element) => {
   const [username, setUsername] = useState<string | null>(null);
   const [connected, setConnected] = useState<Boolean>(false);
   const [defaultColour, setDefaultColour] = useState<string>("white");

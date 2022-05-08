@@ -2,6 +2,7 @@ import React from "react";
 import { View, StyleSheet } from "react-native";
 import ControllerOption from "./ControllerOption";
 import BackgroundOptions from "./BackgroundOptions";
+import BackButton from "../../../components/BackButton";
 
 const CustomiseSlide = ({ slide: { color, variant } }: any) => {
   const whichContent: Record<string, React.ReactNode> = {
@@ -11,6 +12,7 @@ const CustomiseSlide = ({ slide: { color, variant } }: any) => {
 
   return (
     <View style={[styles.container, { backgroundColor: color }]}>
+      <BackButton />
       {whichContent[variant]}
     </View>
   );

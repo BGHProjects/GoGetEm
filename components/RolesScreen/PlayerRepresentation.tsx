@@ -23,6 +23,7 @@ interface PlayerRepresentationProps {
   pulsateDuration?: number;
   animationDuration: number;
   rotation?: number;
+  noBorder?: boolean;
 }
 
 const PlayerRepresentation = ({
@@ -35,6 +36,7 @@ const PlayerRepresentation = ({
   pulsateDuration = 0,
   animationDuration,
   rotation = 0,
+  noBorder = false,
 }: PlayerRepresentationProps) => {
   const fade = useSharedValue(0); // Handles how the component initially fades in
   const isFocused = useIsFocused();
@@ -83,6 +85,7 @@ const PlayerRepresentation = ({
         { transform: [{ rotate: `${rotation}deg` }] },
         styles.playerRepresentation,
         fadeIn,
+        !noBorder && { borderColor: Colors.white, borderWidth: 3 },
       ]}
     >
       <LinearGradient
@@ -123,7 +126,7 @@ const styles = StyleSheet.create({
     textShadowColor: "black",
     textShadowOffset: { width: 1, height: 1 },
     textShadowRadius: 2,
-    top: 2,
+    top: 0,
   },
 });
 

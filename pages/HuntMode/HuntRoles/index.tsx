@@ -5,6 +5,7 @@ import MenuButton from "../../../components/MenuButton";
 import GameInfo from "../../../components/RolesScreen/GameInfo";
 import Arrow from "../../../components/RolesScreen/Arrow";
 import PlayerRepresentation from "../../../components/RolesScreen/PlayerRepresentation";
+import BackButton from "../../../components/BackButton";
 
 const contentSize = 200;
 
@@ -40,6 +41,7 @@ const HuntRoles = ({ navigation, route }: any) => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <BackButton backToGameMenu />
       <GameInfo
         difficulty={totalDetails.difficulty}
         rounds={totalDetails.rounds}
@@ -124,7 +126,7 @@ const HuntRoles = ({ navigation, route }: any) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.primaryBackground,
+    backgroundColor: Colors.darkPurple,
     alignItems: "center",
     justifyContent: "center",
   },

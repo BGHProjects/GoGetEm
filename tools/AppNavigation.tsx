@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import MainMenu from "../pages/MainMenu";
 import ClassicRolesScreen from "../pages/ClassicMode/ClassicRoles";
@@ -20,9 +20,17 @@ import Unlocks from "../pages/Unlocks";
 import Countdown from "../pages/Countdown";
 import GameModes from "../pages/GameModes";
 import { Screens } from "../constants/types";
+import { BackHandler } from "react-native";
 
 const AppNavigation = () => {
   const Stack = createStackNavigator();
+
+  // Removes functionality of android back button
+  useEffect(() => {
+    BackHandler.addEventListener("hardwareBackPress", () => true);
+    return () =>
+      BackHandler.removeEventListener("hardwareBackPress", () => true);
+  }, []);
 
   return (
     <Stack.Navigator initialRouteName={Screens.MainMenu} screenOptions={{}}>

@@ -2,7 +2,7 @@ import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { selectionWidth } from "../values";
 import { LinearGradient } from "expo-linear-gradient";
-import { XYEnd, XYStart } from "../../../constants/Colors";
+import { Colors, XYEnd, XYStart } from "../../../constants/Colors";
 import globalStyles from "../../../constants/GlobalStyles";
 
 export const renderColour = ({ item }: any) => {
@@ -46,5 +46,7 @@ const styles = StyleSheet.create({
     borderRadius: 90,
     alignItems: "center",
     justifyContent: "center",
+    borderColor: Colors.white,
+    borderWidth: 3,
   },
 });

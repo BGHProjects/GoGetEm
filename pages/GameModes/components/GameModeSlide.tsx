@@ -8,6 +8,7 @@ import HuntContent from "./HuntContent";
 import TagTeamContent from "./TagTeamContent";
 import MenuButton from "../../../components/MenuButton";
 import { Mode } from "../../../constants/types";
+import BackButton from "../../../components/BackButton";
 
 const GameModeSlide = ({
   navigation,
@@ -27,6 +28,7 @@ const GameModeSlide = ({
 
   return (
     <View style={[styles.container, { backgroundColor: color }]}>
+      <BackButton />
       <View>
         <Text style={styles.title}>{title}</Text>
         <Text style={styles.description}>{description}</Text>
