@@ -115,6 +115,8 @@ const TagTeamGameplay = ({ navigation, route }: any) => {
       ? 400
       : 300;
 
+  const [scored, setScored] = useState(false);
+
   // So the details can't accidentally be set twice in the same game
   const settingRoundOverDetails = (newDetails: any) => {
     if (roundOverDetails === undefined) {
@@ -176,7 +178,13 @@ const TagTeamGameplay = ({ navigation, route }: any) => {
           setX(searchPath[index][1] + 5);
           setY(searchPath[index][0] + 5);
           index++;
-          follow();
+          if (
+            !isUndefined(searchPath[index]) &&
+            index < searchPath.length &&
+            !roundOverRef.current
+          ) {
+            follow();
+          }
         }, difficulty);
       } else {
         clearTimeout(timeout);
@@ -210,7 +218,9 @@ const TagTeamGameplay = ({ navigation, route }: any) => {
           setPlayerPos((oldPos: any) => {
             return runAwaySingleChaser(oldPos, searchPath, mazeGrid);
           });
-          run();
+          if (!roundOverRef.current && !isUndefined(searchPath)) {
+            run();
+          }
         }, difficulty);
       } else {
         clearTimeout(timeout);
@@ -366,7 +376,7 @@ const TagTeamGameplay = ({ navigation, route }: any) => {
       updateSearchPath(playerX, playerY, searchPath2, mazeGrid);
     }
 
-    if (playerX === player3X && playerY === player3Y) {
+    if (playerX === player3X && playerY === player3Y && !scored) {
       // Player is chasing 3
       if (gameDetails.currentRound === 1 || gameDetails.currentRound === 5) {
         settingRoundOverDetails({
@@ -374,6 +384,8 @@ const TagTeamGameplay = ({ navigation, route }: any) => {
           caught: gameDetails.player3Colour,
         });
         team1Score++;
+        setScored(true);
+        setRoundOver(true);
       }
       // 3 is chasing Player
       else if (
@@ -385,9 +397,10 @@ const TagTeamGameplay = ({ navigation, route }: any) => {
           caught: gameDetails.colour,
         });
         team2Score++;
+        setScored(true);
+        setRoundOver(true);
       }
-      setRoundOver(true);
-    } else if (playerX === player4X && playerY === player4Y) {
+    } else if (playerX === player4X && playerY === player4Y && !scored) {
       // Player is chasing 4
       if (gameDetails.currentRound === 2 || gameDetails.currentRound === 6) {
         settingRoundOverDetails({
@@ -395,6 +408,8 @@ const TagTeamGameplay = ({ navigation, route }: any) => {
           caught: gameDetails.player4Colour,
         });
         team1Score++;
+        setScored(true);
+        setRoundOver(true);
       }
       // 4 is chasing Player
       else if (gameDetails.currentRound === 4) {
@@ -403,9 +418,10 @@ const TagTeamGameplay = ({ navigation, route }: any) => {
           caught: gameDetails.colour,
         });
         team2Score++;
+        setScored(true);
+        setRoundOver(true);
       }
-      setRoundOver(true);
-    } else if (player2X === player3X && player2Y === player3Y) {
+    } else if (player2X === player3X && player2Y === player3Y && !scored) {
       // 2 is chasing 3
       if (gameDetails.currentRound === 4) {
         settingRoundOverDetails({
@@ -413,6 +429,8 @@ const TagTeamGameplay = ({ navigation, route }: any) => {
           caught: gameDetails.player3Colour,
         });
         team1Score++;
+        setScored(true);
+        setRoundOver(true);
       }
       // 3 is chasing 2
       else if (
@@ -424,9 +442,10 @@ const TagTeamGameplay = ({ navigation, route }: any) => {
           caught: gameDetails.player2Colour,
         });
         team2Score++;
+        setScored(true);
+        setRoundOver(true);
       }
-      setRoundOver(true);
-    } else if (player2X === player4X && player2Y === player4Y) {
+    } else if (player2X === player4X && player2Y === player4Y && !scored) {
       // 2 is chasing 4
       if (gameDetails.currentRound === 3 || gameDetails.currentRound === 7) {
         settingRoundOverDetails({
@@ -434,6 +453,8 @@ const TagTeamGameplay = ({ navigation, route }: any) => {
           caught: gameDetails.player4Colour,
         });
         team1Score++;
+        setScored(true);
+        setRoundOver(true);
       }
       // 4 is chasing 2
       else if (
@@ -445,8 +466,9 @@ const TagTeamGameplay = ({ navigation, route }: any) => {
           caught: gameDetails.player2Colour,
         });
         team2Score++;
+        setScored(true);
+        setRoundOver(true);
       }
-      setRoundOver(true);
     }
   }, [
     playerX,
@@ -534,26 +556,30 @@ const TagTeamGameplay = ({ navigation, route }: any) => {
             />
           ))}
 
-          <PlayerAvatar
-            top={player4Y}
-            left={player4X}
-            colour={gameDetails.player4Colour}
-          />
-          <PlayerAvatar
-            top={player3Y}
-            left={player3X}
-            colour={gameDetails.player3Colour}
-          />
-          <PlayerAvatar
-            top={player2Y}
-            left={player2X}
-            colour={gameDetails.player2Colour}
-          />
-          <PlayerAvatar
-            top={playerY}
-            left={playerX}
-            colour={gameDetails.colour}
-          />
+          {!roundOver && (
+            <>
+              <PlayerAvatar
+                top={player4Y}
+                left={player4X}
+                colour={gameDetails.player4Colour}
+              />
+              <PlayerAvatar
+                top={player3Y}
+                left={player3X}
+                colour={gameDetails.player3Colour}
+              />
+              <PlayerAvatar
+                top={player2Y}
+                left={player2X}
+                colour={gameDetails.player2Colour}
+              />
+              <PlayerAvatar
+                top={playerY}
+                left={playerX}
+                colour={gameDetails.colour}
+              />
+            </>
+          )}
         </View>
         <Controller
           downFunction={movePlayerDown}

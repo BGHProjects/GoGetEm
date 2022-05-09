@@ -56,6 +56,8 @@ const ClassicGameplayScreen = ({ navigation, route }: any) => {
   const [roundOverDetails, setRoundOverDetails] = useState<any>();
   const roundOverRef = useRef<any>();
 
+  const [scored, setScored] = useState(false);
+
   let difficulty =
     gameDetails.difficulty === "Meh"
       ? 700
@@ -231,15 +233,17 @@ const ClassicGameplayScreen = ({ navigation, route }: any) => {
   }, [player2X, player2Y, searchPath1]);
 
   useEffect(() => {
-    if (playerX === player3X && playerY === player3Y) {
+    if (playerX === player3X && playerY === player3Y && !scored) {
       if (gameDetails.currentRound % 2 === 0) {
         player3Score++;
+        setScored(true);
         settingRoundOverDetails({
           chaser: gameDetails.player3Colour,
           caught: gameDetails.colour,
         });
       } else {
         player1Score++;
+        setScored(true);
         settingRoundOverDetails({
           chaser: gameDetails.colour,
           caught: gameDetails.player3Colour,
@@ -249,15 +253,17 @@ const ClassicGameplayScreen = ({ navigation, route }: any) => {
       setRoundOver(true);
     }
 
-    if (player3X === player2X && player3Y === player2Y) {
+    if (player3X === player2X && player3Y === player2Y && !scored) {
       if (gameDetails.currentRound % 2 < 1) {
         player2Score++;
+        setScored(true);
         settingRoundOverDetails({
           chaser: gameDetails.player2Colour,
           caught: gameDetails.player3Colour,
         });
       } else {
         player3Score++;
+        setScored(true);
         settingRoundOverDetails({
           chaser: gameDetails.player3Colour,
           caught: gameDetails.player2Colour,
@@ -266,15 +272,17 @@ const ClassicGameplayScreen = ({ navigation, route }: any) => {
       setRoundOver(true);
     }
 
-    if (player2X === playerX && player2Y === playerY) {
+    if (player2X === playerX && player2Y === playerY && !scored) {
       if (gameDetails.currentRound % 2 < 1) {
         player1Score++;
+        setScored(true);
         settingRoundOverDetails({
           chaser: gameDetails.colour,
           caught: gameDetails.player2Colour,
         });
       } else {
         player2Score++;
+        setScored(true);
         settingRoundOverDetails({
           chaser: gameDetails.player2Colour,
           caught: gameDetails.colour,
@@ -344,23 +352,27 @@ const ClassicGameplayScreen = ({ navigation, route }: any) => {
             />
           ))}
 
-          <PlayerAvatar
-            top={playerY}
-            left={playerX}
-            colour={gameDetails.colour}
-          />
+          {!roundOver && (
+            <>
+              <PlayerAvatar
+                top={playerY}
+                left={playerX}
+                colour={gameDetails.colour}
+              />
 
-          <PlayerAvatar
-            top={player2Y}
-            left={player2X}
-            colour={gameDetails.player2Colour}
-          />
+              <PlayerAvatar
+                top={player2Y}
+                left={player2X}
+                colour={gameDetails.player2Colour}
+              />
 
-          <PlayerAvatar
-            top={player3Y}
-            left={player3X}
-            colour={gameDetails.player3Colour}
-          />
+              <PlayerAvatar
+                top={player3Y}
+                left={player3X}
+                colour={gameDetails.player3Colour}
+              />
+            </>
+          )}
         </View>
         <Controller
           downFunction={movePlayerDown}

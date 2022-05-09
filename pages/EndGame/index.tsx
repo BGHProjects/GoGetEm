@@ -114,6 +114,7 @@ const EndGame = ({ navigation, route }: any) => {
       </Text>
       {scoreResult[gameDetails.mode as Mode].map((player, index) => (
         <EndGameScoreCard
+          key={player.toString()}
           player={player}
           gameDetails={gameDetails}
           delay={index * animationDuration}

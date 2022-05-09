@@ -24,6 +24,7 @@ import {
   ClockText,
   SinglePlayerScore,
 } from "../../../components/GameComponents";
+import { Screens } from "../../../constants/types";
 
 const height = Dimensions.get("window").height;
 const cellSize = height * 0.045;
@@ -145,6 +146,8 @@ const ChasedownGameplayScreen = ({
     -1,
     -1,
   ]);
+
+  const [scored, setScored] = useState(false);
 
   let difficulty =
     gameDetails.difficulty === "Meh"
@@ -359,16 +362,18 @@ const ChasedownGameplayScreen = ({
       updateSearchPath(player3X, player3Y, searchPath2, mazeGrid);
     }
 
-    if (playerX === player3X && playerY === player3Y) {
+    if (playerX === player3X && playerY === player3Y && !scored) {
       if (gameDetails.targetPlayer === 1 || gameDetails.targetPlayer === 3) {
         if (gameDetails.targetPlayer === 1) {
           player3Score++;
+          setScored(true);
           settingRoundOverDetails({
             chaser: gameDetails.player3Colour,
             caught: gameDetails.colour,
           });
         } else if (gameDetails.targetPlayer === 3) {
           player1Score++;
+          setScored(true);
           settingRoundOverDetails({
             chaser: gameDetails.colour,
             caught: gameDetails.player3Colour,
@@ -378,16 +383,18 @@ const ChasedownGameplayScreen = ({
       }
     }
 
-    if (player3X === player2X && player3Y === player2Y) {
+    if (player3X === player2X && player3Y === player2Y && !scored) {
       if (gameDetails.targetPlayer === 2 || gameDetails.targetPlayer === 3) {
         if (gameDetails.targetPlayer === 2) {
           player3Score++;
+          setScored(true);
           settingRoundOverDetails({
             chaser: gameDetails.player3Colour,
             caught: gameDetails.player2Colour,
           });
         } else if (gameDetails.targetPlayer === 3) {
           player2Score++;
+          setScored(true);
           settingRoundOverDetails({
             chaser: gameDetails.player2Colour,
             caught: gameDetails.player3Colour,
@@ -397,16 +404,18 @@ const ChasedownGameplayScreen = ({
       }
     }
 
-    if (player2X === playerX && player2Y === playerY) {
+    if (player2X === playerX && player2Y === playerY && !scored) {
       if (gameDetails.targetPlayer === 2 || gameDetails.targetPlayer === 1) {
         if (gameDetails.targetPlayer === 2) {
           player1Score++;
+          setScored(true);
           settingRoundOverDetails({
             chaser: gameDetails.colour,
             caught: gameDetails.player2Colour,
           });
         } else if (gameDetails.targetPlayer === 1) {
           player2Score++;
+          setScored(true);
           settingRoundOverDetails({
             chaser: gameDetails.player2Colour,
             caught: gameDetails.colour,
@@ -430,11 +439,11 @@ const ChasedownGameplayScreen = ({
       if (gameDetails.currentRound > gameDetails.rounds) {
         gameDetails.gameOver = true;
         setTimeout(() => {
-          navigation.navigate("End Game", gameDetails);
+          navigation.navigate(Screens.EndGame, gameDetails);
         }, roundOverDuration);
       } else {
         setTimeout(() => {
-          navigation.navigate("Chasedown Roles", gameDetails);
+          navigation.navigate(Screens.ChasedownRoles, gameDetails);
         }, roundOverDuration);
       }
     }
@@ -502,23 +511,27 @@ const ChasedownGameplayScreen = ({
             />
           ))}
 
-          <PlayerAvatar
-            top={playerY}
-            left={playerX}
-            colour={gameDetails.colour}
-          />
+          {!roundOver && (
+            <>
+              <PlayerAvatar
+                top={playerY}
+                left={playerX}
+                colour={gameDetails.colour}
+              />
 
-          <PlayerAvatar
-            top={player2Y}
-            left={player2X}
-            colour={gameDetails.player2Colour}
-          />
+              <PlayerAvatar
+                top={player2Y}
+                left={player2X}
+                colour={gameDetails.player2Colour}
+              />
 
-          <PlayerAvatar
-            top={player3Y}
-            left={player3X}
-            colour={gameDetails.player3Colour}
-          />
+              <PlayerAvatar
+                top={player3Y}
+                left={player3X}
+                colour={gameDetails.player3Colour}
+              />
+            </>
+          )}
         </View>
         <Controller
           downFunction={movePlayerDown}

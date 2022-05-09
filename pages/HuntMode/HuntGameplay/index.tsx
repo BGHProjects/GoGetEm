@@ -265,22 +265,26 @@ const HuntGameplay = ({ navigation, route }: HuntGameplayProps) => {
             />
           ))}
 
-          <PlayerAvatar
-            top={targetY}
-            left={targetX}
-            colour={ColorGradients.white}
-          />
-          <PlayerAvatar
-            top={playerY}
-            left={playerX}
-            colour={gameDetails.colour}
-          />
+          {!roundOver && (
+            <>
+              <PlayerAvatar
+                top={targetY}
+                left={targetX}
+                colour={ColorGradients.white}
+              />
+              <PlayerAvatar
+                top={playerY}
+                left={playerX}
+                colour={gameDetails.colour}
+              />
 
-          <PlayerAvatar
-            top={player2Y}
-            left={player2X}
-            colour={gameDetails.player2Colour}
-          />
+              <PlayerAvatar
+                top={player2Y}
+                left={player2X}
+                colour={gameDetails.player2Colour}
+              />
+            </>
+          )}
         </View>
         <Controller
           downFunction={movePlayerDown}

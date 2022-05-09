@@ -144,7 +144,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     height: "100%",
     width: "100%",
-    backgroundColor: Colors.transparentBlack,
+    backgroundColor: Colors.darkTransparentBlack,
     alignItems: "center",
     justifyContent: "center",
   },

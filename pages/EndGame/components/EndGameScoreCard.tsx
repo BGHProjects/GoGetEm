@@ -50,6 +50,10 @@ const EndGameScoreCard = ({
     }
   }, [isFocused]);
 
+  // console.log("\nplayer in EndGameScoreCard ", player);
+  // console.log("player[1]", player[1]);
+  // console.log("player[1][0]", player[1][0]);
+
   return (
     <Animated.View
       key={player.toString()}
@@ -71,8 +75,9 @@ const EndGameScoreCard = ({
       {gameDetails.mode === Mode.TagTeam ? (
         <>
           <View style={styles.playerRow}>
+            {/* player[0] is the score, we want the player's colours */}
             {player[1].map((player: any) => (
-              <EndGamePlayer player={player[1][0]} key={player.toString()} />
+              <EndGamePlayer player={player} key={player.toString()} />
             ))}
           </View>
 
