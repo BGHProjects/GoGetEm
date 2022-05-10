@@ -50,10 +50,6 @@ const EndGameScoreCard = ({
     }
   }, [isFocused]);
 
-  // console.log("\nplayer in EndGameScoreCard ", player);
-  // console.log("player[1]", player[1]);
-  // console.log("player[1][0]", player[1][0]);
-
   return (
     <Animated.View
       key={player.toString()}

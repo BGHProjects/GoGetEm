@@ -6,7 +6,7 @@ import {
   trimMaze,
   makeSearchGrid,
 } from "../../../tools/MazeAndGridGeneration";
-import { aStarSearch } from "../../../tools/BotBrain";
+import { aStarSearch, getMazeCell } from "../../../tools/BotBrain";
 import { CountdownCircleTimer } from "react-native-countdown-circle-timer";
 import Controller from "../../../components/Controller/Controller";
 import BGWithImage from "../../../components/BGWithImage";
@@ -65,7 +65,7 @@ const HuntGameplay = ({ navigation, route }: HuntGameplayProps) => {
       : 300;
 
   const movePlayerUp = () => {
-    let mazeCell = getMazeCell(playerX, playerY);
+    let mazeCell = getMazeCell(playerX, playerY, mazeGrid);
 
     if (playerY > 5 && mazeCell.top === 0 && !roundOver) {
       Vibration.vibrate(5);
@@ -74,7 +74,7 @@ const HuntGameplay = ({ navigation, route }: HuntGameplayProps) => {
   };
 
   const movePlayerRight = () => {
-    let mazeCell = getMazeCell(playerX, playerY);
+    let mazeCell = getMazeCell(playerX, playerY, mazeGrid);
 
     if (playerX < 95 && mazeCell.right === 0 && !roundOver) {
       Vibration.vibrate(5);
@@ -83,7 +83,7 @@ const HuntGameplay = ({ navigation, route }: HuntGameplayProps) => {
   };
 
   const movePlayerLeft = () => {
-    let mazeCell = getMazeCell(playerX, playerY);
+    let mazeCell = getMazeCell(playerX, playerY, mazeGrid);
 
     if (playerX > 5 && mazeCell.left === 0 && !roundOver) {
       Vibration.vibrate(5);
@@ -92,27 +92,13 @@ const HuntGameplay = ({ navigation, route }: HuntGameplayProps) => {
   };
 
   const movePlayerDown = () => {
-    let mazeCell = getMazeCell(playerX, playerY);
+    let mazeCell = getMazeCell(playerX, playerY, mazeGrid);
 
     if (playerY < 95 && mazeCell.bottom === 0 && !roundOver) {
       Vibration.vibrate(5);
       setPlayerY(playerY + 10);
     }
   };
-
-  function getMazeCell(X: any, Y: any) {
-    let digit1 = (X - 5).toString();
-    let digit2 = (Y - 5).toString();
-    let digits;
-
-    if (digit2 === "0") {
-      digits = digit1[0];
-    } else {
-      digits = digit2[0] + digit1[0];
-    }
-
-    return mazeGrid[digits];
-  }
 
   function followPath(searchPath: any) {
     let index = 0;

@@ -169,7 +169,7 @@ const ClassicContent = () => {
       >
         <LinearGradient
           style={styles.gradientFill}
-          colors={ColorGradients.yellow}
+          colors={ColorGradients.ice}
           start={XYStart}
           end={XYEnd}
         />

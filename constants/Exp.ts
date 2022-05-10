@@ -1,5 +1,5 @@
 export const base = 100;
-export const exponent = 1.05;
+export const exponent = 1.25;
 export const winIncrement: Record<string, number> = {
   Classic: 10,
   Chasedown: 12,

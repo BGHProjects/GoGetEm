@@ -13,5 +13,5 @@ export const handleTimeLimit = (increment: number, timeLimit: number) => {
   };
 
   increment *= increaseOptions[timeLimit];
-  return increment;
+  return Math.round(increment);
 };

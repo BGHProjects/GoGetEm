@@ -22,8 +22,8 @@ import Unlockables from "../../constants/Unlockables";
 
 const ExpChange = ({ navigation, route }: any) => {
   const userContext = useContext(UserContext);
-  const prevExp = route.params[0];
-  const newExp = route.params[1];
+  const prevExp = Math.round(route.params[0]);
+  const newExp = Math.round(route.params[1]);
   const whichMode = route.params[2];
   const [leveledUp, setLeveledUp] = useState(false);
   const nextLevelExp = calcExpToNextLevel(userContext.level);

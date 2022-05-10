@@ -197,31 +197,35 @@ const ClassicGameplayScreen = ({ navigation, route }: any) => {
       those entries are removed instead of explored by the bot
        */
 
+    let searchPath =
+      gameDetails.currentRound % 2 < 1 ? searchPath2 : searchPath1;
+
     if (
-      playerY - 5 === searchPath1[searchPath1.length - 2][0] &&
-      playerX - 5 === searchPath1[searchPath1.length - 2][1]
+      playerY - 5 === searchPath[searchPath.length - 2][0] &&
+      playerX - 5 === searchPath[searchPath.length - 2][1]
     ) {
-      searchPath1.splice(searchPath1.length - 1, 1);
+      searchPath.splice(searchPath.length - 1, 1);
     } else {
       if (
         [playerY - 5, playerX - 5] !==
         [
-          searchPath1[searchPath1.length - 1][0],
-          searchPath1[searchPath1.length - 1][1],
+          searchPath[searchPath.length - 1][0],
+          searchPath[searchPath.length - 1][1],
         ]
       ) {
-        searchPath1.push([player1Cell.row, player1Cell.col]);
+        searchPath.push([player1Cell.row, player1Cell.col]);
       }
     }
   }, [playerX, playerY]);
 
   useEffect(() => {
-    if (player2Started) {
+    if (player2Started && gameDetails.currentRound % 2 >= 1) {
       let player2Cell = getMazeCell(player2X, player2Y, mazeGrid);
       /*
       This ensures that if player2 backtracks on the search path
       those entries are removed instead of explored by the bot
        */
+
       if (
         player2Cell.row === searchPath2[searchPath2.length - 2][0] &&
         player2Cell.col === searchPath2[searchPath2.length - 2][1]
@@ -230,11 +234,29 @@ const ClassicGameplayScreen = ({ navigation, route }: any) => {
       }
       searchPath2.push([player2Cell.row, player2Cell.col]);
     }
-  }, [player2X, player2Y, searchPath1]);
+  }, [player2X, player2Y]);
+
+  useEffect(() => {
+    if (player2Started && gameDetails.currentRound % 2 < 1) {
+      let player3Cell = getMazeCell(player3X, player3Y, mazeGrid);
+      /*
+      This ensures that if player3 backtracks on the search path
+      those entries are removed instead of explored by the bot
+       */
+
+      if (
+        player3Cell.row === searchPath1[searchPath1.length - 2][0] &&
+        player3Cell.col === searchPath1[searchPath1.length - 2][1]
+      ) {
+        searchPath1.splice(searchPath1.length - 2, 2);
+      }
+      searchPath1.push([player3Cell.row, player3Cell.col]);
+    }
+  }, [player3X, player3Y]);
 
   useEffect(() => {
     if (playerX === player3X && playerY === player3Y && !scored) {
-      if (gameDetails.currentRound % 2 === 0) {
+      if (gameDetails.currentRound % 2 < 1) {
         player3Score++;
         setScored(true);
         settingRoundOverDetails({
@@ -296,7 +318,6 @@ const ClassicGameplayScreen = ({ navigation, route }: any) => {
     if (roundOver) {
       roundOverRef.current = roundOver;
       Vibration.vibrate(500);
-
       gameDetails.player1Score = player1Score;
       gameDetails.player2Score = player2Score;
       gameDetails.player3Score = player3Score;
