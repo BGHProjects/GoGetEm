@@ -39,7 +39,7 @@ const MainMenu = ({ navigation }: any) => {
     }
   };
 
-  const setInitialValues = () => {
+  const setInitialValues = async () => {
     const initialBackgrounds: Record<string, string> = {
       ClassicBackground: "forest",
       ChasedownBackground: "mountains",
@@ -57,20 +57,21 @@ const MainMenu = ({ navigation }: any) => {
 
     let populateObject: Record<string, unknown> = {};
 
-    Object.keys(Data).map(async (dataEntry) => {
-      // Handles controller data
-      if (dataEntry.includes("Colour") || dataEntry.includes("Button")) {
-        await AsyncStorage.setItem(dataEntry, initialController[dataEntry]);
-        populateObject[lowerFirst(dataEntry)] = initialController[dataEntry];
-      } else if (dataEntry.includes("Background")) {
-        await AsyncStorage.setItem(dataEntry, initialBackgrounds[dataEntry]);
-        populateObject[lowerFirst(dataEntry)] = initialBackgrounds[dataEntry];
-      } else {
-        await AsyncStorage.setItem(dataEntry, "0");
-        populateObject[lowerFirst(dataEntry)] = 0;
-      }
-    });
-
+    await Promise.all(
+      Object.keys(Data).map(async (dataEntry) => {
+        // Handles controller data
+        if (dataEntry.includes("Colour") || dataEntry.includes("Button")) {
+          await AsyncStorage.setItem(dataEntry, initialController[dataEntry]);
+          populateObject[lowerFirst(dataEntry)] = initialController[dataEntry];
+        } else if (dataEntry.includes("Background")) {
+          await AsyncStorage.setItem(dataEntry, initialBackgrounds[dataEntry]);
+          populateObject[lowerFirst(dataEntry)] = initialBackgrounds[dataEntry];
+        } else {
+          await AsyncStorage.setItem(dataEntry, "0");
+          populateObject[lowerFirst(dataEntry)] = 0;
+        }
+      })
+    );
     userContext.populateFromDatabase(populateObject);
   };
 

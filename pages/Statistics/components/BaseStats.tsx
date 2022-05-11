@@ -12,7 +12,9 @@ const BaseStats = () => {
   const userContext = useContext(UserContext);
   const nextLevelExp = calcExpToNextLevel(userContext.level);
   const prevLevelExp =
-    userContext.level === 0 ? 100 : calcExpToNextLevel(userContext.level - 1);
+    userContext.level === 0
+      ? nextLevelExp
+      : calcExpToNextLevel(userContext.level - 1);
   const expUntilNextLevel = nextLevelExp - userContext.totalExp;
 
   return (
