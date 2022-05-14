@@ -80,9 +80,11 @@ const MainMenu = ({ navigation }: any) => {
 
     await Promise.all(
       Object.keys(Data).map(async (dataKey) => {
-        let dataValue = await AsyncStorage.getItem(dataKey);
+        let dataValue: number | string | null = await AsyncStorage.getItem(
+          dataKey
+        );
         // Converts any strings that should be numbers into numbers
-        if (!isNaN(dataValue)) {
+        if (!isNaN(Number(dataValue))) {
           dataValue = Number(dataValue);
         }
         // The keys in the context are lowercase

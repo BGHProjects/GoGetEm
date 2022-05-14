@@ -1,6 +1,6 @@
 import { Colors } from "../../../constants/Colors";
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Image } from "react-native";
 import ControlsContent from "./ControlsContent";
 import ClassicContent from "./ClassicContent";
 import ChasedownContent from "./ChasedownContent";
@@ -9,10 +9,14 @@ import TagTeamContent from "./TagTeamContent";
 import MenuButton from "../../../components/MenuButton";
 import { Mode } from "../../../constants/types";
 import BackButton from "../../../components/BackButton";
+import { Ionicons } from "@expo/vector-icons";
+import { Logos } from "../../../constants/Images";
+
+const imgSize = 80;
 
 const GameModeSlide = ({
   navigation,
-  slide: { color, title, description },
+  slide: { color, title, description, image },
 }: any) => {
   const whichComponent: Record<string, React.ReactNode> = {
     Controls: <ControlsContent />,
@@ -30,6 +34,19 @@ const GameModeSlide = ({
     <View style={[styles.container, { backgroundColor: color }]}>
       <BackButton />
       <View>
+        {image !== "questionMark" ? (
+          <Image
+            style={styles.logoImage}
+            source={Logos[image as keyof typeof Logos]}
+          />
+        ) : (
+          <Ionicons
+            name="help"
+            size={imgSize}
+            color={Colors.white}
+            style={styles.questionMark}
+          />
+        )}
         <Text style={styles.title}>{title}</Text>
         <Text style={styles.description}>{description}</Text>
       </View>
@@ -64,6 +81,18 @@ const styles = StyleSheet.create({
     color: "white",
     textAlign: "center",
     fontFamily: "Main",
+  },
+  logoImage: {
+    height: imgSize,
+    width: imgSize,
+    resizeMode: "contain",
+    alignSelf: "center",
+    marginBottom: 20,
+    marginTop: -50,
+  },
+  questionMark: {
+    alignSelf: "center",
+    marginTop: -50,
   },
 });
 

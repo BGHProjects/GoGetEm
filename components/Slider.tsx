@@ -9,7 +9,6 @@ import Animated, {
 } from "react-native-reanimated";
 import { PanGestureHandler } from "react-native-gesture-handler";
 import { snapPoint, useVector } from "react-native-redash";
-
 import Wave, { HEIGHT, MARGIN_WIDTH, Side, WIDTH } from "./Wave";
 import Button from "../pages/GameModes/components/Button";
 import { SlideProps } from "../constants/liquidSwipeConstants";
@@ -133,7 +132,12 @@ const Slider = ({
             >
               {prev}
             </Wave>
-            <Button position={left} side={Side.LEFT} activeSide={activeSide} />
+            <Button
+              position={left}
+              side={Side.LEFT}
+              activeSide={activeSide}
+              image={prev.props.slide.image}
+            />
           </Animated.View>
         )}
         {next && (
@@ -149,6 +153,7 @@ const Slider = ({
               position={right}
               side={Side.RIGHT}
               activeSide={activeSide}
+              image={next.props.slide.image}
             />
           </Animated.View>
         )}

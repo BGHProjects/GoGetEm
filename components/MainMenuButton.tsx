@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { View, StyleSheet, Dimensions, TouchableOpacity } from "react-native";
 import { ColorGradients, XYEnd, XYStart } from "../constants/Colors";
 import { AutoSizeText, ResizeTextMode } from "react-native-auto-size-text";
@@ -11,6 +11,7 @@ import Animated, {
 } from "react-native-reanimated";
 import { useIsFocused } from "@react-navigation/native";
 import { MainMenuOption } from "../constants/types";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface MenuButtonProps {
   text: string;
@@ -29,6 +30,21 @@ const MainMenuButton = ({
   delay,
 }: MenuButtonProps) => {
   const isFocused = useIsFocused();
+  const [appHasLoaded, setAppHasLoaded] = useState(false);
+  // Handles the initial animation when the app loads for the first time
+  const [initialDelay, setInitialDelay] = useState(1200);
+
+  async function getLoadingStatus() {
+    const status = await AsyncStorage.getItem("Loaded");
+    if (status === "true") {
+      setAppHasLoaded(true);
+    }
+  }
+
+  useEffect(() => {
+    getLoadingStatus();
+  }, [AsyncStorage]);
+
   const buttonOpacity = useSharedValue(0);
   const buttonScale = useSharedValue(0.7);
 
@@ -42,17 +58,26 @@ const MainMenuButton = ({
   useEffect(() => {
     buttonOpacity.value = 0;
     buttonScale.value = 0.7;
-    if (isFocused) {
-      buttonOpacity.value = withDelay(
-        delay,
-        withTiming(1, { duration: animationDuration })
-      );
-      buttonScale.value = withDelay(
-        delay,
-        withTiming(1, { duration: animationDuration })
-      );
+    if (isFocused && appHasLoaded) {
+      setTimeout(() => {
+        buttonOpacity.value = withDelay(
+          delay,
+          withTiming(1, { duration: animationDuration })
+        );
+        buttonScale.value = withDelay(
+          delay,
+          withTiming(1, { duration: animationDuration })
+        );
+        /**
+         * When the app loads the first time, the initial loading bounce takes 1000 ms
+         * so this is what the initialDelay is for
+         * Once the app has loaded, we shouldn't delay the user if they navigate back
+         * to the main menu, so we set this delay to 0
+         */
+        setInitialDelay(0);
+      }, initialDelay);
     }
-  }, [isFocused]);
+  }, [isFocused, appHasLoaded]);
 
   const buttonOption: Record<MainMenuOption, any> = {
     [MainMenuOption.Play]: {

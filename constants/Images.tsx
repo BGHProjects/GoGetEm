@@ -19,3 +19,11 @@ export const Youtubers = {
   reactiive: require("../assets/Reactiive.jpg"),
   missCoding: require("../assets/MissCoding.jpg"),
 };
+
+export const Logos = {
+  classicColoured: require("../assets/logos/ColouredClassicLogo.png"),
+  classic: require("../assets/logos/ClassicLogo.png"),
+  chasedown: require("../assets/logos/ChasedownLogo.png"),
+  hunt: require("../assets/logos/HuntLogo.png"),
+  tagTeam: require("../assets/logos/TagTeamLogo.png"),
+};
