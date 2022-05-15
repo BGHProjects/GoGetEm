@@ -19,6 +19,7 @@ import { Data, Mode, Screens } from "../../constants/types";
 import { calculateBarPositions } from "./helpers/handleProgressBar";
 import { BGColourOption } from "../../constants/gameConstants";
 import Unlockables from "../../constants/Unlockables";
+import { useIsFocused } from "@react-navigation/native";
 
 const ExpChange = ({ navigation, route }: any) => {
   const userContext = useContext(UserContext);
@@ -149,11 +150,7 @@ const ExpChange = ({ navigation, route }: any) => {
         <Text style={styles.levelLabel}>Maximum Level Reached</Text>
       )}
 
-      <MenuButton
-        text="Continue"
-        operation={() => handleContinue()}
-        shadowColour={Colors.fluroBlue}
-      />
+      <MenuButton text="Continue" operation={() => handleContinue()} />
     </SafeAreaView>
   );
 };

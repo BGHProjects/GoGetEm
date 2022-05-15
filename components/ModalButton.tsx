@@ -51,6 +51,8 @@ const ModalButton = ({ text, operation }: ModalButtonProps) => {
         backgroundDarker={Colors.fluroBlue}
         width={200}
         borderRadius={10}
+        borderWidth={1}
+        borderColor={Colors.fluroBlue}
         onPress={operation}
         raiseLevel={5}
         style={{ alignSelf: "center" }}

@@ -11,7 +11,6 @@ const animationDuration = 400;
 
 const Unlocks = ({ navigation, route }: any) => {
   const newLevels = route.params;
-
   const [unlockedContent, setUnlockedContent] = useState<string[]>([]);
 
   useEffect(() => {
@@ -45,7 +44,7 @@ const Unlocks = ({ navigation, route }: any) => {
         <MenuButton
           text="Continue"
           operation={() => navigation.navigate(Screens.GameModes)}
-          shadowColour={Colors.fluroBlue}
+          delay={unlockedContent.length * animationDuration}
         />
       </ScrollView>
     </View>

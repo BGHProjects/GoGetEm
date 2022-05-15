@@ -21,7 +21,7 @@ import globalStyles from "../../../constants/GlobalStyles";
 import { isUndefined } from "lodash";
 import PlayerAvatar from "../../../components/PlayerAvatar";
 import { Screens } from "../../../constants/types";
-import { SingleTeamScore } from "../../../components/GameComponents";
+import SingleTeamScore from "../../../components/SingleTeamScore";
 
 const height = Dimensions.get("window").height;
 const cellSize = height * 0.045;
@@ -175,14 +175,14 @@ const TagTeamGameplay = ({ navigation, route }: any) => {
         !roundOverRef.current
       ) {
         timeout = setTimeout(() => {
-          setX(searchPath[index][1] + 5);
-          setY(searchPath[index][0] + 5);
-          index++;
           if (
             !isUndefined(searchPath[index]) &&
             index < searchPath.length &&
             !roundOverRef.current
           ) {
+            setX(searchPath[index][1] + 5);
+            setY(searchPath[index][0] + 5);
+            index++;
             follow();
           }
         }, difficulty);
@@ -233,7 +233,6 @@ const TagTeamGameplay = ({ navigation, route }: any) => {
   /**
    * Starts the game
    */
-
   useEffect(() => {
     roundOverRef.current = roundOver;
     generateCells(mazeGrid, wallWidth, gridSquareLength);

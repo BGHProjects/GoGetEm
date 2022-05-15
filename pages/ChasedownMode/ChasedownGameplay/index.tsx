@@ -20,11 +20,9 @@ import { roundOverDuration } from "../../../constants/Animation";
 import globalStyles from "../../../constants/GlobalStyles";
 import PlayerAvatar from "../../../components/PlayerAvatar";
 import { timerDetails } from "../../../constants/gameConstants";
-import {
-  ClockText,
-  SinglePlayerScore,
-} from "../../../components/GameComponents";
 import { Screens } from "../../../constants/types";
+import ClockText from "../../../components/ClockText";
+import SinglePlayerScore from "../../../components/SinglePlayerScore";
 
 const height = Dimensions.get("window").height;
 const cellSize = height * 0.045;
@@ -56,7 +54,6 @@ const ChasedownGameplayScreen = ({
   route,
 }: ChasedownGameplayScreenProps) => {
   const userContext = useContext(UserContext);
-
   let gameDetails = route.params;
   const [playerX, setPlayerX] = useState(
     gameDetails.currentRound === 1 || gameDetails.currentRound === 7

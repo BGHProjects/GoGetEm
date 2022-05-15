@@ -52,11 +52,7 @@ const GameModeSlide = ({
       </View>
       <View style={{ marginVertical: 20 }}>{whichComponent[title]}</View>
       {title !== "Controls" && (
-        <MenuButton
-          text="Start"
-          shadowColour={Colors.gold}
-          operation={() => onPressButton(title)}
-        />
+        <MenuButton text="Start" operation={() => onPressButton(title)} />
       )}
     </View>
   );

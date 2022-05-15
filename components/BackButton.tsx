@@ -17,9 +17,10 @@ const animValue = 500;
 
 interface BackButtonProps {
   backToGameMenu?: boolean;
+  delay?: number;
 }
 
-const BackButton = ({ backToGameMenu }: BackButtonProps) => {
+const BackButton = ({ backToGameMenu, delay = animValue }: BackButtonProps) => {
   const navigation = useNavigation();
 
   const isFocused = useIsFocused();
@@ -38,11 +39,11 @@ const BackButton = ({ backToGameMenu }: BackButtonProps) => {
     buttonScale.value = 0.7;
     if (isFocused) {
       buttonOpacity.value = withDelay(
-        animValue,
+        delay,
         withTiming(1, { duration: animValue })
       );
       buttonScale.value = withDelay(
-        animValue,
+        delay,
         withTiming(1, { duration: animValue })
       );
     }

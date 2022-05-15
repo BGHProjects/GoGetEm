@@ -14,12 +14,16 @@ import { useIsFocused } from "@react-navigation/native";
 interface MenuButtonProps {
   text: string;
   operation: () => void;
-  shadowColour: string;
+  delay?: number;
 }
 
 const animValue = 500;
 
-const MenuButton = ({ text, operation, shadowColour }: MenuButtonProps) => {
+const MenuButton = ({
+  text,
+  operation,
+  delay = animValue,
+}: MenuButtonProps) => {
   const isFocused = useIsFocused();
   const buttonOpacity = useSharedValue(0);
   const buttonScale = useSharedValue(0.7);
@@ -36,11 +40,11 @@ const MenuButton = ({ text, operation, shadowColour }: MenuButtonProps) => {
     buttonScale.value = 0.7;
     if (isFocused) {
       buttonOpacity.value = withDelay(
-        animValue,
+        delay,
         withTiming(1, { duration: animValue })
       );
       buttonScale.value = withDelay(
-        animValue,
+        delay,
         withTiming(1, { duration: animValue })
       );
     }
@@ -50,9 +54,11 @@ const MenuButton = ({ text, operation, shadowColour }: MenuButtonProps) => {
     <Animated.View style={fadeStyle}>
       <AwesomeButton
         backgroundColor={Colors.buttonBackground}
-        backgroundDarker={shadowColour}
+        backgroundDarker={Colors.fluroBlue}
         width={230}
         borderRadius={10}
+        borderColor={Colors.fluroBlue}
+        borderWidth={1}
         onPress={operation}
         raiseLevel={5}
         style={styles.awesomeButtonContainer}

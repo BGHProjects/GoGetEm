@@ -9,7 +9,7 @@ import { slides } from "../../constants/statisticsSlideContent";
 import { LiquidSwipeMenu } from "../../constants/types";
 import BackButton from "../../components/BackButton";
 
-const topDivHeight = 200;
+const topDivHeight = 210;
 
 const Statistics = () => {
   const userContext = useContext(UserContext);
@@ -22,7 +22,7 @@ const Statistics = () => {
         style={styles.topDiv}
       >
         <View style={styles.pageContentContainer} />
-        <View style={{ marginTop: topDivHeight / 2 - topDivHeight / 4 }}>
+        <View style={{ marginTop: topDivHeight / 3 }}>
           <AutoSizeText
             fontSize={20}
             numberOfLines={1}

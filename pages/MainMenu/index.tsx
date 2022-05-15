@@ -11,7 +11,6 @@ import MainMenuButton from "../../components/MainMenuButton";
 
 const MainMenu = ({ navigation }: any) => {
   const userContext = useContext(UserContext);
-
   const onPressButton = (page: string) => {
     // Just so the mapping function below is clean
     if (page === "Play") page = "Game Modes";
@@ -106,7 +105,7 @@ const MainMenu = ({ navigation }: any) => {
               text={option}
               operation={() => onPressButton(option)}
               menuOption={MainMenuOption[option as keyof typeof MainMenuOption]}
-              delay={index * 300}
+              delay={index * 200}
             />
           ))}
         </ScrollView>

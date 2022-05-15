@@ -39,6 +39,7 @@ const TagTeamRoles = ({ navigation, route }: any) => {
     arrows: animationDelay * 2,
     targets: animationDelay * 3,
     scores: animationDelay * 4,
+    startButton: animationDelay * 5,
   };
 
   return (
@@ -144,7 +145,7 @@ const TagTeamRoles = ({ navigation, route }: any) => {
       <MenuButton
         text={totalDetails.currentRound === 1 ? "Begin" : "Start Round"}
         operation={() => onPressSubmit()}
-        shadowColour={Colors.gold}
+        delay={animationDelays["startButton"]}
       />
     </SafeAreaView>
   );

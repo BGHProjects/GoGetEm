@@ -11,7 +11,6 @@ import { handlePostGame } from "../ExpChange/helpers/handlePostGame";
 import { UserContext } from "../../tools/UserContext";
 import { Data, Mode, Screens } from "../../constants/types";
 import { updateStorageValue } from "../../tools/updateStorageValue";
-import { Colors } from "../../constants/Colors";
 import EndGameScoreCard from "./components/EndGameScoreCard";
 import { BGColourOption } from "../../constants/gameConstants";
 import Unlockables from "../../constants/Unlockables";
@@ -123,7 +122,6 @@ const EndGame = ({ navigation, route }: any) => {
 
       <MenuButton
         text="Continue"
-        shadowColour={Colors.fluroBlue}
         operation={() =>
           navigation.navigate(Screens.ExpChange, [
             prevExp,
@@ -131,6 +129,7 @@ const EndGame = ({ navigation, route }: any) => {
             gameDetails.mode,
           ])
         }
+        delay={scoreResult[gameDetails.mode as Mode].length * animationDuration}
       />
     </SafeAreaView>
   );

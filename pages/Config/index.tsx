@@ -23,6 +23,7 @@ import { Mode } from "../../constants/types";
 import { BGColourOption } from "../../constants/gameConstants";
 
 const width = Dimensions.get("window").width;
+const delay = 200;
 
 const ConfigScreen = ({ navigation, route }: any) => {
   const whichMode = route.params;
@@ -38,7 +39,13 @@ const ConfigScreen = ({ navigation, route }: any) => {
         backgroundColor: BGColourOption[whichMode as Mode],
       }}
     >
-      <BackButton />
+      <BackButton
+        delay={
+          whichMode === Mode.Hunt || whichMode === Mode.Chasedown
+            ? delay * 5
+            : delay * 4
+        }
+      />
       <TitleText text={whichMode} style={{ marginBottom: 40 }} />
 
       <ScrollView>
@@ -52,6 +59,7 @@ const ConfigScreen = ({ navigation, route }: any) => {
             setSelectedColour(colourValues[value]);
           }}
           itemBuffer={10}
+          delay={delay}
         />
 
         <SelectionCarousel
@@ -64,6 +72,7 @@ const ConfigScreen = ({ navigation, route }: any) => {
             setSelectedRound(roundNumbers[value]);
           }}
           itemBuffer={10}
+          delay={delay * 2}
         />
 
         <SelectionCarousel
@@ -76,6 +85,7 @@ const ConfigScreen = ({ navigation, route }: any) => {
             setDifficulty(difficulties[value]);
           }}
           itemBuffer={120}
+          delay={delay * 3}
         />
 
         {(whichMode === Mode.Hunt || whichMode === Mode.Chasedown) && (
@@ -89,6 +99,7 @@ const ConfigScreen = ({ navigation, route }: any) => {
               setTimeLimit(timeActuals[value]);
             }}
             itemBuffer={30}
+            delay={delay * 4}
           />
         )}
 
@@ -109,7 +120,11 @@ const ConfigScreen = ({ navigation, route }: any) => {
                 navigation,
               })
             }
-            shadowColour={Colors.gold}
+            delay={
+              whichMode === Mode.Hunt || whichMode === Mode.Chasedown
+                ? delay * 5
+                : delay * 4
+            }
           />
         </View>
       </ScrollView>

@@ -17,7 +17,8 @@ import globalStyles from "../../../constants/GlobalStyles";
 import { Screens } from "../../../constants/types";
 import PlayerAvatar from "../../../components/PlayerAvatar";
 import { Colors } from "react-native/Libraries/NewAppScreen";
-import { SinglePlayerScore } from "../../../components/GameComponents";
+import SinglePlayerScore from "../../../components/SinglePlayerScore";
+import { useIsFocused } from "@react-navigation/native";
 
 const height = Dimensions.get("window").height;
 const cellSize = height * 0.045;

@@ -37,6 +37,7 @@ const HuntRoles = ({ navigation, route }: any) => {
     chasers: animationDelay,
     arrows: animationDelay * 2,
     target: animationDelay * 3,
+    startButton: animationDelay * 4,
   };
 
   return (
@@ -117,7 +118,7 @@ const HuntRoles = ({ navigation, route }: any) => {
       <MenuButton
         text={totalDetails.currentRound === 1 ? "Begin" : "Start Round"}
         operation={() => onPressSubmit()}
-        shadowColour={Colors.gold}
+        delay={animationDelays["startButton"]}
       />
     </SafeAreaView>
   );

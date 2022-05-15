@@ -17,11 +17,9 @@ import globalStyles from "../../../constants/GlobalStyles";
 import PlayerAvatar from "../../../components/PlayerAvatar";
 import { ColorGradients } from "../../../constants/Colors";
 import { timerDetails } from "../../../constants/gameConstants";
-import {
-  ClockText,
-  SinglePlayerScore,
-} from "../../../components/GameComponents";
 import { Screens } from "../../../constants/types";
+import ClockText from "../../../components/ClockText";
+import SinglePlayerScore from "../../../components/SinglePlayerScore";
 
 const height = Dimensions.get("window").height;
 const cellSize = height * 0.045;
@@ -42,7 +40,6 @@ interface HuntGameplayProps {
 
 const HuntGameplay = ({ navigation, route }: HuntGameplayProps) => {
   const userContext = useContext(UserContext);
-
   let gameDetails = route.params;
   const [playerX, setPlayerX] = useState(5);
   const [playerY, setPlayerY] = useState(5);

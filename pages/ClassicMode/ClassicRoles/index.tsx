@@ -61,11 +61,12 @@ const ClassicRolesScreen = ({ navigation, route }: any) => {
     middleArrow: animationDelay * 3,
     rightPlayer: animationDelay * 4,
     rightArrow: animationDelay * 5,
+    startButton: animationDelay * 6,
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      <BackButton backToGameMenu />
+      <BackButton />
       <GameInfo
         difficulty={totalDetails.difficulty}
         rounds={totalDetails.rounds}
@@ -142,8 +143,8 @@ const ClassicRolesScreen = ({ navigation, route }: any) => {
 
       <MenuButton
         text={totalDetails.currentRound === 1 ? "Begin" : "Start Round"}
-        shadowColour={Colors.fluroBlue}
         operation={() => onPressSubmit()}
+        delay={animationDelays["startButton"]}
       />
     </SafeAreaView>
   );

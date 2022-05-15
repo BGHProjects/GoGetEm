@@ -8,7 +8,7 @@ import Animated, {
   withSequence,
 } from "react-native-reanimated";
 
-const Countdown = ({ navigation, route }) => {
+const Countdown = ({ navigation, route }: any) => {
   const totalDetails = route.params;
   const [countDown, setCountDown] = useState(3);
   const [go, setGo] = useState<string | number>(countDown);

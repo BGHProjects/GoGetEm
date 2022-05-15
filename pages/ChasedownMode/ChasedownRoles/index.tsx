@@ -80,6 +80,7 @@ const ChasedownRolesScreen = ({ navigation, route }: any) => {
     chasers: animationDelay,
     arrows: animationDelay * 2,
     target: animationDelay * 3,
+    startButton: animationDelay * 4,
   };
 
   return (
@@ -167,8 +168,8 @@ const ChasedownRolesScreen = ({ navigation, route }: any) => {
 
       <MenuButton
         text={totalDetails.currentRound === 1 ? "Begin" : "Start Round"}
-        shadowColour={Colors.fluroBlue}
         operation={() => onPressSubmit()}
+        delay={animationDelays["startButton"]}
       />
     </SafeAreaView>
   );
