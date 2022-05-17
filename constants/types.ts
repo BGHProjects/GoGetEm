@@ -1,3 +1,5 @@
+import { Side } from "../components/Wave";
+
 export enum Mode {
   Classic = "Classic",
   Chasedown = "Chasedown",
@@ -85,3 +87,5 @@ export enum MainMenuOption {
   Statistics = "Statstics",
   Credits = "Credits",
 }
+
+export type NotInBetween = Side.RIGHT | Side.LEFT;

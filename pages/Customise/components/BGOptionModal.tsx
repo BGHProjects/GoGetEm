@@ -143,6 +143,7 @@ const BGOptionModal = ({ modeLabel, closeFunction }: BGOptionModalProps) => {
       <View style={styles.modalContainer}>
         <View style={styles.scrollContainer}>
           <Text style={styles.modeLabel}>{modeLabel}</Text>
+          {/* TODO Figure out how to make 'pagingEnabled' to work */}
           <ScrollView horizontal={true}>
             {buttonOptions.map((item) => {
               return renderOption({ item });

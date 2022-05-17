@@ -20,12 +20,6 @@ export default function App() {
     "Main-Bold": require("./assets/fonts/Quicksand-SemiBold.ttf"),
   });
 
-  useEffect(() => {
-    if (error !== null) {
-      console.error("\n Error loading fonts : ", error);
-    }
-  }, [error]);
-
   // Sets a storage value of true, so it can be accessed deeper in the app
   async function setLoadedToStorage() {
     await AsyncStorage.setItem("Loaded", "true");
@@ -51,15 +45,13 @@ export default function App() {
   }
 
   useEffect(() => {
-    if (!appReady) {
+    if (!appReady && fontsLoaded) {
       try {
         loadAssets();
       } catch (err) {
         console.warn(err);
       } finally {
         if (fontsLoaded) {
-          // Just to handle any abnormalities
-          // for better UX
           setTimeout(() => {
             setAppReady(true);
             setLoadedToStorage();
