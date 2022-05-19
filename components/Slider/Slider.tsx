@@ -9,9 +9,12 @@ import Animated, {
 } from "react-native-reanimated";
 import { PanGestureHandler } from "react-native-gesture-handler";
 import { snapPoint, useVector } from "react-native-redash";
-import Wave, { HEIGHT, MARGIN_WIDTH, Side, WIDTH } from "./Wave";
-import Button from "../pages/GameModes/components/Button";
-import { SlideProps } from "../constants/liquidSwipeConstants";
+import Wave, { HEIGHT, MARGIN_WIDTH, Side, WIDTH } from "../Wave";
+import Button from "../../pages/GameModes/components/Button";
+import { SlideProps } from "../../constants/liquidSwipeConstants";
+import { NotInBetween } from "../../constants/types";
+import onStartValue from "./helpers/onStartValue";
+import onActiveValue from "./helpers/onActiveValue";
 
 const PREV = WIDTH;
 const NEXT = 0;
@@ -41,69 +44,58 @@ const Slider = ({
   const activeSide = useSharedValue(Side.NONE);
   const isTransitioningLeft = useSharedValue(false);
   const isTransitioningRight = useSharedValue(false);
+
+  const endValueOptions: Record<NotInBetween, any> = {
+    [Side.LEFT]: {
+      snapPoints: LEFT_SNAP_POINTS,
+      transCheck: PREV,
+      sideVal: left,
+      transval: isTransitioningLeft.value,
+    },
+    [Side.RIGHT]: {
+      snapPoints: RIGHT_SNAP_POINTS,
+      transCheck: NEXT,
+      sideVal: right,
+      transval: isTransitioningRight.value,
+    },
+  };
+
+  // Abbreviations for human readability
+  const asv = activeSide.value;
+  const evo = endValueOptions[asv as NotInBetween];
+
   const onGestureEvent = useAnimatedGestureHandler({
     onStart: ({ x }) => {
-      if (x <= MARGIN_WIDTH && hasPrev) {
-        activeSide.value = Side.LEFT;
-        zIndex.value = 100;
-      } else if (x >= WIDTH - MARGIN_WIDTH && hasNext) {
-        activeSide.value = Side.RIGHT;
-      } else {
-        activeSide.value = Side.NONE;
-      }
+      [activeSide.value, zIndex.value] = onStartValue(x, hasPrev, hasNext);
     },
     onActive: ({ x, y }) => {
-      if (activeSide.value === Side.LEFT) {
-        left.x.value = Math.max(x, MARGIN_WIDTH);
-        left.y.value = y;
-      } else if (activeSide.value === Side.RIGHT) {
-        right.x.value = Math.max(WIDTH - x, MARGIN_WIDTH);
-        right.y.value = y;
-      }
+      evo.sideVal.x.value = onActiveValue(x, asv);
+      evo.sideVal.y.value = y;
     },
     onEnd: ({ velocityX, velocityY, x }) => {
-      if (activeSide.value === Side.LEFT) {
-        const dest = snapPoint(x, velocityX, LEFT_SNAP_POINTS);
-        isTransitioningLeft.value = dest === PREV;
-        left.x.value = withSpring(
-          dest,
-          {
-            velocity: velocityX,
-            overshootClamping: isTransitioningLeft.value ? true : false,
-            restSpeedThreshold: isTransitioningLeft.value ? 100 : 0.01,
-            restDisplacementThreshold: isTransitioningLeft.value ? 100 : 0.01,
-          },
-          () => {
-            if (isTransitioningLeft.value) {
-              runOnJS(setIndex)(index - 1);
-            } else {
-              zIndex.value = 0;
-              activeSide.value = Side.NONE;
-            }
+      const dest = snapPoint(x, velocityX, evo.snapPoints);
+      const endVal = asv === Side.LEFT ? dest : WIDTH - dest;
+      const indexChange = asv === Side.LEFT ? -1 : 1;
+
+      evo.transval = dest === evo.transCheck;
+      evo.sideVal.x.value = withSpring(
+        endVal,
+        {
+          velocity: velocityX,
+          overshootClamping: evo.transval ? true : false,
+          restSpeedThreshold: evo.transval ? 100 : 0.01,
+          restDisplacementThreshold: evo.transval ? 100 : 0.01,
+        },
+        () => {
+          if (evo.transVal) {
+            runOnJS(setIndex)(index + indexChange);
+          } else {
+            if (asv === Side.LEFT) zIndex.value = 0;
+            activeSide.value = Side.NONE;
           }
-        );
-        left.y.value = withSpring(HEIGHT / 2, { velocity: velocityY });
-      } else if (activeSide.value === Side.RIGHT) {
-        const dest = snapPoint(x, velocityX, RIGHT_SNAP_POINTS);
-        isTransitioningRight.value = dest === NEXT;
-        right.x.value = withSpring(
-          WIDTH - dest,
-          {
-            velocity: velocityX,
-            overshootClamping: isTransitioningRight.value ? true : false,
-            restSpeedThreshold: isTransitioningRight.value ? 100 : 0.01,
-            restDisplacementThreshold: isTransitioningRight.value ? 100 : 0.01,
-          },
-          () => {
-            if (isTransitioningRight.value) {
-              runOnJS(setIndex)(index + 1);
-            } else {
-              activeSide.value = Side.NONE;
-            }
-          }
-        );
-        right.y.value = withSpring(HEIGHT / 2, { velocity: velocityY });
-      }
+        }
+      );
+      evo.sideVal.y.value = withSpring(HEIGHT / 2, { velocity: velocityY });
     },
   });
 

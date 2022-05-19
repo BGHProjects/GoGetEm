@@ -114,17 +114,19 @@ const Wave = ({
       />
     </Svg>
   );
-  const androidStyle = useAnimatedStyle(() => {
+
+  const translateXValue = () => {
+    "worklet";
+    if (isTransitioning.value) return withTiming(0);
+    if (side === Side.RIGHT) return WIDTH - ledge.value;
+    return -WIDTH + ledge.value;
+  };
+
+  const aStyle = useAnimatedStyle(() => {
     return {
       transform: [
         {
-          translateX:
-            // eslint-disable-next-line no-nested-ternary
-            isTransitioning.value
-              ? withTiming(0)
-              : side === Side.RIGHT
-              ? WIDTH - ledge.value
-              : -WIDTH + ledge.value,
+          translateX: translateXValue(),
         },
       ],
     };
@@ -133,7 +135,7 @@ const Wave = ({
     return (
       <View style={StyleSheet.absoluteFill}>
         {maskElement}
-        <Animated.View style={[StyleSheet.absoluteFill, androidStyle]}>
+        <Animated.View style={[StyleSheet.absoluteFill, aStyle]}>
           {children}
         </Animated.View>
       </View>
