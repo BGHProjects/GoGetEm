@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Slider from "./Slider/Slider";
+import Slider from "./Slider";
 import GameModeSlide from "../pages/GameModes/components/GameModeSlide";
 import CustomiseSlide from "../pages/Customise/components/CustomiseSlide";
 import StatisticsSlide from "../pages/Statistics/components/StatisticsSlide";
