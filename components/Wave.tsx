@@ -15,8 +15,8 @@ import { Vector } from "react-native-redash";
 import { SlideProps } from "../constants/liquidSwipeConstants";
 
 export const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
-export const MIN_LEDGE = 25;
-export const MARGIN_WIDTH = MIN_LEDGE + 50;
+export const MIN_LEDGE = 10;
+export const MARGIN_WIDTH = MIN_LEDGE + 40;
 
 const AnimatedPath = Animated.createAnimatedComponent(Path);
 

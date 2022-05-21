@@ -15,11 +15,6 @@ export default function App() {
   // Handles state of app's readiness
   const [appReady, setAppReady] = useState(false);
 
-  let [fontsLoaded, error] = Font.useFonts({
-    Main: require("./assets/fonts/Quicksand-Medium.ttf"),
-    "Main-Bold": require("./assets/fonts/Quicksand-SemiBold.ttf"),
-  });
-
   // Sets a storage value of true, so it can be accessed deeper in the app
   async function setLoadedToStorage() {
     await AsyncStorage.setItem("Loaded", "true");
@@ -41,25 +36,27 @@ export default function App() {
       ])
     );
 
-    await Promise.all([...imageAssets]);
+    await Font.loadAsync({
+      Main: require("./assets/fonts/Quicksand-Medium.ttf"),
+      "Main-Bold": require("./assets/fonts/Quicksand-SemiBold.ttf"),
+    });
+    await Promise.all([imageAssets]);
+    // Manually give a slight delay for UI / UX
+    setTimeout(() => {
+      setAppReady(true);
+      setLoadedToStorage();
+    }, 1000);
   }
 
   useEffect(() => {
-    if (!appReady && fontsLoaded) {
+    if (!appReady) {
       try {
         loadAssets();
       } catch (err) {
         console.warn(err);
-      } finally {
-        if (fontsLoaded) {
-          setTimeout(() => {
-            setAppReady(true);
-            setLoadedToStorage();
-          }, 1000);
-        }
       }
     }
-  }, [appReady, fontsLoaded]);
+  }, [appReady]);
 
   return (
     <AnimatedSplashScreen

@@ -12,6 +12,7 @@ import { snapPoint, useVector } from "react-native-redash";
 import Wave, { HEIGHT, MARGIN_WIDTH, Side, WIDTH } from "./Wave";
 import Button from "../pages/GameModes/components/Button";
 import { SlideProps } from "../constants/liquidSwipeConstants";
+import StatisticsSlide from "../pages/Statistics/components/StatisticsSlide";
 
 const PREV = WIDTH;
 const NEXT = 0;
@@ -33,11 +34,14 @@ const Slider = ({
   next,
   setIndex,
 }: SliderProps) => {
+  const isStatistics = current.type === StatisticsSlide;
+  const tabStartHeight = isStatistics ? HEIGHT / 2 : HEIGHT * (2 / 3);
+
   const hasPrev = !!prev;
   const hasNext = !!next;
   const zIndex = useSharedValue(0);
-  const left = useVector(0, HEIGHT / 2);
-  const right = useVector(0, HEIGHT / 2);
+  const left = useVector(0, tabStartHeight);
+  const right = useVector(0, tabStartHeight);
   const activeSide = useSharedValue(Side.NONE);
   const isTransitioningLeft = useSharedValue(false);
   const isTransitioningRight = useSharedValue(false);
@@ -82,7 +86,7 @@ const Slider = ({
             }
           }
         );
-        left.y.value = withSpring(HEIGHT / 2, { velocity: velocityY });
+        left.y.value = withSpring(tabStartHeight, { velocity: velocityY });
       } else if (activeSide.value === Side.RIGHT) {
         const dest = snapPoint(x, velocityX, RIGHT_SNAP_POINTS);
         isTransitioningRight.value = dest === NEXT;
@@ -102,7 +106,7 @@ const Slider = ({
             }
           }
         );
-        right.y.value = withSpring(HEIGHT / 2, { velocity: velocityY });
+        right.y.value = withSpring(tabStartHeight, { velocity: velocityY });
       }
     },
   });

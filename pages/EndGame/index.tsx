@@ -12,8 +12,8 @@ import { UserContext } from "../../tools/UserContext";
 import { Data, Mode, Screens } from "../../constants/types";
 import { updateStorageValue } from "../../tools/updateStorageValue";
 import EndGameScoreCard from "./components/EndGameScoreCard";
-import { BGColourOption } from "../../constants/gameConstants";
 import Unlockables from "../../constants/Unlockables";
+import { Colors } from "../../constants/Colors";
 
 const animationDuration = 400;
 
@@ -102,12 +102,7 @@ const EndGame = ({ navigation, route }: any) => {
   }
 
   return (
-    <SafeAreaView
-      style={[
-        styles.container,
-        { backgroundColor: BGColourOption[gameDetails.mode as Mode] },
-      ]}
-    >
+    <SafeAreaView style={[styles.container]}>
       <Text style={styles.resultLabel}>
         {stringResult[gameDetails.mode as Mode]}
       </Text>
@@ -140,6 +135,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+    backgroundColor: Colors.primaryBackground,
   },
   resultLabel: {
     color: "white",

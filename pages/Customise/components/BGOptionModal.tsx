@@ -24,6 +24,7 @@ import { UserContext } from "../../../tools/UserContext";
 import { Data } from "../../../constants/types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ScrollView } from "react-native-gesture-handler";
+import InvalidLevelModal from "./InvalidLevelModal";
 
 interface BGOptionModalProps {
   modeLabel: string;
@@ -38,6 +39,10 @@ const BGOptionModal = ({ modeLabel, closeFunction }: BGOptionModalProps) => {
     userContext[`${lowerFirst(modeLabel)}Background`],
     "-"
   );
+
+  // For the invalid level modal
+  const [invalidLevel, setInvalidLevel] = useState(false);
+  const [itemLevel, setItemLevel] = useState(0);
 
   let options: any = [];
 
@@ -94,6 +99,11 @@ const BGOptionModal = ({ modeLabel, closeFunction }: BGOptionModalProps) => {
 
     const itemKey = Object.keys(item)[0];
 
+    const handleInvalidLevel = (level: number) => {
+      setItemLevel(level);
+      setInvalidLevel(true);
+    };
+
     return (
       <TouchableOpacity
         key={values(item).toString()}
@@ -104,7 +114,7 @@ const BGOptionModal = ({ modeLabel, closeFunction }: BGOptionModalProps) => {
             ? () => {
                 changeSetting(bgString);
               }
-            : undefined
+            : () => handleInvalidLevel(level)
         }
       >
         <View
@@ -153,6 +163,12 @@ const BGOptionModal = ({ modeLabel, closeFunction }: BGOptionModalProps) => {
         <View style={styles.buttonContainer}>
           <ModalButton text="Close" operation={() => closeFunction()} />
         </View>
+        {invalidLevel && (
+          <InvalidLevelModal
+            level={itemLevel}
+            closeFunction={() => setInvalidLevel(false)}
+          />
+        )}
       </View>
     </View>
   );
@@ -172,7 +188,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     justifyContent: "center",
     alignItems: "center",
-    left: -150,
+    left: -175,
   },
   imageOptionContainer: {
     borderRadius: 5,

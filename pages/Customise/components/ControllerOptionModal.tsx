@@ -14,6 +14,7 @@ import Animated, {
 } from "react-native-reanimated";
 import { loadingPulsation } from "../../../constants/Animation";
 import { ScrollView } from "react-native-gesture-handler";
+import InvalidLevelModal from "./InvalidLevelModal";
 
 interface ControllerOptionModalProps {
   closeFunction: Function;
@@ -26,6 +27,10 @@ const ControllerOptionModal = ({
 }: ControllerOptionModalProps) => {
   let options: any = [];
   const [buttonOptions, setButtonOptions] = useState([]);
+
+  // For the invalid level modal
+  const [invalidLevel, setInvalidLevel] = useState(false);
+  const [itemLevel, setItemLevel] = useState(0);
 
   // Filters for button position and adds it to options available to user
   function validateItem(item: Array<string>, index: string, selection: string) {
@@ -92,6 +97,8 @@ const ControllerOptionModal = ({
                 level={parseInt(keys(item)[0])}
                 variant={values(item)[0] as string}
                 closeFunction={() => closeFunction()}
+                invalidLevelFunction={() => setInvalidLevel(true)}
+                itemLevelFunction={setItemLevel}
               />
             );
           })}
@@ -99,6 +106,12 @@ const ControllerOptionModal = ({
         <View style={styles.buttonContainer}>
           <ModalButton text="Close" operation={() => closeFunction()} />
         </View>
+        {invalidLevel && (
+          <InvalidLevelModal
+            level={itemLevel}
+            closeFunction={() => setInvalidLevel(false)}
+          />
+        )}
       </View>
     </View>
   );
@@ -117,6 +130,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     justifyContent: "center",
     alignItems: "center",
+    top: 15,
     left: -70,
   },
   modalContainer: {

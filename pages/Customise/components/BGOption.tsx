@@ -1,10 +1,8 @@
-import React, { useState, useEffect, useContext } from "react";
+import React from "react";
 import { View, StyleSheet, ImageBackground } from "react-native";
 import { Colors } from "../../../constants/Colors";
 import { Backgrounds } from "../../../constants/Images";
 import { AutoSizeText, ResizeTextMode } from "react-native-auto-size-text";
-import { capitalize, lowerFirst } from "lodash";
-import { UserContext } from "../../../tools/UserContext";
 
 interface BGOptionProps {
   modeLabel: string;
@@ -13,16 +11,6 @@ interface BGOptionProps {
 }
 
 const BGOption = ({ modeLabel, selectionLabel, selection }: BGOptionProps) => {
-  const [showModal, setShowModal] = useState(false);
-  const [BGLabel, setBGLabel] = useState(selectionLabel);
-  const [BG, setBG] = useState(selection);
-  const userContext = useContext(UserContext);
-
-  useEffect(() => {
-    setBGLabel(capitalize(userContext[`${lowerFirst(modeLabel)}Background`]));
-    setBG(userContext[`${lowerFirst(modeLabel)}Background`]);
-  }, [showModal]);
-
   return (
     <View style={styles.optionContainer}>
       <View style={styles.labelsContainer}>
@@ -40,12 +28,12 @@ const BGOption = ({ modeLabel, selectionLabel, selection }: BGOptionProps) => {
           mode={ResizeTextMode.max_lines}
           style={styles.selectionLabel}
         >
-          {BGLabel}
+          {selectionLabel}
         </AutoSizeText>
       </View>
       <View style={styles.imageContainer}>
         <ImageBackground
-          source={Backgrounds[BG as keyof typeof Backgrounds]}
+          source={Backgrounds[selection as keyof typeof Backgrounds]}
           style={styles.bgImage}
           resizeMode="cover"
         />
@@ -82,7 +70,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     flexDirection: "row",
     marginBottom: 20,
-    marginLeft: 50,
+    marginLeft: 10,
     backgroundColor: Colors.primaryBackground,
   },
   selectionLabel: {

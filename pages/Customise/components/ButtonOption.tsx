@@ -11,9 +11,17 @@ interface ButtonOptionProps {
   level: number;
   variant: string;
   closeFunction: () => void;
+  invalidLevelFunction: () => void;
+  itemLevelFunction: (arg1: number) => void;
 }
 
-const ButtonOption = ({ level, variant, closeFunction }: ButtonOptionProps) => {
+const ButtonOption = ({
+  level,
+  variant,
+  closeFunction,
+  invalidLevelFunction,
+  itemLevelFunction,
+}: ButtonOptionProps) => {
   const userContext = useContext(UserContext);
   const userLevel = userContext.level;
   const position = capitalize(split(variant, "-")[0]);
@@ -57,6 +65,11 @@ const ButtonOption = ({ level, variant, closeFunction }: ButtonOptionProps) => {
     }
   }, []);
 
+  const handleInvalidLevel = (level: number) => {
+    itemLevelFunction(level);
+    invalidLevelFunction();
+  };
+
   return (
     <View style={{ position: "relative" }}>
       <TouchableHighlight
@@ -65,7 +78,7 @@ const ButtonOption = ({ level, variant, closeFunction }: ButtonOptionProps) => {
             ? () => {
                 changeSetting(variant);
               }
-            : undefined
+            : () => handleInvalidLevel(level)
         }
         // TODO Make this better
         style={{

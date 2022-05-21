@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Animated, {
   useAnimatedStyle,
   withTiming,
@@ -13,7 +13,7 @@ import { Colors } from "react-native/Libraries/NewAppScreen";
 
 const { width } = Dimensions.get("screen");
 const RADIUS = 25;
-const imgSize = 40;
+const imgSize = 30;
 
 interface ButtonProps {
   position: Vector<Animated.SharedValue<number>>;
@@ -24,22 +24,10 @@ interface ButtonProps {
 
 const Button = ({ position, side, activeSide, image }: ButtonProps) => {
   const isLeft = side === Side.LEFT;
-  const [offset, setOffset] = useState(0);
-
-  // This is so changing to a new image rerenders the UI
-  useEffect(() => {
-    if (!!image) {
-      setOffset(10);
-    } else {
-      setOffset(0);
-    }
-  }, [image]);
 
   const style = useAnimatedStyle(() => ({
     position: "absolute",
-    left: isLeft
-      ? position.x.value - RADIUS * 2 - offset
-      : width - position.x.value + offset,
+    left: isLeft ? position.x.value - RADIUS * 2 : width - position.x.value,
     top: position.y.value - RADIUS,
     borderRadius: RADIUS,
     width: RADIUS * 2,
@@ -51,6 +39,7 @@ const Button = ({ position, side, activeSide, image }: ButtonProps) => {
 
   return (
     <Animated.View style={style}>
+      {/* If its one of the game mode logos */}
       {!isUndefined(image) && image !== "questionMark" && (
         <Image
           style={styles.logoImage}
@@ -58,10 +47,12 @@ const Button = ({ position, side, activeSide, image }: ButtonProps) => {
         />
       )}
 
+      {/* If its the question mark */}
       {!isUndefined(image) && image === "questionMark" && (
         <Ionicons name="help" size={40} color={Colors.white} />
       )}
 
+      {/* Otherwise, default to the chevron */}
       {isUndefined(image) && (
         <Icon
           name={`chevron-${isLeft ? "right" : "left"}` as const}
