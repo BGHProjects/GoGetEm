@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "GoGetEm",
-    "slug": "GoGetEm",
+    "name": "gogetem",
+    "slug": "gogetem",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/logos/ColouredBackgroundedClassicLogo.png",
@@ -24,15 +24,7 @@
       }
     },
     "web": {
-      "favicon": "./assets/favicon.png",
-      "config": {
-        "firebase": {
-          "appId": "1:329346400631:web:62637c654bc3dbee23e172",
-          "apiKey": "AIzaSyDDZLJAFidKviKafYx2vjhRsU0MXquBHog",
-          "projectId": "gogetem-db-v1",
-          "measurementId": "G-2H4RX0C0RF"
-        }
-      }
+      "favicon": "./assets/favicon.png"
     }
   }
 }

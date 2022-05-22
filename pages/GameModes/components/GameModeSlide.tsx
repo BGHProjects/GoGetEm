@@ -1,5 +1,5 @@
 import { Colors } from "../../../constants/Colors";
-import React from "react";
+import React, { useEffect } from "react";
 import { View, Text, StyleSheet, Image } from "react-native";
 import ControlsContent from "./ControlsContent";
 import ClassicContent from "./ClassicContent";
@@ -11,12 +11,21 @@ import { Mode } from "../../../constants/types";
 import BackButton from "../../../components/BackButton";
 import { Ionicons } from "@expo/vector-icons";
 import { Logos } from "../../../constants/Images";
+import { useIsFocused } from "@react-navigation/native";
+import { isUndefined } from "lodash";
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+} from "react-native-reanimated";
 
 const imgSize = 80;
+const animValue = 500;
 
 const GameModeSlide = ({
   navigation,
   slide: { color, title, description, image },
+  index,
 }: any) => {
   const whichComponent: Record<string, React.ReactNode> = {
     Controls: <ControlsContent />,
@@ -30,29 +39,65 @@ const GameModeSlide = ({
     navigation.navigate("Config", Mode[gameMode as Mode]);
   };
 
+  const isFocused = useIsFocused();
+
+  const contentOpacity = useSharedValue(0);
+  const contentScale = useSharedValue(0.7);
+
+  const fadeStyle = useAnimatedStyle(() => {
+    return {
+      opacity: contentOpacity.value,
+      transform: [{ scale: contentScale.value }],
+    };
+  }, []);
+
+  useEffect(() => {
+    contentOpacity.value = 0;
+    contentScale.value = 0.7;
+    if (isFocused && !isUndefined(index)) {
+      contentOpacity.value = withTiming(1, { duration: animValue });
+      contentScale.value = withTiming(1, { duration: animValue });
+    }
+  }, [isFocused, index]);
+
   return (
     <View style={[styles.container, { backgroundColor: color }]}>
-      <BackButton />
-      <View>
-        {image !== "questionMark" ? (
-          <Image
-            style={styles.logoImage}
-            source={Logos[image as keyof typeof Logos]}
-          />
-        ) : (
-          <Ionicons
-            name="help"
-            size={imgSize}
-            color={Colors.white}
-            style={styles.questionMark}
-          />
-        )}
-        <Text style={styles.title}>{title}</Text>
-        <Text style={styles.description}>{description}</Text>
-      </View>
-      <View style={{ marginVertical: 20 }}>{whichComponent[title]}</View>
-      {title !== "Controls" && (
-        <MenuButton text="Start" operation={() => onPressButton(title)} />
+      {isFocused && !isUndefined(index) ? (
+        <>
+          <BackButton />
+          <Animated.View style={fadeStyle}>
+            {image !== "questionMark" ? (
+              <Image
+                style={styles.logoImage}
+                source={Logos[image as keyof typeof Logos]}
+              />
+            ) : (
+              <Ionicons
+                name="help"
+                size={imgSize}
+                color={Colors.white}
+                style={styles.questionMark}
+              />
+            )}
+            <Text style={styles.title}>{title}</Text>
+            <Text style={styles.description}>{description}</Text>
+          </Animated.View>
+          <View style={{ marginVertical: 20 }}>{whichComponent[title]}</View>
+          {title !== "Controls" && (
+            <MenuButton
+              text="Start"
+              operation={() => onPressButton(title)}
+              // Make these not magic numbers
+              delay={index === 0 ? 1000 : 2000}
+            />
+          )}
+        </>
+      ) : (
+        <>
+          {/**
+           * Don't display any content to slow down the processer
+           */}
+        </>
       )}
     </View>
   );

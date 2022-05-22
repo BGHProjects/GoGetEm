@@ -9,7 +9,6 @@ import HuntRoles from "../pages/HuntMode/HuntRoles";
 import HuntGameplay from "../pages/HuntMode/HuntGameplay";
 import TagTeamRoles from "../pages/TagTeamMode/TagTeamRoles";
 import TagTeamGameplay from "../pages/TagTeamMode/TagTeamGameplay";
-import Preparation from "../pages/Preparation/";
 import Statistics from "../pages/Statistics";
 import ConfigScreen from "../pages/Config";
 import Customise from "../pages/Customise";
@@ -34,13 +33,6 @@ const AppNavigation = () => {
 
   return (
     <Stack.Navigator initialRouteName={Screens.MainMenu} screenOptions={{}}>
-      {/* 
-      // TODO Eliminate this dude
-      <Stack.Screen
-        name="Preparation"
-        component={Preparation}
-        options={{ headerShown: false }}
-      /> */}
       <Stack.Screen
         name={Screens.MainMenu}
         component={MainMenu}

@@ -16,7 +16,10 @@ import Controller from "../../../components/Controller/Controller";
 import BGWithImage from "../../../components/BGWithImage";
 import { UserContext } from "../../../tools/UserContext";
 import RoundOverAlert from "../../../components/RoundOverAlert/RoundOverAlert";
-import { roundOverDuration } from "../../../constants/Animation";
+import {
+  roundOverDuration,
+  playerAnimationDelay,
+} from "../../../constants/Animation";
 import globalStyles from "../../../constants/GlobalStyles";
 import { isUndefined } from "lodash";
 import PlayerAvatar from "../../../components/PlayerAvatar";
@@ -561,21 +564,25 @@ const TagTeamGameplay = ({ navigation, route }: any) => {
                 top={player4Y}
                 left={player4X}
                 colour={gameDetails.player4Colour}
+                delay={difficulty}
               />
               <PlayerAvatar
                 top={player3Y}
                 left={player3X}
                 colour={gameDetails.player3Colour}
+                delay={difficulty}
               />
               <PlayerAvatar
                 top={player2Y}
                 left={player2X}
                 colour={gameDetails.player2Colour}
+                delay={difficulty}
               />
               <PlayerAvatar
                 top={playerY}
                 left={playerX}
                 colour={gameDetails.colour}
+                delay={playerAnimationDelay}
               />
             </>
           )}

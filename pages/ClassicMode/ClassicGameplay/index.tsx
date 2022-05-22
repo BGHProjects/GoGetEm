@@ -12,13 +12,15 @@ import BGWithImage from "../../../components/BGWithImage";
 import { UserContext } from "../../../tools/UserContext";
 import { getMazeCell } from "../../../tools/BotBrain";
 import RoundOverAlert from "../../../components/RoundOverAlert/RoundOverAlert";
-import { roundOverDuration } from "../../../constants/Animation";
+import {
+  roundOverDuration,
+  playerAnimationDelay,
+} from "../../../constants/Animation";
 import globalStyles from "../../../constants/GlobalStyles";
 import { Screens } from "../../../constants/types";
 import PlayerAvatar from "../../../components/PlayerAvatar";
 import { Colors } from "react-native/Libraries/NewAppScreen";
 import SinglePlayerScore from "../../../components/SinglePlayerScore";
-import { useIsFocused } from "@react-navigation/native";
 
 const height = Dimensions.get("window").height;
 const cellSize = height * 0.045;
@@ -380,18 +382,21 @@ const ClassicGameplayScreen = ({ navigation, route }: any) => {
                 top={playerY}
                 left={playerX}
                 colour={gameDetails.colour}
+                delay={playerAnimationDelay}
               />
 
               <PlayerAvatar
                 top={player2Y}
                 left={player2X}
                 colour={gameDetails.player2Colour}
+                delay={difficulty}
               />
 
               <PlayerAvatar
                 top={player3Y}
                 left={player3X}
                 colour={gameDetails.player3Colour}
+                delay={difficulty}
               />
             </>
           )}

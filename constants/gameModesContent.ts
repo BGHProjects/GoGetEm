@@ -1,5 +1,4 @@
 import { Colors } from "./Colors";
-import { Logos } from "./Images";
 
 export const slides = [
   {
@@ -10,7 +9,7 @@ export const slides = [
     image: "questionMark",
   },
   {
-    color: Colors.richPurple,
+    color: Colors.darkPurple,
     title: "Classic",
     description:
       "Catch your target, before they catch theirs... or before you're caught!",
@@ -24,7 +23,7 @@ export const slides = [
     image: "chasedown",
   },
   {
-    color: Colors.darkPurple,
+    color: Colors.richPurple,
     title: "Hunt",
     description: "Catch more targets than your opponent before time runs out",
     image: "hunt",

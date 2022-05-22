@@ -21,6 +21,7 @@ const animFullLength = CONTENTSIZE * 0.8;
 const animHalfLength = animFullLength / 2;
 const animQuarterLength = animHalfLength / 1.5;
 const positionOffset = 5;
+const animValue = 500;
 
 const TagTeamContent = () => {
   const team1ChaserOpacity = useSharedValue(0);
@@ -219,13 +220,27 @@ const TagTeamContent = () => {
     );
   };
 
+  const contentOpacity = useSharedValue(0);
+
+  const fadeStyle = useAnimatedStyle(() => {
+    return {
+      opacity: contentOpacity.value,
+    };
+  });
+
   useEffect(() => {
-    fadeIn();
-    chase();
+    contentOpacity.value = withDelay(
+      animValue,
+      withTiming(1, { duration: animValue })
+    );
+    setTimeout(() => {
+      fadeIn();
+      chase();
+    }, animValue);
   }, []);
 
   return (
-    <View style={styles.container}>
+    <Animated.View style={[fadeStyle, styles.container]}>
       <Animated.View style={[styles.playerRepresentation, team1Chaser]}>
         <LinearGradient
           style={styles.gradientFill}
@@ -264,7 +279,7 @@ const TagTeamContent = () => {
           end={XYEnd}
         />
       </Animated.View>
-    </View>
+    </Animated.View>
   );
 };
 

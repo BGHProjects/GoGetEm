@@ -1,6 +1,6 @@
 import { XYStart, XYEnd, ColorGradients } from "../../../constants/Colors";
 import React, { useEffect } from "react";
-import { View, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -21,6 +21,7 @@ const rotateDelay = fadeSpeed * 3;
 const animTop = CONTENTSIZE * 0.65;
 const animFullLength = CONTENTSIZE * 0.75;
 const animHalfLength = animFullLength / 2;
+const animValue = 500;
 
 const ClassicContent = () => {
   const topOpacity = useSharedValue(0);
@@ -147,13 +148,27 @@ const ClassicContent = () => {
     );
   };
 
+  const contentOpacity = useSharedValue(0);
+
+  const fadeStyle = useAnimatedStyle(() => {
+    return {
+      opacity: contentOpacity.value,
+    };
+  });
+
   useEffect(() => {
-    fadeIn();
-    rotate();
+    contentOpacity.value = withDelay(
+      animValue,
+      withTiming(1, { duration: animValue })
+    );
+    setTimeout(() => {
+      fadeIn();
+      rotate();
+    }, animValue);
   }, []);
 
   return (
-    <View style={styles.container}>
+    <Animated.View style={[fadeStyle, styles.container]}>
       <Animated.View
         style={[styles.playerRepresentation, styles.topPlayer, topAnimation]}
       >
@@ -188,7 +203,7 @@ const ClassicContent = () => {
           end={XYEnd}
         />
       </Animated.View>
-    </View>
+    </Animated.View>
   );
 };
 

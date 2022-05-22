@@ -7,9 +7,10 @@ export const timerDetails = [
   ["#ff0000", 0.2],
 ];
 
+// Make sure these match gameModesContent.ts colours
 export const BGColourOption: Record<Mode, string> = {
-  [Mode.Classic]: Colors.richPurple,
+  [Mode.Classic]: Colors.darkPurple,
   [Mode.Chasedown]: Colors.cherryPink,
-  [Mode.Hunt]: Colors.darkPurple,
+  [Mode.Hunt]: Colors.richPurple,
   [Mode.TagTeam]: Colors.softBlue,
 };

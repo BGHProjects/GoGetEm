@@ -77,7 +77,9 @@ const UnlockedItemCard = ({ item, delay }: UnlockedItemCardProps) => {
         )}
       </View>
       <View style={styles.labelContainer}>
-        <Text style={styles.itemLabel}>{label}</Text>
+        <View style={{ width: "80%" }}>
+          <Text style={styles.itemLabel}>{label}</Text>
+        </View>
       </View>
     </Animated.View>
   );

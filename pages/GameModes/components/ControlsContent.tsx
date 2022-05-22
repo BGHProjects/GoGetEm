@@ -23,6 +23,7 @@ const BUTTONPADDING = 3;
 const MOVEMENT = 30;
 const MOVEMENTDURATION = 700;
 const PLAYERSIZE = 37.5;
+const animValue = 500;
 
 const ControlsContent = () => {
   const button = [styles.basicCircle, styles.buttonStyle];
@@ -131,13 +132,27 @@ const ControlsContent = () => {
     );
   };
 
+  const contentOpacity = useSharedValue(0);
+
+  const fadeStyle = useAnimatedStyle(() => {
+    return {
+      opacity: contentOpacity.value,
+    };
+  });
+
   useEffect(() => {
-    movePlayer();
-    pressButtons();
+    contentOpacity.value = withDelay(
+      animValue,
+      withTiming(1, { duration: animValue })
+    );
+    setTimeout(() => {
+      movePlayer();
+      pressButtons();
+    }, animValue);
   }, []);
 
   return (
-    <View>
+    <Animated.View style={fadeStyle}>
       <View style={globalStyles().featureContainer}>
         <Animated.View style={playerAnimation}>
           <LinearGradient
@@ -156,7 +171,7 @@ const ControlsContent = () => {
           <Animated.View style={[button, styles.leftButton, leftAnimation]} />
         </View>
       </View>
-    </View>
+    </Animated.View>
   );
 };
 

@@ -10,6 +10,8 @@ import Animated, {
   withDelay,
 } from "react-native-reanimated";
 import { useIsFocused } from "@react-navigation/native";
+import { BlurView } from "expo-blur";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 interface MenuButtonProps {
   text: string;
@@ -79,6 +81,15 @@ const MenuButton = ({
 };
 
 const styles = StyleSheet.create({
+  blurStyle: {
+    alignSelf: "center",
+    marginTop: 20,
+    width: 230,
+    height: 50,
+    borderRadius: 10,
+    alignItems: "center",
+    justifyContent: "center",
+  },
   awesomeButtonContainer: { alignSelf: "center", marginTop: 20 },
   textContainer: {
     width: "90%",

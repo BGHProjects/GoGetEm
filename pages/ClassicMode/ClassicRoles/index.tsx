@@ -153,7 +153,7 @@ const ClassicRolesScreen = ({ navigation, route }: any) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.richPurple,
+    backgroundColor: Colors.darkPurple,
     alignItems: "center",
     justifyContent: "center",
   },

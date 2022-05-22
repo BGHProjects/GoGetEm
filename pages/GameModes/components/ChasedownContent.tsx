@@ -19,6 +19,7 @@ const animSpeed = 700;
 const chaseDelay = fadeSpeed * 3;
 const animFullLength = CONTENTSIZE * 0.75;
 const animHalfLength = animFullLength / 2;
+const animValue = 500;
 
 const ChasedownContent = () => {
   const topOpacity = useSharedValue(0);
@@ -141,13 +142,28 @@ const ChasedownContent = () => {
     );
   };
 
+  const contentOpacity = useSharedValue(0);
+
+  const fadeStyle = useAnimatedStyle(() => {
+    return {
+      opacity: contentOpacity.value,
+    };
+  });
+
   useEffect(() => {
-    fadeIn();
-    chase();
+    contentOpacity.value = withDelay(
+      animValue,
+      withTiming(1, { duration: animValue })
+    );
+
+    setTimeout(() => {
+      fadeIn();
+      chase();
+    }, animValue);
   }, []);
 
   return (
-    <View style={styles.container}>
+    <Animated.View style={[fadeStyle, styles.container]}>
       <Animated.View style={[styles.playerRepresentation, topAnimation]}>
         <LinearGradient
           style={styles.gradientFill}
@@ -184,7 +200,7 @@ const ChasedownContent = () => {
           end={XYEnd}
         />
       </Animated.View>
-    </View>
+    </Animated.View>
   );
 };
 

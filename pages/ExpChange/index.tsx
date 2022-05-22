@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
-import { StyleSheet, Text, View, SafeAreaView } from "react-native";
+import { StyleSheet, Text, View, SafeAreaView, Vibration } from "react-native";
 import { UserContext } from "../../tools/UserContext";
 import MenuButton from "../../components/MenuButton";
 import { Colors } from "../../constants/Colors";
@@ -107,6 +107,7 @@ const ExpChange = ({ navigation, route }: any) => {
 
     // Delays change to line up with animation
     setTimeout(() => {
+      Vibration.vibrate(500);
       setLevelLabel((old) => old + 1);
     }, progressBarDuration + progressBarDelay);
   };
@@ -131,12 +132,7 @@ const ExpChange = ({ navigation, route }: any) => {
     }
   };
   return (
-    <SafeAreaView
-      style={[
-        styles.container,
-        { backgroundColor: BGColourOption[whichMode as Mode] },
-      ]}
-    >
+    <SafeAreaView style={styles.container}>
       {userContext.level < Object.keys(Unlockables).length && (
         <>
           <Text style={styles.levelLabel}>Level {levelLabel}</Text>
@@ -173,6 +169,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+    backgroundColor: Colors.primaryBackground,
   },
   levelLabel: {
     color: "white",

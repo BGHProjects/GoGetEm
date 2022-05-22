@@ -127,7 +127,7 @@ const HuntRoles = ({ navigation, route }: any) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.darkPurple,
+    backgroundColor: Colors.richPurple,
     alignItems: "center",
     justifyContent: "center",
   },

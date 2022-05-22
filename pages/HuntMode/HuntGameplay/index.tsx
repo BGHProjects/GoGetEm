@@ -12,7 +12,10 @@ import Controller from "../../../components/Controller/Controller";
 import BGWithImage from "../../../components/BGWithImage";
 import { UserContext } from "../../../tools/UserContext";
 import RoundOverAlert from "../../../components/RoundOverAlert/RoundOverAlert";
-import { roundOverDuration } from "../../../constants/Animation";
+import {
+  roundOverDuration,
+  playerAnimationDelay,
+} from "../../../constants/Animation";
 import globalStyles from "../../../constants/GlobalStyles";
 import PlayerAvatar from "../../../components/PlayerAvatar";
 import { ColorGradients } from "../../../constants/Colors";
@@ -20,6 +23,7 @@ import { timerDetails } from "../../../constants/gameConstants";
 import { Screens } from "../../../constants/types";
 import ClockText from "../../../components/ClockText";
 import SinglePlayerScore from "../../../components/SinglePlayerScore";
+import { isUndefined } from "lodash";
 
 const height = Dimensions.get("window").height;
 const cellSize = height * 0.045;
@@ -101,10 +105,16 @@ const HuntGameplay = ({ navigation, route }: HuntGameplayProps) => {
     let index = 0;
     setSearch1IntervalId(
       setInterval(() => {
-        if (index < searchPath.length) {
+        if (
+          !isUndefined(searchPath) &&
+          searchPath.length > 0 &&
+          index < searchPath.length
+        ) {
           setPlayer2X(searchPath[index][1] + 5);
           setPlayer2Y(searchPath[index][0] + 5);
           index++;
+        } else {
+          clearInterval(search1IntervalId);
         }
       }, difficulty)
     );
@@ -156,7 +166,6 @@ const HuntGameplay = ({ navigation, route }: HuntGameplayProps) => {
     setTimerRunning(true);
     aStarSearch(searchGrid1, searchPath1, player2X, player2Y, targetX, targetY);
     searchPath1 = searchPath1.reverse();
-    followPath(searchPath1);
   }, []);
 
   useEffect(() => {
@@ -259,12 +268,14 @@ const HuntGameplay = ({ navigation, route }: HuntGameplayProps) => {
                 top={playerY}
                 left={playerX}
                 colour={gameDetails.colour}
+                delay={playerAnimationDelay}
               />
 
               <PlayerAvatar
                 top={player2Y}
                 left={player2X}
                 colour={gameDetails.player2Colour}
+                delay={difficulty}
               />
             </>
           )}

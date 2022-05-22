@@ -44,7 +44,7 @@ const Unlocks = ({ navigation, route }: any) => {
         <MenuButton
           text="Continue"
           operation={() => navigation.navigate(Screens.GameModes)}
-          delay={unlockedContent.length * animationDuration}
+          delay={unlockedContent.length + 1 * animationDuration}
         />
       </ScrollView>
     </View>

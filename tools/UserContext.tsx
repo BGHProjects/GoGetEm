@@ -1,5 +1,4 @@
-import React, { createContext, useState, useEffect } from "react";
-import NetInfo from "@react-native-community/netinfo";
+import React, { createContext, useState } from "react";
 
 export interface User {
   username: string | null;
@@ -221,26 +220,6 @@ export const UserContextProvider = ({
     setTagTeamBackground(payload.tagTeamBackground);
     setUnlockedItems(payload.unlockedItems);
   }
-
-  // Checks and sets the internetconnection
-  const checkConnection = NetInfo.fetch().then((state) => {
-    if (state === null) {
-      setConnected(false);
-    } else {
-      setConnected(state.isConnected);
-    }
-  });
-
-  useEffect(() => {
-    checkConnection;
-  }, []);
-
-  useEffect(() => {
-    console.log("connected ", connected);
-    if (connected !== null) {
-      setConnected(connected);
-    }
-  }, [connected]);
 
   return (
     <UserContext.Provider

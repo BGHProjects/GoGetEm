@@ -16,13 +16,17 @@ import Controller from "../../../components/Controller/Controller";
 import BGWithImage from "../../../components/BGWithImage";
 import { UserContext } from "../../../tools/UserContext";
 import RoundOverAlert from "../../../components/RoundOverAlert/RoundOverAlert";
-import { roundOverDuration } from "../../../constants/Animation";
+import {
+  roundOverDuration,
+  playerAnimationDelay,
+} from "../../../constants/Animation";
 import globalStyles from "../../../constants/GlobalStyles";
 import PlayerAvatar from "../../../components/PlayerAvatar";
 import { timerDetails } from "../../../constants/gameConstants";
 import { Screens } from "../../../constants/types";
 import ClockText from "../../../components/ClockText";
 import SinglePlayerScore from "../../../components/SinglePlayerScore";
+import { isUndefined } from "lodash";
 
 const height = Dimensions.get("window").height;
 const cellSize = height * 0.045;
@@ -259,10 +263,23 @@ const ChasedownGameplayScreen = ({
     const run = () => {
       if (!roundOverRef.current) {
         timeout = setTimeout(() => {
-          setPlayerPos((oldPos: any) => {
-            return runAwayAlgorithm(oldPos, searchPath1, searchPath2, mazeGrid);
-          });
-          run();
+          if (
+            !isUndefined(searchPath1) &&
+            !isUndefined(searchPath2) &&
+            !roundOverRef.current
+          ) {
+            setPlayerPos((oldPos: any) => {
+              return runAwayAlgorithm(
+                oldPos,
+                searchPath1,
+                searchPath2,
+                mazeGrid
+              );
+            });
+            run();
+          } else {
+            clearTimeout(timeout);
+          }
         }, difficulty);
       } else {
         clearTimeout(timeout);
@@ -514,18 +531,21 @@ const ChasedownGameplayScreen = ({
                 top={playerY}
                 left={playerX}
                 colour={gameDetails.colour}
+                delay={playerAnimationDelay}
               />
 
               <PlayerAvatar
                 top={player2Y}
                 left={player2X}
                 colour={gameDetails.player2Colour}
+                delay={difficulty}
               />
 
               <PlayerAvatar
                 top={player3Y}
                 left={player3X}
                 colour={gameDetails.player3Colour}
+                delay={difficulty}
               />
             </>
           )}

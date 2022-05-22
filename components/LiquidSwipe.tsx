@@ -25,7 +25,12 @@ const LiquidSwipe = ({ navigation, slidesInfo, variant }: LiquidSwipeProps) => {
       prevSlide: <GameModeSlide slide={prev} />,
       nextSlide: <GameModeSlide slide={next} />,
       initialSlide: (
-        <GameModeSlide navigation={navigation} slide={slidesInfo[index]!} />
+        <GameModeSlide
+          navigation={navigation}
+          slide={slidesInfo[index]!}
+          // Index is used to conditionally hide other slide's content in GameModeSlide
+          index={index}
+        />
       ),
     },
     [LiquidSwipeMenu.Customise]: {
