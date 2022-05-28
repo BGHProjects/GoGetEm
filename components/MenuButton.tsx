@@ -10,8 +10,6 @@ import Animated, {
   withDelay,
 } from "react-native-reanimated";
 import { useIsFocused } from "@react-navigation/native";
-import { BlurView } from "expo-blur";
-import { TouchableOpacity } from "react-native-gesture-handler";
 
 interface MenuButtonProps {
   text: string;

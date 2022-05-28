@@ -6,7 +6,8 @@ import { UserContext } from "../../tools/UserContext";
 import { split } from "lodash";
 import ControllerButton from "./ControllerButton";
 
-const height = Dimensions.get("window").height;
+const controllerSize = 200;
+const controllerRadius = 48;
 
 interface Props {
   outerCircle?: Function;
@@ -33,7 +34,7 @@ const Controller: FC<Props> = ({
         <Circle
           cx="50%"
           cy="50%"
-          r={height / 13}
+          r={controllerRadius}
           stroke={Colors[`${outlineColour}`]}
           strokeWidth="2"
           fill={Colors.transparentBlack}
@@ -76,8 +77,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     alignSelf: "center",
-    height: height / 3,
-    width: height / 3,
+    height: controllerSize,
+    width: controllerSize,
     marginTop: 10,
   },
 });

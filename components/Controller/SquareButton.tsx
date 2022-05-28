@@ -1,8 +1,6 @@
 import React from "react";
 import { Rect } from "react-native-svg";
-import { Dimensions } from "react-native";
-
-const height = Dimensions.get("window").height;
+import { rectSize } from "../../constants/controllerButtons";
 
 interface ButtonProps {
   buttonFunction: Function;
@@ -26,8 +24,8 @@ const SquareButton: React.FC<ButtonProps> = ({
     <Rect
       x={positionOption[position].x}
       y={positionOption[position].y}
-      width={height / 32}
-      height={height / 32}
+      width={rectSize}
+      height={rectSize}
       onPress={() => buttonFunction()}
       stroke={colour}
       strokeWidth="2"

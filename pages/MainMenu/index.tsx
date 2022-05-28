@@ -8,6 +8,7 @@ import { UserContext } from "../../tools/UserContext";
 import { lowerFirst } from "lodash";
 import { MainMenuOption } from "../../constants/types";
 import MainMenuButton from "../../components/MainMenuButton";
+import { updateStorageValue } from "../../tools/updateStorageValue";
 
 const MainMenu = ({ navigation }: any) => {
   const userContext = useContext(UserContext);

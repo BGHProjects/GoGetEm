@@ -11,7 +11,9 @@ const animationDuration = 400;
 
 const Unlocks = ({ navigation, route }: any) => {
   const newLevels = route.params;
-  const [unlockedContent, setUnlockedContent] = useState<string[]>([]);
+  const [unlockedContent, setUnlockedContent] = useState<
+    string[] | undefined
+  >();
 
   useEffect(() => {
     let totalContent: string[] = [];
@@ -41,11 +43,16 @@ const Unlocks = ({ navigation, route }: any) => {
               );
             })}
         </View>
-        <MenuButton
-          text="Continue"
-          operation={() => navigation.navigate(Screens.GameModes)}
-          delay={unlockedContent.length + 1 * animationDuration}
-        />
+        {unlockedContent && (
+          <MenuButton
+            text="Continue"
+            operation={() => navigation.navigate(Screens.GameModes)}
+            delay={
+              unlockedContent &&
+              (unlockedContent.length + 1) * animationDuration
+            }
+          />
+        )}
       </ScrollView>
     </View>
   );

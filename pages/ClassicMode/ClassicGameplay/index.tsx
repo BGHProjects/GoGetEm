@@ -21,6 +21,7 @@ import { Screens } from "../../../constants/types";
 import PlayerAvatar from "../../../components/PlayerAvatar";
 import { Colors } from "react-native/Libraries/NewAppScreen";
 import SinglePlayerScore from "../../../components/SinglePlayerScore";
+import { isUndefined } from "lodash";
 
 const height = Dimensions.get("window").height;
 const cellSize = height * 0.045;
@@ -134,12 +135,22 @@ const ClassicGameplayScreen = ({ navigation, route }: any) => {
     let timeout: any;
 
     const follow = () => {
-      if (index < searchPath.length && !roundOverRef.current) {
+      if (
+        !isUndefined(searchPath) &&
+        index < searchPath.length &&
+        !roundOverRef.current
+      ) {
         timeout = setTimeout(() => {
-          setX(searchPath[index][1] + 5);
-          setY(searchPath[index][0] + 5);
-          index++;
-          follow();
+          if (
+            !isUndefined(searchPath) &&
+            index < searchPath.length &&
+            !roundOverRef.current
+          ) {
+            setX(searchPath[index][1] + 5);
+            setY(searchPath[index][0] + 5);
+            index++;
+            follow();
+          }
         }, difficulty);
       } else {
         clearTimeout(timeout);

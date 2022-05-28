@@ -10,7 +10,6 @@ import Animated, {
   withDelay,
 } from "react-native-reanimated";
 import { useIsFocused } from "@react-navigation/native";
-import { Colors } from "../../../constants/Colors";
 
 interface UnlockedItemCardProps {
   item: string;

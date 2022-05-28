@@ -10,6 +10,7 @@ import * as Font from "expo-font";
 import { Asset } from "expo-asset";
 import { flattenDeep } from "lodash";
 import { Backgrounds, Youtubers, Logos } from "./constants/Images";
+import AppLoading from "expo-app-loading";
 
 export default function App() {
   // Handles state of app's readiness
@@ -26,6 +27,11 @@ export default function App() {
     });
   };
 
+  let [fontsReady, error] = Font.useFonts({
+    Main: require("./assets/fonts/Quicksand-Medium.ttf"),
+    "Main-Bold": require("./assets/fonts/Quicksand-SemiBold.ttf"),
+  });
+
   // Caches all the images in a synchronous way
   async function loadAssets() {
     const imageAssets = cacheImages(
@@ -36,27 +42,30 @@ export default function App() {
       ])
     );
 
-    await Font.loadAsync({
-      Main: require("./assets/fonts/Quicksand-Medium.ttf"),
-      "Main-Bold": require("./assets/fonts/Quicksand-SemiBold.ttf"),
-    });
     await Promise.all([imageAssets]);
+    setLoadedToStorage();
+
     // Manually give a slight delay for UI / UX
     setTimeout(() => {
       setAppReady(true);
-      setLoadedToStorage();
     }, 1000);
   }
 
   useEffect(() => {
-    if (!appReady) {
-      try {
-        loadAssets();
-      } catch (err) {
-        console.warn(err);
+    if (fontsReady) {
+      if (!appReady) {
+        try {
+          loadAssets();
+        } catch (err) {
+          console.warn(err);
+        }
       }
     }
-  }, [appReady]);
+  }, [appReady, fontsReady]);
+
+  if (!fontsReady) {
+    return <AppLoading />;
+  }
 
   return (
     <AnimatedSplashScreen

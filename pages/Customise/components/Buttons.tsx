@@ -4,7 +4,9 @@ import { Svg } from "react-native-svg";
 
 import PointerButton from "../../../components/Controller/PointerButton";
 import ShardButton from "../../../components/Controller/ShardButton";
-import LetterButton from "../../../components/Controller/LetterButton";
+import LetterButton, {
+  LetterOption,
+} from "../../../components/Controller/LetterButton";
 import SquareButton from "../../../components/Controller/SquareButton";
 import TriangleButton from "../../../components/Controller/TriangleButton";
 import CircleButton from "../../../components/Controller/CircleButton";
@@ -114,7 +116,7 @@ export const DownPointer = ({ colour }: ShapeProps) => (
 );
 
 export const TopLetter = ({ colour, letter }: LetterProps) => (
-  <Svg height="100%" width="100%" viewBox="0 0 50 20">
+  <Svg height="120%" width="100%" viewBox="0 0 50 20">
     <LetterButton
       buttonFunction={() => {
         return;
@@ -122,6 +124,7 @@ export const TopLetter = ({ colour, letter }: LetterProps) => (
       colour={colour}
       position="top"
       letter={letter}
+      which={LetterOption.Selection}
     />
   </Svg>
 );

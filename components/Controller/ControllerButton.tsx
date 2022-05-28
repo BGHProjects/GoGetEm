@@ -4,7 +4,7 @@ import SquareButton from "./SquareButton";
 import TriangleButton from "./TriangleButton";
 import ShardButton from "./ShardButton";
 import PointerButton from "./PointerButton";
-import LetterButton from "./LetterButton";
+import LetterButton, { LetterOption } from "./LetterButton";
 import { split, capitalize } from "lodash";
 import { Colors } from "../../constants/Colors";
 
@@ -70,6 +70,7 @@ const ControllerButton = ({ whichButton, operation }: ButtonProps) => {
           position={parts[0]}
           letter={capitalize(parts[3])}
           buttonFunction={() => operation()}
+          which={LetterOption.Controller}
         />
       );
       break;

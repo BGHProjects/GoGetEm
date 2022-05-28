@@ -1,8 +1,6 @@
 import React from "react";
 import { Circle } from "react-native-svg";
-import { Dimensions } from "react-native";
-
-const height = Dimensions.get("window").height;
+import { circleButtonRadius } from "../../constants/controllerButtons";
 
 interface ButtonProps {
   buttonFunction: Function;
@@ -26,7 +24,7 @@ const CircleButton: React.FC<ButtonProps> = ({
     <Circle
       cx={positionOption[position].cx}
       cy={positionOption[position].cy}
-      r={height / 52}
+      r={circleButtonRadius}
       onPress={() => buttonFunction()}
       stroke={colour}
       strokeWidth="2"
