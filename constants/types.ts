@@ -71,7 +71,6 @@ export enum LiquidSwipeMenu {
   GameModes = "GameModes",
   Customise = "Customise",
   Statistics = "Statistics",
-  Credits = "Credits",
 }
 
 export enum Difficulty {
@@ -85,7 +84,6 @@ export enum MainMenuOption {
   Play = "Play",
   Customise = "Customise",
   Statistics = "Statstics",
-  Credits = "Credits",
 }
 
 export type NotInBetween = Side.RIGHT | Side.LEFT;

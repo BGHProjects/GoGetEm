@@ -84,18 +84,20 @@ const GameModeSlide = ({
           </Animated.View>
           <View style={{ marginVertical: 20 }}>{whichComponent[title]}</View>
           {title !== "Controls" && (
-            <MenuButton
-              text="Start"
-              operation={() => onPressButton(title)}
-              // Make these not magic numbers
-              delay={index === 0 ? 1000 : 2000}
-            />
+            <View style={styles.menuButtonContainer}>
+              <MenuButton
+                text="Start"
+                operation={() => onPressButton(title)}
+                // TODO Make these not magic numbers
+                delay={index === 0 ? 1000 : 2000}
+              />
+            </View>
           )}
         </>
       ) : (
         <>
           {/**
-           * Don't display any content to slow down the processer
+           * Don't display any content to relieve the processer
            */}
         </>
       )}
@@ -135,6 +137,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     marginTop: -50,
   },
+  menuButtonContainer: { position: "absolute", bottom: 60 },
 });
 
 export default GameModeSlide;

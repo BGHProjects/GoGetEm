@@ -27,6 +27,7 @@ import { Screens } from "../../../constants/types";
 import ClockText from "../../../components/ClockText";
 import SinglePlayerScore from "../../../components/SinglePlayerScore";
 import { isUndefined } from "lodash";
+import { Difficulty } from "../../../constants/gameConstants";
 
 const height = Dimensions.get("window").height;
 const cellSize = height * 0.045;
@@ -149,15 +150,7 @@ const ChasedownGameplayScreen = ({
   ]);
 
   const [scored, setScored] = useState(false);
-
-  let difficulty =
-    gameDetails.difficulty === "Meh"
-      ? 700
-      : gameDetails.difficulty === "Oh OK"
-      ? 500
-      : gameDetails.difficulty === "Hang On"
-      ? 400
-      : 300;
+  const difficulty = Difficulty[gameDetails.difficulty];
 
   // So the details can't accidentally be set twice in the same game
   const settingRoundOverDetails = (newDetails: any) => {

@@ -81,15 +81,12 @@ const MainMenuButton = ({
 
   const buttonOption: Record<MainMenuOption, any> = {
     [MainMenuOption.Play]: {
-      colour: ColorGradients.green,
-    },
-    [MainMenuOption.Customise]: {
       colour: ColorGradients.fire,
     },
-    [MainMenuOption.Statistics]: {
+    [MainMenuOption.Customise]: {
       colour: ColorGradients.purple,
     },
-    [MainMenuOption.Credits]: {
+    [MainMenuOption.Statistics]: {
       colour: ColorGradients.ice,
     },
   };

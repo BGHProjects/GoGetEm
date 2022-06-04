@@ -130,8 +130,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     justifyContent: "center",
     alignItems: "center",
-    top: 15,
-    left: -70,
+    top: 25,
   },
   modalContainer: {
     width: "80%",

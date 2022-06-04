@@ -12,7 +12,6 @@ import TagTeamGameplay from "../pages/TagTeamMode/TagTeamGameplay";
 import Statistics from "../pages/Statistics";
 import ConfigScreen from "../pages/Config";
 import Customise from "../pages/Customise";
-import Credits from "../pages/Credits";
 import EndGame from "../pages/EndGame";
 import ExpChange from "../pages/ExpChange";
 import Unlocks from "../pages/Unlocks";
@@ -97,11 +96,6 @@ const AppNavigation = () => {
       <Stack.Screen
         name={Screens.Customise}
         component={Customise}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name={Screens.Credits}
-        component={Credits}
         options={{ headerShown: false }}
       />
       <Stack.Screen

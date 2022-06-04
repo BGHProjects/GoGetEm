@@ -11,8 +11,7 @@ export const slides = [
   {
     color: Colors.darkPurple,
     title: "Classic",
-    description:
-      "Catch your target, before they catch theirs... or before you're caught!",
+    description: "The classic three-way chasing game",
     image: "classic",
   },
   {

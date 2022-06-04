@@ -70,7 +70,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     flexDirection: "row",
     marginBottom: 20,
-    marginLeft: 10,
     backgroundColor: Colors.primaryBackground,
   },
   selectionLabel: {

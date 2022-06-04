@@ -25,6 +25,7 @@ import { isUndefined } from "lodash";
 import PlayerAvatar from "../../../components/PlayerAvatar";
 import { Screens } from "../../../constants/types";
 import SingleTeamScore from "../../../components/SingleTeamScore";
+import { Difficulty } from "../../../constants/gameConstants";
 
 const height = Dimensions.get("window").height;
 const cellSize = height * 0.045;
@@ -109,15 +110,7 @@ const TagTeamGameplay = ({ navigation, route }: any) => {
     -1,
   ]);
 
-  let difficulty =
-    gameDetails.difficulty === "Meh"
-      ? 700
-      : gameDetails.difficulty === "Oh OK"
-      ? 500
-      : gameDetails.difficulty === "Hang On"
-      ? 400
-      : 300;
-
+  const difficulty = Difficulty[gameDetails.difficulty];
   const [scored, setScored] = useState(false);
 
   // So the details can't accidentally be set twice in the same game

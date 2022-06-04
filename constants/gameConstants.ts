@@ -14,3 +14,10 @@ export const BGColourOption: Record<Mode, string> = {
   [Mode.Hunt]: Colors.richPurple,
   [Mode.TagTeam]: Colors.softBlue,
 };
+
+export const Difficulty: Record<string, number> = {
+  Meh: 500,
+  "Oh OK": 350,
+  "Hang On": 200,
+  "What The": 100,
+};

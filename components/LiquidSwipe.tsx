@@ -4,7 +4,6 @@ import GameModeSlide from "../pages/GameModes/components/GameModeSlide";
 import CustomiseSlide from "../pages/Customise/components/CustomiseSlide";
 import StatisticsSlide from "../pages/Statistics/components/StatisticsSlide";
 import { LiquidSwipeMenu } from "../constants/types";
-import CreditsSlide from "../pages/Credits/components/CreditsSlide";
 
 interface LiquidSwipeProps {
   navigation?: any;
@@ -42,11 +41,6 @@ const LiquidSwipe = ({ navigation, slidesInfo, variant }: LiquidSwipeProps) => {
       prevSlide: <StatisticsSlide slide={prev} />,
       nextSlide: <StatisticsSlide slide={next} />,
       initialSlide: <StatisticsSlide slide={slidesInfo[index]!} />,
-    },
-    [LiquidSwipeMenu.Credits]: {
-      prevSlide: <CreditsSlide slide={prev} />,
-      nextSlide: <CreditsSlide slide={next} />,
-      initialSlide: <CreditsSlide slide={slidesInfo[index]!} />,
     },
   };
 

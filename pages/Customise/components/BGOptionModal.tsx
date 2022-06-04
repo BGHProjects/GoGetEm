@@ -185,10 +185,9 @@ const styles = StyleSheet.create({
   fullContainer: {
     width: "100%",
     height: "100%",
-    position: "absolute",
     justifyContent: "center",
     alignItems: "center",
-    left: -175,
+    top: 25,
   },
   imageOptionContainer: {
     borderRadius: 5,
@@ -226,8 +225,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderColor: Colors.fluroBlue,
     borderWidth: 2,
-    zIndex: 3,
-    marginTop: -40,
   },
   scrollContainer: {
     width: "100%",

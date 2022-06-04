@@ -1,5 +1,5 @@
 import React, { useEffect, useContext } from "react";
-import { ScrollView } from "react-native";
+import { View, StyleSheet } from "react-native";
 import BGWithImage from "../../components/BGWithImage";
 import TitleText from "../../components/TitleText";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -8,7 +8,6 @@ import { UserContext } from "../../tools/UserContext";
 import { lowerFirst } from "lodash";
 import { MainMenuOption } from "../../constants/types";
 import MainMenuButton from "../../components/MainMenuButton";
-import { updateStorageValue } from "../../tools/updateStorageValue";
 
 const MainMenu = ({ navigation }: any) => {
   const userContext = useContext(UserContext);
@@ -97,9 +96,9 @@ const MainMenu = ({ navigation }: any) => {
 
   return (
     <BGWithImage image={"mainMenu"}>
-      <>
-        <TitleText text="GoGetEm" style={{ marginBottom: 40 }} />
-        <ScrollView>
+      <TitleText text="GoGetEm" />
+      <View style={styles.buttonsContainer}>
+        <View>
           {Object.keys(MainMenuOption).map((option, index) => (
             <MainMenuButton
               key={option.toString()}
@@ -109,10 +108,17 @@ const MainMenu = ({ navigation }: any) => {
               delay={index * 200}
             />
           ))}
-        </ScrollView>
-      </>
+        </View>
+      </View>
     </BGWithImage>
   );
 };
+
+const styles = StyleSheet.create({
+  buttonsContainer: {
+    flex: 1,
+    justifyContent: "center",
+  },
+});
 
 export default MainMenu;
