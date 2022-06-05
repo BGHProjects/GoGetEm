@@ -21,7 +21,9 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/logos/GoGetEmLogo.png",
         "backgroundColor": "#000026"
-      }
+      },
+      "package": "com.gogetem",
+      "version": 1
     },
     "web": {
       "favicon": "./assets/favicon.png"
