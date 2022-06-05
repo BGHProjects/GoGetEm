@@ -1,5 +1,5 @@
 import { Colors } from "../../../constants/Colors";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, Image } from "react-native";
 import ControlsContent from "./ControlsContent";
 import ClassicContent from "./ClassicContent";
@@ -19,7 +19,8 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 
-const imgSize = 80;
+const imgAvg = 80;
+const imgBig = 100;
 const animValue = 500;
 
 const GameModeSlide = ({
@@ -43,6 +44,7 @@ const GameModeSlide = ({
 
   const contentOpacity = useSharedValue(0);
   const contentScale = useSharedValue(0.7);
+  const [imgSize, setImgSize] = useState(80);
 
   const fadeStyle = useAnimatedStyle(() => {
     return {
@@ -58,17 +60,22 @@ const GameModeSlide = ({
       contentOpacity.value = withTiming(1, { duration: animValue });
       contentScale.value = withTiming(1, { duration: animValue });
     }
+    if (image !== "classic" && image !== "questionMark") {
+      setImgSize(imgBig);
+    } else {
+      setImgSize(imgAvg);
+    }
   }, [isFocused, index]);
 
   return (
-    <View style={[styles.container, { backgroundColor: color }]}>
+    <View style={[styles(imgSize).container, { backgroundColor: color }]}>
       {isFocused && !isUndefined(index) ? (
         <>
           <BackButton />
           <Animated.View style={fadeStyle}>
             {image !== "questionMark" ? (
               <Image
-                style={styles.logoImage}
+                style={styles(imgSize).logoImage}
                 source={Logos[image as keyof typeof Logos]}
               />
             ) : (
@@ -76,15 +83,15 @@ const GameModeSlide = ({
                 name="help"
                 size={imgSize}
                 color={Colors.white}
-                style={styles.questionMark}
+                style={styles(imgSize).questionMark}
               />
             )}
-            <Text style={styles.title}>{title}</Text>
-            <Text style={styles.description}>{description}</Text>
+            <Text style={styles(imgSize).title}>{title}</Text>
+            <Text style={styles(imgSize).description}>{description}</Text>
           </Animated.View>
           <View style={{ marginVertical: 20 }}>{whichComponent[title]}</View>
           {title !== "Controls" && (
-            <View style={styles.menuButtonContainer}>
+            <View style={styles(imgSize).menuButtonContainer}>
               <MenuButton
                 text="Start"
                 operation={() => onPressButton(title)}
@@ -105,39 +112,40 @@ const GameModeSlide = ({
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    ...StyleSheet.absoluteFillObject,
-    padding: 75,
-    paddingTop: 125,
-    alignItems: "center",
-  },
-  title: {
-    fontSize: 32,
-    color: "white",
-    textAlign: "center",
-    marginBottom: 16,
-    fontFamily: "Main-Bold",
-  },
-  description: {
-    fontSize: 14,
-    color: "white",
-    textAlign: "center",
-    fontFamily: "Main",
-  },
-  logoImage: {
-    height: imgSize,
-    width: imgSize,
-    resizeMode: "contain",
-    alignSelf: "center",
-    marginBottom: 20,
-    marginTop: -50,
-  },
-  questionMark: {
-    alignSelf: "center",
-    marginTop: -50,
-  },
-  menuButtonContainer: { position: "absolute", bottom: 60 },
-});
+const styles = (imgSize: number) =>
+  StyleSheet.create({
+    container: {
+      ...StyleSheet.absoluteFillObject,
+      padding: 75,
+      paddingTop: 125,
+      alignItems: "center",
+    },
+    title: {
+      fontSize: 32,
+      color: "white",
+      textAlign: "center",
+      marginBottom: 16,
+      fontFamily: "Main-Bold",
+    },
+    description: {
+      fontSize: 14,
+      color: "white",
+      textAlign: "center",
+      fontFamily: "Main",
+    },
+    logoImage: {
+      height: imgSize,
+      width: imgSize,
+      resizeMode: "contain",
+      alignSelf: "center",
+      marginBottom: imgSize === imgBig ? 0 : 20,
+      marginTop: -50,
+    },
+    questionMark: {
+      alignSelf: "center",
+      marginTop: -50,
+    },
+    menuButtonContainer: { position: "absolute", bottom: 60 },
+  });
 
 export default GameModeSlide;

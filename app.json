@@ -4,7 +4,7 @@
     "slug": "gogetem",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/logos/ColouredBackgroundedClassicLogo.png",
+    "icon": "./assets/logos/GoGetEmLogoWithCBG.png",
     "splash": {
       "image": "./assets/MainMenuBGPNG.png",
       "resizeMode": "cover",
@@ -19,7 +19,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/logos/ColouredClassicLogo.png",
+        "foregroundImage": "./assets/logos/GoGetEmLogo.png",
         "backgroundColor": "#000026"
       }
     },

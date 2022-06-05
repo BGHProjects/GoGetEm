@@ -14,14 +14,8 @@ export const Backgrounds = {
   space: require("../assets/SpaceBG.jpg"),
 };
 
-export const Youtubers = {
-  williamCandillon: require("../assets/WilliamCandillon.jpg"),
-  reactiive: require("../assets/Reactiive.jpg"),
-  missCoding: require("../assets/MissCoding.jpg"),
-};
-
 export const Logos = {
-  classicColoured: require("../assets/logos/ColouredClassicLogo.png"),
+  classicColoured: require("../assets/logos/GoGetEmLogo.png"),
   classic: require("../assets/logos/ClassicLogo.png"),
   chasedown: require("../assets/logos/ChasedownLogo.png"),
   hunt: require("../assets/logos/HuntLogo.png"),

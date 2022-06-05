@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Animated, {
   useAnimatedStyle,
   withTiming,
@@ -13,7 +13,8 @@ import { Colors } from "react-native/Libraries/NewAppScreen";
 
 const { width } = Dimensions.get("screen");
 const RADIUS = 25;
-const imgSize = 30;
+const imgAvgSize = 30;
+const imgBigSize = 40;
 
 interface ButtonProps {
   position: Vector<Animated.SharedValue<number>>;
@@ -37,12 +38,22 @@ const Button = ({ position, side, activeSide, image }: ButtonProps) => {
     opacity: withTiming(activeSide.value === Side.NONE ? 1 : 0),
   }));
 
+  const [imgSize, setImgSize] = useState(imgAvgSize);
+
+  useEffect(() => {
+    if (image !== "questionMark" && image !== "classic") {
+      setImgSize(imgBigSize);
+    } else {
+      setImgSize(imgAvgSize);
+    }
+  }, []);
+
   return (
     <Animated.View style={style}>
       {/* If its one of the game mode logos */}
       {!isUndefined(image) && image !== "questionMark" && (
         <Image
-          style={styles.logoImage}
+          style={styles(imgSize).logoImage}
           source={Logos[image as keyof typeof Logos]}
         />
       )}
@@ -64,13 +75,14 @@ const Button = ({ position, side, activeSide, image }: ButtonProps) => {
   );
 };
 
-const styles = StyleSheet.create({
-  logoImage: {
-    height: imgSize,
-    width: imgSize,
-    resizeMode: "contain",
-    alignSelf: "center",
-  },
-});
+const styles = (imgSize: number) =>
+  StyleSheet.create({
+    logoImage: {
+      height: imgSize,
+      width: imgSize,
+      resizeMode: "contain",
+      alignSelf: "center",
+    },
+  });
 
 export default Button;

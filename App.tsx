@@ -9,7 +9,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Font from "expo-font";
 import { Asset } from "expo-asset";
 import { flattenDeep } from "lodash";
-import { Backgrounds, Youtubers, Logos } from "./constants/Images";
+import { Backgrounds, Logos } from "./constants/Images";
 import AppLoading from "expo-app-loading";
 
 export default function App() {
@@ -34,12 +34,9 @@ export default function App() {
 
   // Caches all the images in a synchronous way
   async function loadAssets() {
+    console.log("Reached load assets");
     const imageAssets = cacheImages(
-      flattenDeep([
-        Object.values(Backgrounds),
-        Object.values(Youtubers),
-        Object.values(Logos),
-      ])
+      flattenDeep([Object.values(Backgrounds), Object.values(Logos)])
     );
 
     await Promise.all([imageAssets]);
