@@ -1,5 +1,5 @@
 # GoGetEm
-Mobile chasing game built with React Native and Expo
+Mobile chasing game built with React Native and Expo<br/>
 <img src="https://github.com/BGHProjects/GoGetEm/blob/main/assets/screenshots/MainMenu.jpg" width="300" height="533">
 
 - Gameplay is inspired by Atari-style 8-bit games, but includes a modern smooth, gradient-based, and colourful artstyle
@@ -11,7 +11,8 @@ Mobile chasing game built with React Native and Expo
 
 ## There are four modes of gameplay:
 ### Classic
-A three player chasing game, in which you must catch your target before your target catches their target, and their target catches you
+A three player chasing game, in which you must catch your target before your target catches their target, and their target catches you <br/>
+<img src="https://github.com/BGHProjects/GoGetEm/blob/main/assets/screenshots/ClassicMenu.jpg" width="300" height="533"> <img src="https://github.com/BGHProjects/GoGetEm/blob/main/assets/screenshots/ClassicGameplay.jpg" width="300" height="533">
 ### Chasedown
 Another three player game, in which players take turns being the target, and must evade the other two players before time runs out
 ### Hunt
