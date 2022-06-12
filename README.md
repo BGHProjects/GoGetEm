@@ -1,5 +1,6 @@
 # GoGetEm
 Mobile chasing game built with React Native and Expo
+![MainMenu](assets/screenshots/MainMenu.jpg)
 
 - Gameplay is inspired by Atari-style 8-bit games, but includes a modern smooth, gradient-based, and colourful artstyle
 - 138 levels of unlockable content including controller configuration and background customisation
