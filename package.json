@@ -43,7 +43,8 @@
     "react-native-tab-view": "^3.1.1",
     "react-native-web": "0.17.7",
     "svg-arc-to-cubic-bezier": "^3.2.0",
-    "expo-app-loading": "~2.0.0"
+    "expo-app-loading": "~2.0.0",
+    "expo-updates": "~0.13.2"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

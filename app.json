@@ -6,7 +6,7 @@
     "orientation": "portrait",
     "icon": "./assets/logos/GoGetEmLogoWithCBG.png",
     "splash": {
-      "image": "./assets/MainMenuBGPNG.png",
+      "image": "./assets/MMBG.png",
       "resizeMode": "cover",
       "backgroundColor": "#000026"
     },
@@ -22,8 +22,7 @@
         "foregroundImage": "./assets/logos/GoGetEmLogo.png",
         "backgroundColor": "#000026"
       },
-      "package": "com.gogetem",
-      "version": 1
+      "package": "com.gogetem"
     },
     "web": {
       "favicon": "./assets/favicon.png"

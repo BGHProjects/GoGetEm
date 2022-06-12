@@ -8,8 +8,7 @@ import { Colors } from "./constants/Colors";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Font from "expo-font";
 import { Asset } from "expo-asset";
-import { flattenDeep } from "lodash";
-import { Backgrounds, Logos } from "./constants/Images";
+import { Logos } from "./constants/Images";
 import AppLoading from "expo-app-loading";
 
 export default function App() {
@@ -21,10 +20,29 @@ export default function App() {
     await AsyncStorage.setItem("Loaded", "true");
   }
 
-  const cacheImages = (images: any[]) => {
-    images.map((image) => {
-      return Asset.fromModule(image).downloadAsync();
-    });
+  const allImages = [
+    require("./assets/ForestBG.jpg"),
+    require("./assets/MountainsBG.jpg"),
+    require("./assets/SnowBG.jpg"),
+    require("./assets/MMBG.png"),
+    require("./assets/GameModesBG.jpg"),
+    require("./assets/AuroraBG.jpg"),
+    require("./assets/FireBG.jpg"),
+    require("./assets/GogglesBG.jpg"),
+    require("./assets/GoldBG.jpg"),
+    require("./assets/LiquidBG.jpg"),
+    require("./assets/NeonCityBG.jpg"),
+    require("./assets/NeonFutureBG.jpg"),
+    require("./assets/SpaceBG.jpg"),
+    require("./assets/logos/GoGetEmLogo.png"),
+    require("./assets/logos/ClassicLogo.png"),
+    require("./assets/logos/ChasedownLogo.png"),
+    require("./assets/logos/HuntLogo.png"),
+    require("./assets/logos/TagTeamLogo.png"),
+  ];
+
+  const cacheImages = async (images: any[]) => {
+    return Promise.all([Asset.loadAsync(images)]);
   };
 
   let [fontsReady, error] = Font.useFonts({
@@ -34,13 +52,9 @@ export default function App() {
 
   // Caches all the images in a synchronous way
   async function loadAssets() {
-    console.log("Reached load assets");
-    const imageAssets = cacheImages(
-      flattenDeep([Object.values(Backgrounds), Object.values(Logos)])
-    );
-
+    const imageAssets = cacheImages(allImages);
     await Promise.all([imageAssets]);
-    setLoadedToStorage();
+    await setLoadedToStorage();
 
     // Manually give a slight delay for UI / UX
     setTimeout(() => {

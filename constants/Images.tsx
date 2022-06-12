@@ -2,7 +2,7 @@ export const Backgrounds = {
   forest: require("../assets/ForestBG.jpg"),
   mountains: require("../assets/MountainsBG.jpg"),
   snow: require("../assets/SnowBG.jpg"),
-  mainMenu: require("../assets/MainMenuBG.jpg"),
+  mainMenu: require("../assets/MMBG.png"),
   gameModes: require("../assets/GameModesBG.jpg"),
   aurora: require("../assets/AuroraBG.jpg"),
   fire: require("../assets/FireBG.jpg"),
